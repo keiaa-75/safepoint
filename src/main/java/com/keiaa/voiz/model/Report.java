@@ -18,6 +18,10 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // New fields
+    private String name;
+    private String contactNumber;
+
     private String category;
     private String description;
     private LocalDateTime timestamp = LocalDateTime.now();
