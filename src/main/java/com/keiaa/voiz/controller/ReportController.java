@@ -26,6 +26,7 @@ public class ReportController {
     public String submitReport(@ModelAttribute("report") Report report, Model model) {
         reportRepository.save(report);
         model.addAttribute("message", "Thank you! Your anonymous report has been submitted successfully.");
+        model.addAttribute("report", new Report()); 
         return "index";
     }
 }
