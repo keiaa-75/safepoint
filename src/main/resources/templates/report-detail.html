@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 th:text="'Report: ' + ${report.reportId}"></h1>
+        <a th:href="@{/admin-dashboard(key=${adminKey})}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Report Details</h5>
+            <span class="badge" th:classappend="${report.status == 'Pending Review' ? 'bg-warning text-dark' : (report.status == 'Under Investigation' ? 'bg-info text-dark' : (report.status == 'Resolved' or report.status == 'Action Taken' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status}"></span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Name:</strong> <span th:text="${report.name}"></span></p>
+                    <p><strong>Email:</strong> <span th:text="${report.email}"></span></p>
+                    <p><strong>Category:</strong> <span th:text="${report.category}"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Description:</strong></p>
+                    <p th:text="${report.description}"></p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <form th:action="@{/update-report-status}" method="post" class="d-flex align-items-center">
+                <input type="hidden" name="reportId" th:value="${report.reportId}" />
+                <input type="hidden" name="key" th:value="${adminKey}" />
+                <label for="status" class="form-label me-2 mb-0">Update Status:</label>
+                <select class="form-select form-select-sm" name="status" onchange="this.form.submit()" style="width: auto;">
+                    <option value="Pending Review" th:selected="${report.status == 'Pending Review'}">Pending Review</option>
+                    <option value="Under Investigation" th:selected="${report.status == 'Under Investigation'}">Under Investigation</option>
+                    <option value="Action Taken" th:selected="${report.status == 'Action Taken'}">Action Taken</option>
+                    <option value="Resolved" th:selected="${report.status == 'Resolved'}">Resolved</option>
+                </select>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -21,37 +21,11 @@
         <div th:if="${#lists.isEmpty(reports)}">
             <p class="text-center text-muted">No reports submitted yet.</p>
         </div>
-        <div th:each="report : ${reports}" class="card mb-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0" th:text="'Report ID: ' + ${report.reportId}"></h5>
+        <div class="list-group" th:unless="${#lists.isEmpty(reports)}">
+            <a th:each="report : ${reports}" th:href="@{/admin/report/{id}(id=${report.reportId}, key=${adminKey})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                <span th:text="${report.reportId}"></span>
                 <span class="badge" th:classappend="${report.status == 'Pending Review' ? 'bg-warning text-dark' : (report.status == 'Under Investigation' ? 'bg-info text-dark' : (report.status == 'Resolved' or report.status == 'Action Taken' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status}"></span>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Name:</strong> <span th:text="${report.name}"></span></p>
-                        <p><strong>Email:</strong> <span th:text="${report.email}"></span></p>
-                        <p><strong>Category:</strong> <span th:text="${report.category}"></span></p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Description:</strong></p>
-                        <p th:text="${report.description}"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer bg-light">
-                <form th:action="@{/update-report-status}" method="post" class="d-flex align-items-center">
-                    <input type="hidden" name="reportId" th:value="${report.reportId}" />
-                    <input type="hidden" name="key" th:value="${adminKey}" />
-                    <label for="status" class="form-label me-2 mb-0">Update Status:</label>
-                    <select class="form-select form-select-sm" name="status" onchange="this.form.submit()" style="width: auto;">
-                        <option value="Pending Review" th:selected="${report.status == 'Pending Review'}">Pending Review</option>
-                        <option value="Under Investigation" th:selected="${report.status == 'Under Investigation'}">Under Investigation</option>
-                        <option value="Action Taken" th:selected="${report.status == 'Action Taken'}">Action Taken</option>
-                        <option value="Resolved" th:selected="${report.status == 'Resolved'}">Resolved</option>
-                    </select>
-                </form>
-            </div>
+            </a>
         </div>
 
         <h2 class="mt-5 mb-3">Appointment Requests</h2>

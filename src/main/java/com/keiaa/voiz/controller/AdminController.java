@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,6 +51,22 @@ public class AdminController {
         model.addAttribute("appointments", appointments);
         model.addAttribute("adminKey", key);
         return "admin-dashboard";
+    }
+
+    @GetMapping("/admin/report/{id}")
+    public String reportDetails(@PathVariable("id") String reportId, @RequestParam("key") String key, Model model, RedirectAttributes redirectAttributes) {
+        if (!adminKey.equals(key)) {
+            redirectAttributes.addFlashAttribute("error", "Invalid key. Please try again.");
+            return "redirect:/admin-login";
+        }
+
+        return reportRepository.findByReportId(reportId)
+                .map(report -> {
+                    model.addAttribute("report", report);
+                    model.addAttribute("adminKey", key);
+                    return "report-detail";
+                })
+                .orElse("redirect:/admin-dashboard?key=" + key);
     }
 
     @PostMapping("/update-report-status")
