@@ -1,6 +1,5 @@
-/* Body and Background Styles */
 body:not(.admin-body) {
-    background: #e0f2f1; /* Fallback for older browsers */
+    background: #e0f2f1;
     background: -webkit-linear-gradient(to right, #2C90C4, #31CCB0);
     background: linear-gradient(to right, #2C90C4, #31CCB0);
     background-attachment: fixed;
@@ -29,7 +28,6 @@ body.admin-body {
     filter: blur(5px);
 }
 
-/* Backdrop */
 .backdrop {
     position: fixed;
     top: 0;
@@ -40,7 +38,7 @@ body.admin-body {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 999; /* Below FAB container */
+    z-index: 999;
 }
 
 .backdrop.active {
@@ -48,7 +46,6 @@ body.admin-body {
     visibility: visible;
 }
 
-/* FAB Container */
 .fab-container {
     position: fixed;
     bottom: 20px;
@@ -56,24 +53,28 @@ body.admin-body {
     z-index: 1000;
 }
 
-/* FAB Button */
 .fab {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #007bff;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background-color: #0D6EFD;
     color: white;
     border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    transition: transform 0.3s ease;
-    display: flex; /* Centers the icon */
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
-/* Icon rotation when active */
-.fab.active {
+.fab-list-icon {
+    font-size: 30px;
+    transition: transform 0.3s ease;
+}
+
+.fab.active .fab-list-icon {
     transform: rotate(90deg);
 }
 
@@ -83,27 +84,22 @@ body.admin-body {
     padding: 0;
     margin: 0;
     position: absolute;
-    bottom: 70px; /* Position above the FAB */
+    bottom: 70px;
     right: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 12px;
-    opacity: 0; /* Initially hidden */
-    visibility: hidden; /* Hidden from screen readers */
+    opacity: 0;
+    visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    pointer-events: none; /* Prevent accidental clicks when hidden */
-    background: none;
-    box-shadow: none;
-    border: none;
-    min-width: 0;
-    backdrop-filter: none;
+    pointer-events: none;
 }
+
 .nav-links.active {
-    opacity: 1; /* Fade in */
-    visibility: visible; /* Make visible */
+    opacity: 1;
+    visibility: visible;
     pointer-events: auto;
-    animation: navLinksFadeIn 0.3s;
 }
 
 .nav-links li {
@@ -113,29 +109,32 @@ body.admin-body {
 }
 
 .nav-links a {
-    color: #343a40;
+    color: #49454f;
     background: #fff;
-    padding: 12px 32px 12px 48px;
-    border-radius: 32px;
+    padding: 12px 20px;
+    border-radius: 16px;
     text-decoration: none;
-    font-size: 1.08rem;
+    font-size: 1rem;
     font-weight: 500;
-    min-width: 180px;
-    max-width: 240px;
     display: flex;
     align-items: center;
-    box-shadow: 0 4px 18px rgba(44, 144, 196, 0.18), 0 2px 8px rgba(49, 204, 176, 0.10);
-    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-    text-align: left;
-    position: relative;
+    justify-content: flex-end;
+    gap: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
     border: none;
 }
 
+.nav-links a i {
+    font-size: 20px;
+    order: -1; 
+    color: #0D6EFD;
+}
+
 .nav-links a:hover {
-    background: linear-gradient(90deg, #2C90C4 0%, #31CCB0 100%);
-    color: #fff;
-    box-shadow: 0 8px 32px rgba(44, 144, 196, 0.22), 0 2px 12px rgba(49, 204, 176, 0.18);
-    text-shadow: 0 1px 4px rgba(44, 144, 196, 0.10);
+    background: #d3e5ff;
+    color: #49454f;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
 }
 
 @keyframes navLinksFadeIn {
