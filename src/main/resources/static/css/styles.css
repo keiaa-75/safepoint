@@ -46,30 +46,57 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    gap: 12px;
     opacity: 0; /* Initially hidden */
     visibility: hidden; /* Hidden from screen readers */
     transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none; /* Prevent accidental clicks when hidden */
+    background: none;
+    box-shadow: none;
+    border: none;
+    min-width: 0;
+    backdrop-filter: none;
 }
-
 .nav-links.active {
     opacity: 1; /* Fade in */
     visibility: visible; /* Make visible */
+    pointer-events: auto;
+    animation: navLinksFadeIn 0.3s;
 }
 
 .nav-links li {
-    margin-bottom: 10px;
+    width: auto;
+    margin: 0;
+    border: none;
 }
 
 .nav-links a {
-    background-color: #343a40;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 20px;
+    color: #343a40;
+    background: #fff;
+    padding: 12px 32px 12px 48px;
+    border-radius: 32px;
     text-decoration: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.2s ease;
+    font-size: 1.08rem;
+    font-weight: 500;
+    min-width: 180px;
+    max-width: 240px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 18px rgba(44, 144, 196, 0.18), 0 2px 8px rgba(49, 204, 176, 0.10);
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    text-align: left;
+    position: relative;
+    border: none;
 }
 
 .nav-links a:hover {
-    background-color: #495057;
+    background: linear-gradient(90deg, #2C90C4 0%, #31CCB0 100%);
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(44, 144, 196, 0.22), 0 2px 12px rgba(49, 204, 176, 0.18);
+    text-shadow: 0 1px 4px rgba(44, 144, 196, 0.10);
+}
+
+@keyframes navLinksFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
