@@ -63,19 +63,20 @@ body.admin-body {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
 }
 
 .fab-list-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     font-size: 30px;
     transition: transform 0.3s ease;
+    transform: translate(-50%, -50%) rotate(0deg);
 }
 
 .fab.active .fab-list-icon {
-    transform: rotate(90deg);
+    transform: translate(-50%, -50%) rotate(90deg);
 }
 
 /* Navigation Links (Speed Dial) */
