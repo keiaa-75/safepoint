@@ -24,7 +24,9 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // New fields
+    // New field for the unique report ID
+    private String reportId;
+    
     private String name;
     private String contactNumber;
 
@@ -32,4 +34,6 @@ public class Report {
     private String description;
     private LocalDateTime timestamp = LocalDateTime.now();
 
+    // A default status for new reports
+    private String status = "Pending Review";
 }
