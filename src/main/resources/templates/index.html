@@ -16,7 +16,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
             background: #e0f2f1; /* Fallback for older browsers */
             background: -webkit-linear-gradient(to right, #2C90C4, #31CCB0);
             background: linear-gradient(to right, #2C90C4, #31CCB0);
-            background-attachment: fixed; /* Ensures the gradient covers the whole page without repeating */
+            background-attachment: fixed;
         }
     </style>
 </head>
@@ -81,6 +81,11 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
           </div>
           <div class="modal-body">
             <p th:text="${message}"></p>
+            <div th:if="${reportId}" class="mt-3">
+                <p>Your unique report tracking ID is:</p>
+                <h4 class="text-center font-monospace" th:text="${reportId}"></h4>
+                <p class="text-center text-muted"><small>Please save this ID to track your report's status.</small></p>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
