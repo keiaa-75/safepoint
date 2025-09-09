@@ -8,7 +8,13 @@
             <h1 class="mb-0">Report Details</h1>
             <p class="text-muted" th:text="'Tracking ID: ' + ${report.reportId}"></p>
         </div>
-        <a th:href="@{/admin-dashboard(key=${adminKey})}" class="btn btn-outline-secondary">Back to Dashboard</a>
+        <div class="d-flex gap-2">
+            <a th:href="@{/admin/dashboard}" class="btn btn-outline-secondary">Back to Dashboard</a>
+            <form th:action="@{/admin/report/delete}" method="post" onsubmit="return confirm('Are you sure you want to delete this report?');">
+                <input type="hidden" name="reportId" th:value="${report.reportId}" />
+                <button type="submit" class="btn btn-danger">Delete Report</button>
+            </form>
+        </div>
     </div>
 
     <div class="bg-white p-4 p-md-5 rounded shadow-sm">
@@ -17,9 +23,8 @@
                 <h2 class="h5">Status</h2>
                 <span class="badge fs-6" th:classappend="${report.status == 'Pending Review' ? 'bg-warning text-dark' : (report.status == 'Under Investigation' ? 'bg-info text-dark' : (report.status == 'Resolved' or report.status == 'Action Taken' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status}"></span>
             </div>
-            <form th:action="@{/update-report-status}" method="post" class="d-flex align-items-center">
+            <form th:action="@{/admin/report/update-status}" method="post" class="d-flex align-items-center">
                 <input type="hidden" name="reportId" th:value="${report.reportId}" />
-                <input type="hidden" name="key" th:value="${adminKey}" />
                 <label for="status" class="form-label me-2 mb-0 visually-hidden">Update Status:</label>
                 <select class="form-select form-select-sm" name="status" onchange="this.form.submit()">
                     <option value="Pending Review" th:selected="${report.status == 'Pending Review'}">Pending Review</option>

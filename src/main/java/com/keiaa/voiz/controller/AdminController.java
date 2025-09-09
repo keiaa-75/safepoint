@@ -15,8 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +23,8 @@ import com.keiaa.voiz.model.Appointment;
 import com.keiaa.voiz.model.Report;
 import com.keiaa.voiz.repository.AppointmentRepository;
 import com.keiaa.voiz.repository.ReportRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AdminController {
@@ -43,10 +43,21 @@ public class AdminController {
         return "admin-login";
     }
 
-    @RequestMapping(value = "/admin-dashboard", method = {RequestMethod.GET, RequestMethod.POST})
-    public String adminDashboard(@RequestParam("key") String key, Model model, RedirectAttributes redirectAttributes) {
-        if (!adminKey.equals(key)) {
+    @PostMapping("/admin-login")
+    public String handleAdminLogin(@RequestParam("key") String key, HttpSession session, RedirectAttributes redirectAttributes) {
+        if (adminKey.equals(key)) {
+            session.setAttribute("adminLoggedIn", true);
+            return "redirect:/admin/dashboard";
+        } else {
             redirectAttributes.addFlashAttribute("error", "Invalid key. Please try again.");
+            return "redirect:/admin-login";
+        }
+    }
+
+    @GetMapping("/admin/dashboard")
+    public String showAdminDashboard(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
             return "redirect:/admin-login";
         }
 
@@ -55,33 +66,31 @@ public class AdminController {
 
         model.addAttribute("reports", reports);
         model.addAttribute("appointments", appointments);
-        model.addAttribute("adminKey", key);
         return "admin-dashboard";
     }
 
     @GetMapping("/admin/report/{id}")
-    public String reportDetails(@PathVariable("id") String reportId, @RequestParam("key") String key, Model model, RedirectAttributes redirectAttributes) {
-        if (!adminKey.equals(key)) {
-            redirectAttributes.addFlashAttribute("error", "Invalid key. Please try again.");
+    public String reportDetails(@PathVariable("id") String reportId, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
             return "redirect:/admin-login";
         }
 
         return reportRepository.findByReportId(reportId)
                 .map(report -> {
                     model.addAttribute("report", report);
-                    model.addAttribute("adminKey", key);
                     return "report-detail";
                 })
-                .orElse("redirect:/admin-dashboard?key=" + key);
+                .orElse("redirect:/admin/dashboard");
     }
 
-    @PostMapping("/update-report-status")
+    @PostMapping("/admin/report/update-status")
     public String updateReportStatus(@RequestParam("reportId") String reportId,
                                      @RequestParam("status") String status,
-                                     @RequestParam("key") String key,
+                                     HttpSession session,
                                      RedirectAttributes redirectAttributes) {
-        if (!adminKey.equals(key)) {
-            redirectAttributes.addFlashAttribute("error", "Invalid key. Please try again.");
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
             return "redirect:/admin-login";
         }
         
@@ -90,17 +99,16 @@ public class AdminController {
             reportRepository.save(report);
         });
         
-        redirectAttributes.addAttribute("key", key);
-        return "redirect:/admin-dashboard";
+        return "redirect:/admin/dashboard";
     }
 
     @Transactional
-    @GetMapping("/delete-report")
+    @PostMapping("/admin/report/delete")
     public String deleteReport(@RequestParam("reportId") String reportId,
-                               @RequestParam("key") String key,
+                               HttpSession session,
                                RedirectAttributes redirectAttributes) {
-        if (!adminKey.equals(key)) {
-            redirectAttributes.addFlashAttribute("error", "Invalid key. Please try again.");
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
             return "redirect:/admin-login";
         }
 
@@ -108,7 +116,12 @@ public class AdminController {
             reportRepository.delete(report);
         });
 
-        redirectAttributes.addAttribute("key", key);
-        return "redirect:/admin-dashboard";
+        return "redirect:/admin/dashboard";
+    }
+
+    @GetMapping("/admin/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/admin-login";
     }
 }
