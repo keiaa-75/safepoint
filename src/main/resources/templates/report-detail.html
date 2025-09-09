@@ -7,43 +7,50 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
-<div class="container mt-5 mb-5">
+<body class="admin-body">
+<div class="container py-5" style="max-width: 960px;">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 th:text="'Report: ' + ${report.reportId}"></h1>
-        <a th:href="@{/admin-dashboard(key=${adminKey})}" class="btn btn-secondary">Back to Dashboard</a>
+        <div>
+            <h1 class="mb-0">Report Details</h1>
+            <p class="text-muted" th:text="'Tracking ID: ' + ${report.reportId}"></p>
+        </div>
+        <a th:href="@{/admin-dashboard(key=${adminKey})}" class="btn btn-outline-secondary">Back to Dashboard</a>
     </div>
 
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Report Details</h5>
-            <span class="badge" th:classappend="${report.status == 'Pending Review' ? 'bg-warning text-dark' : (report.status == 'Under Investigation' ? 'bg-info text-dark' : (report.status == 'Resolved' or report.status == 'Action Taken' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status}"></span>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <p><strong>Name:</strong> <span th:text="${report.name}"></span></p>
-                    <p><strong>Email:</strong> <span th:text="${report.email}"></span></p>
-                    <p><strong>Category:</strong> <span th:text="${report.category}"></span></p>
-                </div>
-                <div class="col-md-6">
-                    <p><strong>Description:</strong></p>
-                    <p th:text="${report.description}"></p>
-                </div>
+    <div class="bg-white p-4 p-md-5 rounded shadow-sm">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h2 class="h5">Status</h2>
+                <span class="badge fs-6" th:classappend="${report.status == 'Pending Review' ? 'bg-warning text-dark' : (report.status == 'Under Investigation' ? 'bg-info text-dark' : (report.status == 'Resolved' or report.status == 'Action Taken' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status}"></span>
             </div>
-        </div>
-        <div class="card-footer bg-light">
             <form th:action="@{/update-report-status}" method="post" class="d-flex align-items-center">
                 <input type="hidden" name="reportId" th:value="${report.reportId}" />
                 <input type="hidden" name="key" th:value="${adminKey}" />
-                <label for="status" class="form-label me-2 mb-0">Update Status:</label>
-                <select class="form-select form-select-sm" name="status" onchange="this.form.submit()" style="width: auto;">
+                <label for="status" class="form-label me-2 mb-0 visually-hidden">Update Status:</label>
+                <select class="form-select form-select-sm" name="status" onchange="this.form.submit()">
                     <option value="Pending Review" th:selected="${report.status == 'Pending Review'}">Pending Review</option>
                     <option value="Under Investigation" th:selected="${report.status == 'Under Investigation'}">Under Investigation</option>
                     <option value="Action Taken" th:selected="${report.status == 'Action Taken'}">Action Taken</option>
                     <option value="Resolved" th:selected="${report.status == 'Resolved'}">Resolved</option>
                 </select>
             </form>
+        </div>
+
+        <hr class="my-4">
+
+        <div>
+            <h2 class="h5">Submitter Information</h2>
+            <p class="mb-1"><strong>Name:</strong> <span th:text="${report.name}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${report.email}"></span></p>
+        </div>
+
+        <hr class="my-4">
+
+        <div>
+            <h2 class="h5">Report Content</h2>
+            <p class="mb-1"><strong>Category:</strong> <span th:text="${report.category}"></span></p>
+            <p><strong>Description:</strong></p>
+            <p th:text="${report.description}" class="bg-light p-3 rounded"></p>
         </div>
     </div>
 </div>
