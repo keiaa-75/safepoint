@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafePoint - Schedule a Session</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        body {
+            background: #e0f2f1; /* Fallback for older browsers */
+            background: -webkit-linear-gradient(to right, #2C90C4, #31CCB0);
+            background: linear-gradient(to right, #2C90C4, #31CCB0);
+            background-attachment: fixed; /* Ensures the gradient covers the whole page without repeating */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card shadow p-4" style="max-width: 600px; width: 100%;">
+            <div class="card-body">
+                <h1 class="card-title text-center mb-4">Schedule a Counseling Session</h1>
+                <p class="card-text text-center text-muted mb-4">Please fill out this form to request a session. We will contact you to confirm the details.</p>
+
+                <div th:if="${message}" class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="successModalLabel">Request Submitted!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p th:text="${message}"></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="appointmentForm" th:action="@{/schedule}" th:object="${appointment}" method="post">
+                    
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Name" required>
+                        <label for="name">Name</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="tel" class="form-control" id="contactNumber" th:field="*{contactNumber}" placeholder="Contact Number">
+                        <label for="contactNumber">Contact Number</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="datetime-local" class="form-control" id="preferredDateTime" th:field="*{preferredDateTime}" placeholder="Preferred Date and Time" required>
+                        <label for="preferredDateTime">Preferred Date and Time</label>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <textarea class="form-control" id="reason" th:field="*{reason}" placeholder="Brief Reason for Session" rows="5" required style="height: 120px;"></textarea>
+                        <label for="reason">Brief Reason for Session</label>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Request Session</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script th:if="${message}">
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        });
+    </script>
+</body>
+</html>
