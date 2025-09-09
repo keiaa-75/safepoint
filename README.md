@@ -21,28 +21,28 @@ These instructions will get you a copy of the project up and running on your loc
 
 **1. Clone the repository:**
 
-    ```sh
-    git clone https://github.com/keiaa-75/voiz.git
-    cd voiz
-    ```
+```sh
+git clone https://github.com/keiaa-75/voiz.git
+cd voiz
+```
 
 **2. Build the project:**
 
-    ```sh
-    mvn clean install
-    ```
+```sh
+mvn clean install
+```
 
 **3. Run the application:**
 
-    From your IDE, you can run the `VoizApplication.java` file as a Spring Boot app. Alternatively, you can use the command line:
+From your IDE, you can run the `VoizApplication.java` file as a Spring Boot app. Alternatively, you can use the command line:
 
-    ```sh
-    mvn spring-boot:run
-    ```
+```sh
+mvn spring-boot:run
+```
 
     The application will start on port `9090`.
 
-### Usage
+## Usage
 
 1. **Access the application:** Open your web browser and navigate to `http://localhost:9090`.
 2. **Submit a report:** Fill out the report form and click "Submit Report." A confirmation modal will appear, and the data will be saved to the H2 Database.
