@@ -141,3 +141,8 @@ body.admin-body {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+.login-card {
+    max-width: 450px;
+    width: 100%;
+}
