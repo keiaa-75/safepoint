@@ -40,7 +40,7 @@ From your IDE, you can run the `VoizApplication.java` file as a Spring Boot app.
 mvn spring-boot:run
 ```
 
-    The application will start on port `9090`.
+The application will start on port `9090`.
 
 ## Usage
 
