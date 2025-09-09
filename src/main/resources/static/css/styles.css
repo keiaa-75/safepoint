@@ -1,0 +1,75 @@
+/* Body and Background Styles */
+body {
+    background: #e0f2f1; /* Fallback for older browsers */
+    background: -webkit-linear-gradient(to right, #2C90C4, #31CCB0);
+    background: linear-gradient(to right, #2C90C4, #31CCB0);
+    background-attachment: fixed;
+}
+
+/* FAB Container */
+.fab-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* FAB Button */
+.fab {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: flex; /* Centers the icon */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Icon rotation when active */
+.fab.active {
+    transform: rotate(90deg);
+}
+
+/* Navigation Links (Speed Dial) */
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    bottom: 70px; /* Position above the FAB */
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Hidden from screen readers */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.nav-links.active {
+    opacity: 1; /* Fade in */
+    visibility: visible; /* Make visible */
+}
+
+.nav-links li {
+    margin-bottom: 10px;
+}
+
+.nav-links a {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease;
+}
+
+.nav-links a:hover {
+    background-color: #495057;
+}
