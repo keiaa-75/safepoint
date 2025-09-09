@@ -21,6 +21,33 @@ body.admin-body {
     transform: translateY(-2px);
 }
 
+.main-content {
+    transition: filter 0.3s ease-in-out;
+}
+
+.main-content.blurred {
+    filter: blur(5px);
+}
+
+/* Backdrop */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 999; /* Below FAB container */
+}
+
+.backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
 /* FAB Container */
 .fab-container {
     position: fixed;

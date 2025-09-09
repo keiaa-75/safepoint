@@ -15,56 +15,57 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 </head>
 <body>
     <div th:replace="~{fragments/nav :: nav}"></div>
+    <div class="main-content">
+        <div class="container d-flex justify-content-center align-items-center min-vh-100">
+            <div class="card shadow p-4" style="max-width: 600px; width: 100%;">
+                <div class="card-body">
+                    <h1 class="card-title text-center mb-4">Schedule a Counseling Session</h1>
+                    <p class="card-text text-center text-muted mb-4">Please fill out this form to request a session. We will contact you to confirm the details.</p>
 
-    <div class="container d-flex justify-content-center align-items-center min-vh-100">
-        <div class="card shadow p-4" style="max-width: 600px; width: 100%;">
-            <div class="card-body">
-                <h1 class="card-title text-center mb-4">Schedule a Counseling Session</h1>
-                <p class="card-text text-center text-muted mb-4">Please fill out this form to request a session. We will contact you to confirm the details.</p>
-
-                <div th:if="${message}" class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="successModalLabel">Request Submitted!</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p th:text="${message}"></p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                    <div th:if="${message}" class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="successModalLabel">Request Submitted!</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p th:text="${message}"></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <form id="appointmentForm" th:action="@{/schedule}" th:object="${appointment}" method="post">
+                        
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Name" required>
+                            <label for="name">Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Email Address">
+                            <label for="email">Email Address</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="datetime-local" class="form-control" id="preferredDateTime" th:field="*{preferredDateTime}" placeholder="Preferred Date and Time" required>
+                            <label for="preferredDateTime">Preferred Date and Time</label>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <textarea class="form-control" id="reason" th:field="*{reason}" placeholder="Brief Reason for Session" rows="5" required style="height: 120px;"></textarea>
+                            <label for="reason">Brief Reason for Session</label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Request Session</button>
+                        </div>
+                    </form>
                 </div>
-
-                <form id="appointmentForm" th:action="@{/schedule}" th:object="${appointment}" method="post">
-                    
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Name" required>
-                        <label for="name">Name</label>
-                    </div>
-
-                    <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Email Address">
-                        <label for="email">Email Address</label>
-                    </div>
-
-                    <div class="form-floating mb-3">
-                        <input type="datetime-local" class="form-control" id="preferredDateTime" th:field="*{preferredDateTime}" placeholder="Preferred Date and Time" required>
-                        <label for="preferredDateTime">Preferred Date and Time</label>
-                    </div>
-
-                    <div class="form-floating mb-4">
-                        <textarea class="form-control" id="reason" th:field="*{reason}" placeholder="Brief Reason for Session" rows="5" required style="height: 120px;"></textarea>
-                        <label for="reason">Brief Reason for Session</label>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">Request Session</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
