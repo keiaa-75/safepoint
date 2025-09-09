@@ -19,43 +19,44 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.keiaa.voiz.model.Report;
 import com.keiaa.voiz.repository.ReportRepository;
+import com.keiaa.voiz.service.EmailService;
 
 @Controller
 public class ReportController {
 
     @Autowired
     private ReportRepository reportRepository;
+    
+    @Autowired
+    private EmailService emailService;
 
-    // Mapping for the main report submission page
     @GetMapping("/")
     public String showForm(Model model) {
         model.addAttribute("report", new Report());
         return "index";
     }
 
-    // Mapping to handle report submission
     @PostMapping("/submit-report")
     public String submitReport(@ModelAttribute("report") Report report, Model model) {
-        // Generate a unique ID before saving the report
         report.setReportId(UUID.randomUUID().toString());
-        
         reportRepository.save(report);
+
+        if (report.getEmail() != null && !report.getEmail().isEmpty()) {
+            emailService.sendConfirmationEmail(report.getEmail(), report.getReportId());
+        }
         
         model.addAttribute("message", "Thank you! Your report has been submitted successfully.");
-        model.addAttribute("reportId", report.getReportId()); // Pass the unique ID to the view
+        model.addAttribute("reportId", report.getReportId()); 
         
-        // Add a new, empty Report object to reset the form
         model.addAttribute("report", new Report()); 
         return "index";
     }
 
-    // Mapping for the tracking page
     @GetMapping("/track")
     public String showTrackingPage() {
         return "track";
     }
 
-    // Mapping to handle report ID submission for tracking
     @GetMapping("/track-report")
     public String trackReport(@RequestParam("reportId") String reportId, Model model) {
         Optional<Report> reportOptional = reportRepository.findByReportId(reportId);

@@ -35,6 +35,11 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <label for="name">Name</label>
                     </div>
 
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="name" th:field="*{email}" placeholder="Email Address" required>
+                        <label for="email">Email Address</label>
+                    </div>
+
                     <div class="form-floating mb-4">
                         <input type="tel" class="form-control" id="contactNumber" th:field="*{contactNumber}" placeholder="Contact Number">
                         <label for="contactNumber">Contact Number</label>
