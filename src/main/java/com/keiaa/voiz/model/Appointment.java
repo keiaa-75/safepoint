@@ -25,7 +25,7 @@ public class Appointment {
     private Long id;
 
     private String name;
-    private String contactNumber;
+    private String email;
     private LocalDateTime preferredDateTime;
     private String reason;
 }

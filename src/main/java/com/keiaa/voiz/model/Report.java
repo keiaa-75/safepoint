@@ -29,7 +29,6 @@ public class Report {
     
     private String name;
     private String email;
-    private String contactNumber;
 
     private String category;
     private String description;
