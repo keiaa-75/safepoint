@@ -18,64 +18,55 @@
         <h1 class="text-center mb-5">Admin Dashboard</h1>
 
         <h2 class="mt-5 mb-3">Submitted Reports</h2>
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Report ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Category</th>
-                        <th>Description</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="report : ${reports}">
-                        <td th:text="${report.reportId}"></td>
-                        <td th:text="${report.name}"></td>
-                        <td th:text="${report.email}"></td>
-                        <td th:text="${report.category}"></td>
-                        <td th:text="${report.description}"></td>
-                        <td>
-                            <form th:action="@{/update-report-status}" method="post">
-                                <input type="hidden" name="reportId" th:value="${report.reportId}" />
-                                <input type="hidden" name="key" th:value="${adminKey}" />
-                                <select class="form-select" name="status" onchange="this.form.submit()">
-                                    <option value="Pending Review" th:selected="${report.status == 'Pending Review'}">Pending Review</option>
-                                    <option value="Under Investigation" th:selected="${report.status == 'Under Investigation'}">Under Investigation</option>
-                                    <option value="Action Taken" th:selected="${report.status == 'Action Taken'}">Action Taken</option>
-                                    <option value="Resolved" th:selected="${report.status == 'Resolved'}">Resolved</option>
-                                </select>
-                            </form>
-                        </td>
-                        <td>
-                            <a th:href="@{/delete-report(reportId=${report.reportId}, key=${adminKey})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this report?');">Delete</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div th:if="${#lists.isEmpty(reports)}">
+            <p class="text-center text-muted">No reports submitted yet.</p>
+        </div>
+        <div th:each="report : ${reports}" class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0" th:text="'Report ID: ' + ${report.reportId}"></h5>
+                <span class="badge" th:classappend="${report.status == 'Pending Review' ? 'bg-warning text-dark' : (report.status == 'Under Investigation' ? 'bg-info text-dark' : (report.status == 'Resolved' or report.status == 'Action Taken' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status}"></span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Name:</strong> <span th:text="${report.name}"></span></p>
+                        <p><strong>Email:</strong> <span th:text="${report.email}"></span></p>
+                        <p><strong>Category:</strong> <span th:text="${report.category}"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Description:</strong></p>
+                        <p th:text="${report.description}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-light">
+                <form th:action="@{/update-report-status}" method="post" class="d-flex align-items-center">
+                    <input type="hidden" name="reportId" th:value="${report.reportId}" />
+                    <input type="hidden" name="key" th:value="${adminKey}" />
+                    <label for="status" class="form-label me-2 mb-0">Update Status:</label>
+                    <select class="form-select form-select-sm" name="status" onchange="this.form.submit()" style="width: auto;">
+                        <option value="Pending Review" th:selected="${report.status == 'Pending Review'}">Pending Review</option>
+                        <option value="Under Investigation" th:selected="${report.status == 'Under Investigation'}">Under Investigation</option>
+                        <option value="Action Taken" th:selected="${report.status == 'Action Taken'}">Action Taken</option>
+                        <option value="Resolved" th:selected="${report.status == 'Resolved'}">Resolved</option>
+                    </select>
+                </form>
+            </div>
         </div>
 
         <h2 class="mt-5 mb-3">Appointment Requests</h2>
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Preferred Date and Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="appointment : ${appointments}">
-                        <td th:text="${appointment.name}"></td>
-                        <td th:text="${appointment.email}"></td>
-                        <td th:text="${appointment.preferredDateTime}"></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div th:if="${#lists.isEmpty(appointments)}">
+            <p class="text-center text-muted">No appointment requests yet.</p>
+        </div>
+        <div th:each="appointment : ${appointments}" class="card mb-3">
+            <div class="card-header">
+                <h5 class="mb-0" th:text="'Appointment from ' + ${appointment.name}"></h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Email:</strong> <span th:text="${appointment.email}"></span></p>
+                <p><strong>Preferred Date & Time:</strong> <span th:text="${appointment.preferredDateTime}"></span></p>
+                <p><strong>Reason:</strong> <span th:text="${appointment.reason}"></span></p>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

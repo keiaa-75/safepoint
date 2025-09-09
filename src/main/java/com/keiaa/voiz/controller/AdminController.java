@@ -8,8 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.keiaa.voiz.model.Appointment;
 import com.keiaa.voiz.model.Report;
@@ -33,7 +36,7 @@ public class AdminController {
         return "admin-login";
     }
 
-    @PostMapping("/admin-dashboard")
+    @RequestMapping(value = "/admin-dashboard", method = {RequestMethod.GET, RequestMethod.POST})
     public String adminDashboard(@RequestParam("key") String key, Model model, RedirectAttributes redirectAttributes) {
         if (!adminKey.equals(key)) {
             redirectAttributes.addFlashAttribute("error", "Invalid key. Please try again.");
@@ -52,8 +55,8 @@ public class AdminController {
     @PostMapping("/update-report-status")
     public String updateReportStatus(@RequestParam("reportId") String reportId,
                                      @RequestParam("status") String status,
-                                     @RequestParam("key") String key, // Add this line
-                                     RedirectAttributes redirectAttributes) { // Add this line
+                                     @RequestParam("key") String key,
+                                     RedirectAttributes redirectAttributes) {
         if (!adminKey.equals(key)) {
             redirectAttributes.addFlashAttribute("error", "Invalid key. Please try again.");
             return "redirect:/admin-login";
@@ -64,6 +67,25 @@ public class AdminController {
             reportRepository.save(report);
         });
         
+        redirectAttributes.addAttribute("key", key);
+        return "redirect:/admin-dashboard";
+    }
+
+    @Transactional
+    @GetMapping("/delete-report")
+    public String deleteReport(@RequestParam("reportId") String reportId,
+                               @RequestParam("key") String key,
+                               RedirectAttributes redirectAttributes) {
+        if (!adminKey.equals(key)) {
+            redirectAttributes.addFlashAttribute("error", "Invalid key. Please try again.");
+            return "redirect:/admin-login";
+        }
+
+        reportRepository.findByReportId(reportId).ifPresent(report -> {
+            reportRepository.delete(report);
+        });
+
+        redirectAttributes.addAttribute("key", key);
         return "redirect:/admin-dashboard";
     }
 }
