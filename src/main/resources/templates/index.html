@@ -11,14 +11,14 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div th:replace="~{fragments/nav :: nav}"></div>
     <div class="main-content">
         <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 py-5">
-            
-            <div class="text-center text-white mb-4">
-                <h1 class="display-4">SafePoint</h1>
-                <p class="lead">Submit a confidential report.</p>
-            </div>
 
             <div class="card shadow p-4" style="max-width: 600px; width: 100%;">
                 <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h1 class="card-title">SafePoint</h1>
+                        <p class="card-text text-muted">Submit a confidential report about bullying.</p>
+                    </div>
+
                     <form id="reportForm" th:action="@{/submit-report}" th:object="${report}" method="post" novalidate>
                         
                         <!-- Progress Bar -->
@@ -81,7 +81,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <div class="d-flex justify-content-between mt-4">
                             <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Previous</button>
                             <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
-                            <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">Submit</button>
+                            <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">Submit Report</button>
                         </div>
                     </form>
                 </div>
@@ -112,7 +112,6 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     </div>
     
     <div th:replace="~{fragments/common :: scripts}"></div>
-
     <script src="/js/report-form.js"></script>
 
     <script th:if="${message}">
