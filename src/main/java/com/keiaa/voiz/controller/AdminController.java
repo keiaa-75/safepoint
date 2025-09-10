@@ -24,6 +24,7 @@ import com.keiaa.voiz.model.Report;
 import com.keiaa.voiz.repository.AppointmentRepository;
 import com.keiaa.voiz.repository.ReportRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -44,8 +45,10 @@ public class AdminController {
     }
 
     @PostMapping("/admin-login")
-    public String handleAdminLogin(@RequestParam("key") String key, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String handleAdminLogin(@RequestParam("key") String key, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         if (adminKey.equals(key)) {
+            request.changeSessionId();
+            HttpSession session = request.getSession();
             session.setAttribute("adminLoggedIn", true);
             return "redirect:/admin/dashboard";
         } else {
