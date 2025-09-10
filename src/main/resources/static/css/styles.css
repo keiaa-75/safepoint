@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+ */
+
 body:not(.admin-body) {
     background: #e0f2f1;
     background: -webkit-linear-gradient(to right, #2C90C4, #31CCB0);
@@ -19,6 +25,8 @@ body.admin-body {
     box-shadow: 0 6px 16px rgba(0,0,0,0.12);
     transform: translateY(-2px);
 }
+
+
 
 .main-content {
     transition: filter 0.3s ease-in-out;

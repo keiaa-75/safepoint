@@ -10,50 +10,78 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <body>
     <div th:replace="~{fragments/nav :: nav}"></div>
     <div class="main-content">
-        <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 py-5">
+            
+            <div class="text-center text-white mb-4">
+                <h1 class="display-4">SafePoint</h1>
+                <p class="lead">Submit a confidential report.</p>
+            </div>
+
             <div class="card shadow p-4" style="max-width: 600px; width: 100%;">
                 <div class="card-body">
-                    <h1 class="card-title text-center mb-4">SafePoint</h1>
-                    <p class="card-text text-center text-muted mb-4">Please fill out this form to submit a report. Your information will be kept confidential.</p>
-
-                    <form id="reportForm" th:action="@{/submit-report}" th:object="${report}" method="post">
+                    <form id="reportForm" th:action="@{/submit-report}" th:object="${report}" method="post" novalidate>
                         
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Name" required>
-                            <label for="name">Name</label>
+                        <!-- Progress Bar -->
+                        <div class="progress mb-4" style="height: 10px;">
+                            <div id="progressBar" class="progress-bar" role="progressbar" style="width: 33.33%;" aria-valuenow="33.33" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
 
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Email Address" required>
-                            <label for="email">Email Address</label>
-                        </div>
-                        
-                        <div class="form-floating mb-3">
-                            <select class="form-select" id="category" name="category" required>
-                                <option value="" selected disabled>Select a category</option>
-                                <option value="Physical">Physical</option>
-                                <option value="Verbal">Verbal</option>
-                                <option value="Cyber">Cyber</option>
-                                <option value="Social">Social</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <label for="category">Bullying Category</label>
-                        </div>
-                        
-                        <div class="form-floating mb-4">
-                            <textarea class="form-control" id="description" th:field="*{description}" placeholder="Description of the Incident" rows="5" required style="height: 120px"></textarea>
-                            <label for="description">Description of the Incident</label>
+                        <!-- Step 1: Your Information -->
+                        <div class="form-step active" id="step-1">
+                            <h5 class="mb-4">Step 1: Your Information</h5>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Name" required>
+                                <label for="name">Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Email Address" required>
+                                <label for="email">Email Address</label>
+                            </div>
                         </div>
 
-                        <div class="form-check mb-4">
-                            <input class="form-check-input" type="checkbox" value="" id="confirmation" required>
-                            <label class="form-check-label" for="confirmation">
-                                I verify that this report is true and accurate to the best of my knowledge.
-                            </label>
+                        <!-- Step 2: Incident Details -->
+                        <div class="form-step" id="step-2" style="display: none;">
+                            <h5 class="mb-4">Step 2: Incident Details</h5>
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="" selected disabled>Select a category</option>
+                                    <option value="Physical">Physical</option>
+                                    <option value="Verbal">Verbal</option>
+                                    <option value="Cyber">Cyber</option>
+                                    <option value="Social">Social</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <label for="category">Bullying Category</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <textarea class="form-control" id="description" th:field="*{description}" placeholder="Description of the Incident" rows="5" required style="height: 120px"></textarea>
+                                <label for="description">Description of the Incident</label>
+                            </div>
                         </div>
-                        
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">Submit Report</button>
+
+                        <!-- Step 3: Review & Confirm -->
+                        <div class="form-step" id="step-3" style="display: none;">
+                            <h5 class="mb-4">Step 3: Review & Confirm</h5>
+                            <div class="mb-3">
+                                <p class="mb-1"><strong>Name:</strong> <span id="review-name"></span></p>
+                                <p class="mb-1"><strong>Email:</strong> <span id="review-email"></span></p>
+                                <p class="mb-1"><strong>Category:</strong> <span id="review-category"></span></p>
+                                <p><strong>Description:</strong></p>
+                                <p id="review-description" class="bg-light text-dark p-2 rounded" style="min-height: 80px;"></p>
+                            </div>
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" value="" id="confirmation" required>
+                                <label class="form-check-label" for="confirmation">
+                                    I verify that this report is true and accurate to the best of my knowledge.
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Previous</button>
+                            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+                            <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">Submit</button>
                         </div>
                     </form>
                 </div>
