@@ -12,11 +12,11 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div class="main-content">
         <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 py-5">
 
-            <div class="card shadow p-4" style="max-width: 600px; width: 100%;">
+            <div class="card shadow p-4 card-large-radius" style="max-width: 600px; width: 100%;">
                 <div class="card-body">
                     <div class="text-center mb-4">
-                        <h1 class="card-title">Schedule a Counseling Session</h1>
-                        <p class="card-text text-muted">Please fill out this form to request a session.</p>
+                        <h1 class="card-title">Schedule a Session</h1>
+                        <p class="card-text text-muted">Choose a time that feels right. We are here to support you.</p>
                     </div>
 
                     <form id="appointmentForm" th:action="@{/schedule}" th:object="${appointment}" method="post" novalidate>

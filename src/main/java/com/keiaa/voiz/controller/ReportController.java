@@ -45,7 +45,7 @@ public class ReportController {
             emailService.sendConfirmationEmail(report.getEmail(), report.getReportId());
         }
         
-        model.addAttribute("message", "Thank you! Your report has been submitted successfully.");
+        model.addAttribute("message", "We’ve received your report and will review it with care. If you’re unsafe right now, please contact campus security or emergency services first.");
         model.addAttribute("reportId", report.getReportId()); 
         
         model.addAttribute("report", new Report()); 

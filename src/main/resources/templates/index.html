@@ -12,7 +12,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div class="main-content">
         <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 py-5">
 
-            <div class="card shadow p-4" style="max-width: 600px; width: 100%;">
+            <div class="card shadow p-4 card-large-radius" style="max-width: 600px; width: 100%;">
                 <div class="card-body">
                     <div class="text-center mb-4">
                         <h1 class="card-title">SafePoint</h1>
@@ -90,35 +90,33 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     </div>
     
     <div th:if="${message}" class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="successModalLabel">Report Submitted!</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p th:text="${message}"></p>
-            <div th:if="${reportId}" class="mt-3">
-                <p>Your unique report tracking ID is:</p>
-                <h4 class="text-center font-monospace" th:text="${reportId}"></h4>
-                <p class="text-center text-muted"><small>Please save this ID to track your report's status.</small></p>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-body p-4 text-center">
+                    <h5 class="mb-2">Report Received</h5>
+                    <p class="text-muted">Your report has been submitted. If you feel unsafe, please contact campus security immediately.</p>
+                    
+                    <div th:if="${reportId}" class="my-4">
+                        <p class="text-muted mb-2">Your unique reference ID is:</p>
+                        <div class="input-group">
+                            <input type="text" id="reportId" class="form-control font-monospace fs-5 bg-light" th:value="${reportId}" readonly>
+                            <button id="copyBtn" class="btn btn-outline-secondary" type="button" title="Copy to clipboard">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        </div>
+                        <div id="copy-feedback" class="form-text text-success d-none">Copied!</div>
+                    </div>
+    
+                    <div class="d-grid">
+                        <button type="button" class="btn btn-success btn-lg" data-bs-dismiss="modal">Done</button>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
-          </div>
         </div>
-      </div>
     </div>
     
     <div th:replace="~{fragments/common :: scripts}"></div>
     <script src="/js/report-form.js"></script>
 
-    <script th:if="${message}">
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-            successModal.show();
-        });
-    </script>
 </body>
 </html>

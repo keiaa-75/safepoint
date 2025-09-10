@@ -72,4 +72,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         showStep(currentStep);
     }
+
+    // Success Modal Logic
+    const successModalEl = document.getElementById('successModal');
+    if (successModalEl && successModalEl.outerHTML.includes('reportId')) { // Check if modal has content
+        const successModal = new bootstrap.Modal(successModalEl);
+        successModal.show();
+
+        const copyBtn = document.getElementById('copyBtn');
+        const reportIdInput = document.getElementById('reportId');
+        const copyFeedback = document.getElementById('copy-feedback');
+
+        if (copyBtn && reportIdInput) {
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(reportIdInput.value).then(() => {
+                    copyFeedback.classList.remove('d-none');
+                    copyBtn.innerHTML = '<i class="bi bi-check-lg text-success"></i>';
+                    setTimeout(() => {
+                        copyFeedback.classList.add('d-none');
+                        copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+            });
+        }
+    }
 });

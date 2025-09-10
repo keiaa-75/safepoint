@@ -26,7 +26,9 @@ body.admin-body {
     transform: translateY(-2px);
 }
 
-
+.card-large-radius {
+    border-radius: 1.5rem;
+}
 
 .main-content {
     transition: filter 0.3s ease-in-out;

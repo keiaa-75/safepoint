@@ -11,10 +11,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div th:replace="~{fragments/nav :: nav}"></div>
     <div class="main-content">
         <div class="container d-flex justify-content-center align-items-center min-vh-100">
-            <div class="card shadow p-4" style="max-width: 600px; width: 100%;">
+            <div class="card shadow p-4 card-large-radius" style="max-width: 600px; width: 100%;">
                 <div class="card-body">
                     <h1 class="card-title text-center mb-4">Track Your Report</h1>
-                    <p class="card-text text-center text-muted mb-4">Enter your unique report ID to check the status of your submission.</p>
+                    <p class="card-text text-center text-muted mb-4">Enter your reference ID to see updates and next steps.</p>
 
                     <form th:action="@{/track-report}" method="get" class="mb-4">
                         <div class="form-floating mb-3">
