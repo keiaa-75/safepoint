@@ -113,6 +113,8 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     
     <div th:replace="~{fragments/common :: scripts}"></div>
 
+    <script src="/js/report-form.js"></script>
+
     <script th:if="${message}">
         document.addEventListener('DOMContentLoaded', (event) => {
             const successModal = new bootstrap.Modal(document.getElementById('successModal'));

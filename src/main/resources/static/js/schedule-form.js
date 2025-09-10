@@ -5,37 +5,14 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // FAB menu logic
-    const fabToggle = document.getElementById('fabToggle');
-    const navLinks = document.querySelector('.nav-links');
-    const backdrop = document.getElementById('backdrop');
-    const mainContent = document.querySelector('.main-content');
-
-    if (fabToggle && navLinks && backdrop && mainContent) {
-        fabToggle.addEventListener('click', () => {
-            fabToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-            backdrop.classList.toggle('active');
-            mainContent.classList.toggle('blurred');
-        });
-
-        backdrop.addEventListener('click', () => {
-            fabToggle.classList.remove('active');
-            navLinks.classList.remove('active');
-            backdrop.classList.remove('active');
-            mainContent.classList.remove('blurred');
-        });
-    }
-
-    // Multi-step form logic
-    const reportForm = document.getElementById('reportForm');
-    if (reportForm) {
+    const appointmentForm = document.getElementById('appointmentForm');
+    if (appointmentForm) {
         let currentStep = 1;
-        const steps = Array.from(reportForm.querySelectorAll('.form-step'));
-        const nextBtn = reportForm.querySelector('#nextBtn');
-        const prevBtn = reportForm.querySelector('#prevBtn');
-        const submitBtn = reportForm.querySelector('#submitBtn');
-        const progressBar = reportForm.querySelector('#progressBar');
+        const steps = Array.from(appointmentForm.querySelectorAll('.form-step'));
+        const nextBtn = appointmentForm.querySelector('#nextBtn');
+        const prevBtn = appointmentForm.querySelector('#prevBtn');
+        const submitBtn = appointmentForm.querySelector('#submitBtn');
+        const progressBar = appointmentForm.querySelector('#progressBar');
 
         const showStep = (stepNumber) => {
             steps.forEach((step, index) => {
@@ -55,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentStepFields = steps[stepNumber - 1].querySelectorAll('[required]');
             let isValid = true;
             currentStepFields.forEach(field => {
-                if (!field.value.trim() || (field.type === 'checkbox' && !field.checked)) {
+                if (!field.value.trim()) {
                     field.classList.add('is-invalid');
                     isValid = false;
                 } else {
@@ -68,9 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateReview = () => {
             document.getElementById('review-name').textContent = document.getElementById('name').value;
             document.getElementById('review-email').textContent = document.getElementById('email').value;
-            const categorySelect = document.getElementById('category');
-            document.getElementById('review-category').textContent = categorySelect.options[categorySelect.selectedIndex].text;
-            document.getElementById('review-description').textContent = document.getElementById('description').value;
+            const dtInput = document.getElementById('preferredDateTime').value;
+            const formattedDate = new Date(dtInput).toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' });
+            document.getElementById('review-datetime').textContent = formattedDate;
+            document.getElementById('review-reason').textContent = document.getElementById('reason').value;
         };
 
         nextBtn.addEventListener('click', () => {
