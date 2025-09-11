@@ -4,6 +4,10 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
+body {
+    font-family: 'Inter', sans-serif;
+}
+
 body:not(.admin-body) {
     background: #e0f2f1;
     background: -webkit-linear-gradient(to right, #2C90C4, #31CCB0);
