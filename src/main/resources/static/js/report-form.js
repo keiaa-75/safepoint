@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentStepFields = steps[stepNumber - 1].querySelectorAll('[required]');
             let isValid = true;
             currentStepFields.forEach(field => {
-                if (!field.value.trim() || (field.type === 'checkbox' && !field.checked)) {
+                if ((field.type === 'checkbox' && !field.checked) || (field.type !== 'checkbox' && !field.value.trim())) {
                     field.classList.add('is-invalid');
                     isValid = false;
                 } else {
@@ -67,6 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentStep > 1) {
                 currentStep--;
                 showStep(currentStep);
+            }
+        });
+
+        reportForm.addEventListener('submit', (e) => {
+            if (!validateStep(currentStep)) {
+                e.preventDefault();
             }
         });
 
