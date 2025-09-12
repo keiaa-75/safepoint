@@ -63,15 +63,26 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <div class="form-step" id="step-3" style="display: none;">
                             <h5 class="mb-4">Step 3: Review & Confirm</h5>
                             <div class="mb-3">
-                                <p class="mb-1"><strong>Name:</strong> <span id="review-name"></span></p>
-                                <p class="mb-1"><strong>Email:</strong> <span id="review-email"></span></p>
-                                <p class="mb-1"><strong>Category:</strong> <span id="review-category"></span></p>
-                                <p><strong>Description:</strong></p>
-                                <p id="review-description" class="bg-light text-dark p-2 rounded" style="min-height: 80px;"></p>
+                                <p class="text-muted mb-0">Name</p>
+                                <p id="review-name"></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted mb-0">Email</p>
+                                <p id="review-email"></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted mb-0">Category</p>
+                                <p id="review-category"></p>
+                            </div>
+                            <div class="mb-4">
+                                <p class="text-muted mb-1">Description:</p>
+                                <div class="p-3 bg-light rounded">
+                                    <p id="review-description" class="mb-0"></p>
+                                </div>
                             </div>
                             <div class="form-check mb-4">
                                 <input class="form-check-input" type="checkbox" value="" id="confirmation" required>
-                                <label class="form-check-label" for="confirmation">
+                                <label class="form-check-label text-muted small" for="confirmation">
                                     I verify that this report is true and accurate to the best of my knowledge.
                                 </label>
                             </div>
