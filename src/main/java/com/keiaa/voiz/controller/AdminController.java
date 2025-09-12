@@ -99,7 +99,7 @@ public class AdminController {
             reportRepository.save(report);
         });
         
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/report/" + reportId;
     }
 
     @Transactional

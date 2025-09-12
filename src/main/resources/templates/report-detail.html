@@ -18,6 +18,18 @@
                     <p th:text="${#temporals.format(report.timestamp, 'dd-MMM-yyyy HH:mm')}"></p>
                 </div>
                 <div class="col-md-6">
+                    <p class="text-muted mb-1">Change Status</p>
+                    <form th:action="@{/admin/report/update-status}" method="post">
+                        <input type="hidden" name="reportId" th:value="${report.reportId}" />
+                        <select name="status" class="form-select" onchange="this.form.submit()">
+                            <option value="Pending Review" th:selected="${report.status == 'Pending Review'}">Pending Review</option>
+                            <option value="Under Investigation" th:selected="${report.status == 'Under Investigation'}">Under Investigation</option>
+                            <option value="Action Taken" th:selected="${report.status == 'Action Taken'}">Action Taken</option>
+                            <option value="Resolved" th:selected="${report.status == 'Resolved'}">Resolved</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="col-md-6">
                     <p class="text-muted mb-1">Category</p>
                     <p th:text="${report.category}"></p>
                 </div>
