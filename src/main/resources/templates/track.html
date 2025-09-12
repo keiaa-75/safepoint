@@ -18,7 +18,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
                     <form th:action="@{/track-report}" method="get" class="mb-4">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="reportId" name="reportId" placeholder="Enter your Report ID" required>
+                            <input type="text" class="form-control" id="reportId" name="reportId" placeholder="Enter your Report ID" required th:value="${param.reportId}">
                             <label for="reportId">Report ID</label>
                         </div>
                         <div class="d-grid gap-2">
@@ -26,13 +26,26 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         </div>
                     </form>
 
-                    <div th:if="${report}">
-                        <h5 class="mt-4">Report Status</h5>
-                        <div class="border p-3 rounded">
-                            <p><strong>Report ID:</strong> <span th:text="${report.reportId}"></span></p>
-                            <p><strong>Category:</strong> <span th:text="${report.category}"></span></p>
-                            <p><strong>Description:</strong> <span th:text="${report.description}"></span></p>
-                            <p><strong>Status:</strong> <span class="badge" th:classappend="${report.status == 'Pending Review'} ? 'bg-warning' : 'bg-success'" th:text="${report.status}"></span></p>
+                    <div th:if="${report}" class="accordion" id="reportAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <span class="me-auto">
+                                        Report #<span class="d-none d-md-inline" th:text="${report.reportId}"></span>
+                                        <span class="d-inline d-md-none" th:text="${#strings.substring(report.reportId, 0, 8)} + '...'"></span>
+                                    </span>
+                                    <span class="badge me-3" th:classappend="${report.status == 'Pending Review'} ? 'bg-warning text-dark' : (${report.status == 'Under Investigation'} ? 'bg-info text-dark' : 'bg-success')" th:text="${report.status}"></span>
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#reportAccordion">
+                                <div class="accordion-body">
+                                    <p class="text-muted mb-1">Category</p>
+                                    <p class="mb-3" th:text="${report.category}"></p>
+                                    
+                                    <p class="text-muted mb-1">Description</p>
+                                    <p class="bg-light p-2 rounded" th:text="${report.description}"></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
