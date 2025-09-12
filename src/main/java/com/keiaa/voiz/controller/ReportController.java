@@ -6,6 +6,8 @@
 
 package com.keiaa.voiz.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,11 +18,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.keiaa.voiz.model.Report;
 import com.keiaa.voiz.repository.ReportRepository;
 import com.keiaa.voiz.service.EmailService;
+import com.keiaa.voiz.service.FileStorageService;
 
 @Controller
 public class ReportController {
@@ -31,6 +35,9 @@ public class ReportController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
     @GetMapping("/")
     public String showForm(Model model) {
         if (!model.containsAttribute("report")) {
@@ -40,8 +47,20 @@ public class ReportController {
     }
 
     @PostMapping("/submit-report")
-    public String submitReport(@ModelAttribute("report") Report report, RedirectAttributes redirectAttributes) {
+    public String submitReport(@ModelAttribute("report") Report report, 
+                               @RequestParam("files") MultipartFile[] files, 
+                               RedirectAttributes redirectAttributes) {
         report.setReportId(UUID.randomUUID().toString());
+
+        List<String> fileNames = new ArrayList<>();
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                String fileName = fileStorageService.store(file);
+                fileNames.add(fileName);
+            }
+        }
+        report.setEvidenceFilePaths(fileNames);
+
         reportRepository.save(report);
 
         if (report.getEmail() != null && !report.getEmail().isEmpty()) {

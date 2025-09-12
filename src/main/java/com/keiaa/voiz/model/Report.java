@@ -7,7 +7,9 @@
 package com.keiaa.voiz.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,6 +35,9 @@ public class Report {
     private String category;
     private String description;
     private LocalDateTime timestamp = LocalDateTime.now();
+
+    @ElementCollection
+    private List<String> evidenceFilePaths;
 
     // A default status for new reports
     private String status = "Pending Review";
