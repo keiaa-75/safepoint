@@ -35,6 +35,27 @@
                 </div>
             </div>
 
+            <div th:if="${report.evidenceFilePaths != null and not #lists.isEmpty(report.evidenceFilePaths)}" class="mt-4">
+                <div class="accordion" id="evidenceAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                View Attached Evidence <span class="badge bg-primary rounded-pill ms-2" th:text="${#lists.size(report.evidenceFilePaths)}"></span>
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#evidenceAccordion">
+                            <div class="accordion-body">
+                                <ul class="list-group">
+                                    <li th:each="filePath : ${report.evidenceFilePaths}" class="list-group-item">
+                                        <a th:href="@{/files/{filename}(filename=${filePath})}" th:text="${filePath}" target="_blank"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <hr class="my-4">
 
             <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
