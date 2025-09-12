@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="success-modal" th:if="${message}" class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div th:fragment="success-modal(title, text, referenceId, referenceIdLabel)" class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4 shadow">
                 <div class="modal-body p-4 text-center">
-                    <h5 class="mb-2">Report Received</h5>
-                    <p class="text-muted">Your report has been submitted. If you feel unsafe, please contact campus security immediately.</p>
+                    <h5 class="mb-2" th:text="${title}"></h5>
+                    <p class="text-muted" th:text="${text}"></p>
                     
-                    <div th:if="${reportId}" class="my-4">
-                        <p class="text-muted mb-2">Your unique reference ID is:</p>
+                    <div th:if="${referenceId}" class="my-4">
+                        <p class="text-muted mb-2" th:text="${referenceIdLabel}"></p>
                         <div class="input-group">
-                            <input type="text" id="reportId" class="form-control font-monospace fs-5 bg-light" th:value="${reportId}" readonly>
+                            <input type="text" id="referenceId" class="form-control font-monospace fs-5 bg-light" th:value="${referenceId}" readonly>
                             <button id="copyBtn" class="btn btn-outline-secondary" type="button" title="Copy to clipboard">
                                 <i class="bi bi-clipboard"></i>
                             </button>

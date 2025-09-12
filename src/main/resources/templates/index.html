@@ -89,10 +89,16 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         </div>
     </div>
     
-    <div th:replace="~{fragments/success-modal :: success-modal}"></div>
+    <div th:if="${message}" th:replace="~{fragments/success-modal :: success-modal(title='Report Received', text='Your report has been submitted. If you feel unsafe, please contact campus security immediately.', referenceId=${reportId}, referenceIdLabel='Your unique reference ID is:')}"></div>
     
     <div th:replace="~{fragments/common :: scripts}"></div>
     <script src="/js/report-form.js"></script>
 
+    <script th:if="${message}">
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        });
+    </script>
 </body>
 </html>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.keiaa.voiz.model.Report;
 import com.keiaa.voiz.repository.ReportRepository;
@@ -32,12 +33,14 @@ public class ReportController {
 
     @GetMapping("/")
     public String showForm(Model model) {
-        model.addAttribute("report", new Report());
+        if (!model.containsAttribute("report")) {
+            model.addAttribute("report", new Report());
+        }
         return "index";
     }
 
     @PostMapping("/submit-report")
-    public String submitReport(@ModelAttribute("report") Report report, Model model) {
+    public String submitReport(@ModelAttribute("report") Report report, RedirectAttributes redirectAttributes) {
         report.setReportId(UUID.randomUUID().toString());
         reportRepository.save(report);
 
@@ -45,11 +48,10 @@ public class ReportController {
             emailService.sendConfirmationEmail(report.getEmail(), report.getReportId());
         }
         
-        model.addAttribute("message", "We’ve received your report and will review it with care. If you’re unsafe right now, please contact campus security or emergency services first.");
-        model.addAttribute("reportId", report.getReportId()); 
+        redirectAttributes.addFlashAttribute("message", "We’ve received your report and will review it with care. If you’re unsafe right now, please contact campus security or emergency services first.");
+        redirectAttributes.addFlashAttribute("reportId", report.getReportId()); 
         
-        model.addAttribute("report", new Report()); 
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/track")

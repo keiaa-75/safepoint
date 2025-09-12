@@ -76,22 +76,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         </div>
     </div>
 
-    <div th:if="${message}" class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Request Submitted!</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p th:text="${message}"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div th:if="${message}" th:replace="~{fragments/success-modal :: success-modal(title='Request Submitted!', text=${message}, referenceId=null, referenceIdLabel=null)}"></div>
 
     <div th:replace="~{fragments/common :: scripts}"></div>
     <script src="/js/schedule-form.js"></script>

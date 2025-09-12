@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.keiaa.voiz.model.Appointment;
 import com.keiaa.voiz.repository.AppointmentRepository;
@@ -26,15 +27,16 @@ public class AppointmentController {
 
     @GetMapping
     public String showForm(Model model) {
-        model.addAttribute("appointment", new Appointment());
+        if (!model.containsAttribute("appointment")) {
+            model.addAttribute("appointment", new Appointment());
+        }
         return "schedule";
     }
 
     @PostMapping
-    public String submitAppointment(@ModelAttribute("appointment") Appointment appointment, Model model) {
+    public String submitAppointment(@ModelAttribute("appointment") Appointment appointment, RedirectAttributes redirectAttributes) {
         appointmentRepository.save(appointment);
-        model.addAttribute("message", "Your counseling session request has been submitted successfully!");
-        model.addAttribute("appointment", new Appointment()); // Reset the form
-        return "schedule";
+        redirectAttributes.addFlashAttribute("message", "Your counseling session request has been submitted successfully!");
+        return "redirect:/schedule";
     }
 }
