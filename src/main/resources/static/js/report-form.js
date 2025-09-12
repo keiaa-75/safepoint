@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevBtn = reportForm.querySelector('#prevBtn');
         const submitBtn = reportForm.querySelector('#submitBtn');
         const progressBar = reportForm.querySelector('#progressBar');
+        const filesInput = reportForm.querySelector('#files');
+        const fileError = reportForm.querySelector('#file-error');
 
         const showStep = (stepNumber) => {
             steps.forEach((step, index) => {
@@ -54,6 +56,24 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('review-category').textContent = categorySelect.options[categorySelect.selectedIndex].text;
             document.getElementById('review-description').textContent = document.getElementById('description').value;
         };
+
+        const validateFiles = () => {
+            const maxFileSize = 1024 * 1024 * 1024; // 1 GB
+            fileError.textContent = '';
+            nextBtn.disabled = false;
+
+            if (filesInput.files.length > 0) {
+                for (const file of filesInput.files) {
+                    if (file.size > maxFileSize) {
+                        fileError.textContent = `File "${file.name}" is too large. Maximum size is 1 GB.`;
+                        nextBtn.disabled = true;
+                        return;
+                    }
+                }
+            }
+        };
+
+        filesInput.addEventListener('change', validateFiles);
 
         nextBtn.addEventListener('click', () => {
             if (validateStep(currentStep)) {
