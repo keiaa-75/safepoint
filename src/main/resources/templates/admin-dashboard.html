@@ -41,16 +41,28 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <div th:if="${#lists.isEmpty(appointments)}">
                             <p class="text-center text-muted mb-0">No appointment requests yet.</p>
                         </div>
-                        <ul class="list-group" th:unless="${#lists.isEmpty(appointments)}">
-                            <li th:each="appointment : ${appointments}" class="list-group-item">
-                                <div class="d-flex flex-column flex-sm-row w-100 justify-content-between">
-                                    <h5 class="mb-1" th:text="${appointment.name}"></h5>
-                                    <small th:text="${#temporals.format(appointment.preferredDateTime, 'dd-MMM-yyyy HH:mm')}"></small>
+                        <div class="accordion" id="appointmentsAccordion" th:unless="${#lists.isEmpty(appointments)}">
+                            <div class="accordion-item" th:each="appointment, iterStat : ${appointments}">
+                                <h2 class="accordion-header" th:id="'heading' + ${iterStat.index}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.index}" aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.index}">
+                                        <span class="fw-bold" th:text="${appointment.name}"></span>
+                                        <span class="ms-auto pe-4" th:text="${#temporals.format(appointment.preferredDateTime, 'dd-MMM-yyyy HH:mm')}"></span>
+                                    </button>
+                                </h2>
+                                <div th:id="'collapse' + ${iterStat.index}" class="accordion-collapse collapse" th:aria-labelledby="'heading' + ${iterStat.index}" data-bs-parent="#appointmentsAccordion">
+                                    <div class="accordion-body">
+                                        <p class="mb-2">
+                                            <strong>Reason:</strong><br>
+                                            <span th:text="${appointment.reason}"></span>
+                                        </p>
+                                        <p class="mb-0">
+                                            <strong>Email:</strong><br>
+                                            <a th:href="'mailto:' + ${appointment.email}" th:text="${appointment.email}"></a>
+                                        </p>
+                                    </div>
                                 </div>
-                                <p class="mb-1" th:text="${appointment.reason}"></p>
-                                <small th:text="${appointment.email}"></small>
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
