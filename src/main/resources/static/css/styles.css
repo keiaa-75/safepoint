@@ -8,7 +8,7 @@ body {
     font-family: 'Inter', sans-serif;
     padding-bottom: 80px; /* Space for bottom nav */
     text-align: left;
-    background-color: #fff;
+    background-color: #f8f9fa;
 }
 
 body.admin-body {
@@ -19,6 +19,18 @@ body.admin-body {
     max-width: 700px;
     margin: 0 auto;
     padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - 90px);
+}
+
+.content-card {
+    background-color: #fff;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid #e9ecef;
 }
 
 /* Bottom Navigation */
