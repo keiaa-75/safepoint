@@ -42,6 +42,33 @@ mvn spring-boot:run
 
 The application will start on port `9090`.
 
+
+## Development Properties
+
+This project requires a file named `src/main/resources/application-dev.properties` for local development. This file contains sensitive configuration (such as email credentials) and is excluded from version control (`.gitignore`).
+
+**You must create this file before running the app.**
+
+### Sample `application-dev.properties`
+
+```properties
+# Email properties
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=your-email@gmail.com
+spring.mail.password=your-app-password
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+# Custom properties
+admin.key=your-admin-key
+```
+
+**Note:**
+- Use an [App Password](https://support.google.com/accounts/answer/185833) for Gmail if 2FA is enabled.
+- Never commit real credentials to version control.
+- The `admin.key` is used for admin authentication.
+
 ## Usage
 
 1. **Access the application:** Open your web browser and navigate to `http://localhost:9090`.
