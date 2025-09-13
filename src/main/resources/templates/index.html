@@ -10,104 +10,58 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <body>
     <div th:replace="~{fragments/nav :: nav}"></div>
     <div class="main-content">
-        <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 py-5">
+        <div class="container content-container py-5">
 
-            <div class="card shadow p-4 card-large-radius" style="max-width: 600px; width: 100%;">
-                <div class="card-body">
-                    <div class="text-center mb-4">
-                        <h1 class="card-title">SafePoint</h1>
-                        <p class="card-text text-muted">Submit a confidential report about bullying.</p>
+            <!-- Landing Page Content -->
+            <div id="bento-container">
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <h1>SafePoint</h1>
+                    <p class="lead">A safe space for students to report bullying and find support confidentially.</p>
+                </div>
+
+                <!-- Bento Grid -->
+                <div class="bento-grid">
+                    <!-- Card 1: Submit Report -->
+                    <div id="showReportForm" class="bento-card">
+                        <div class="icon-wrapper bg-primary-soft">
+                            <i class="bi bi-chat-right-dots-fill"></i>
+                        </div>
+                        <h3>Submit a Report</h3>
+                        <p>Provide details about an incident confidentially.</p>
                     </div>
-
-                    <form id="reportForm" th:action="@{/submit-report}" th:object="${report}" method="post" enctype="multipart/form-data" novalidate>
-                        
-                        <!-- Progress Bar -->
-                        <div class="progress mb-4" style="height: 10px;">
-                            <div id="progressBar" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    <!-- Card 2: Schedule Session -->
+                    <a href="/schedule" class="bento-card">
+                         <div class="icon-wrapper bg-success-soft">
+                            <i class="bi bi-calendar2-plus-fill"></i>
                         </div>
-
-                        <!-- Step 1: Your Information -->
-                        <div class="form-step active" id="step-1">
-                            <h5 class="mb-4">Step 1: Your Information</h5>
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Name" required>
-                                <label for="name">Name</label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Email Address" required>
-                                <label for="email">Email Address</label>
-                            </div>
+                        <h3>Schedule a Session</h3>
+                        <p>Request a meeting with a counselor.</p>
+                    </a>
+                    <!-- Card 3: Track Report -->
+                    <a href="/track" class="bento-card">
+                         <div class="icon-wrapper bg-warning-soft">
+                            <i class="bi bi-clipboard2-data-fill"></i>
                         </div>
-
-                        <!-- Step 2: Incident Details -->
-                        <div class="form-step" id="step-2" style="display: none;">
-                            <h5 class="mb-4">Step 2: Incident Details</h5>
-                            <div class="form-floating mb-3">
-                                <select class="form-select" id="category" name="category" required>
-                                    <option value="" selected disabled>Select a category</option>
-                                    <option value="Physical">Physical</option>
-                                    <option value="Verbal">Verbal</option>
-                                    <option value="Cyber">Cyber</option>
-                                    <option value="Social">Social</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <label for="category">Bullying Category</label>
-                            </div>
-                            <div class="form-floating mb-4">
-                                <textarea class="form-control" id="description" th:field="*{description}" placeholder="Description of the Incident" rows="5" required style="height: 120px"></textarea>
-                                <label for="description">Description of the Incident</label>
-                            </div>
+                        <h3>Track Your Report</h3>
+                        <p>Check the status of your submitted report.</p>
+                    </a>
+                    <!-- Card 4: Resources -->
+                    <a href="/about" class="bento-card">
+                         <div class="icon-wrapper bg-info-soft">
+                            <i class="bi bi-info-circle-fill"></i>
                         </div>
-
-                        <!-- Step 3: Upload Evidence -->
-                        <div class="form-step" id="step-3" style="display: none;">
-                            <h5 class="mb-4">Step 3: Upload Evidence</h5>
-                            <div class="mb-3">
-                                <label for="files" class="form-label">Select files to upload:</label>
-                                <input class="form-control" type="file" id="files" name="files" multiple>
-                                <div id="file-error" class="text-danger mt-2"></div>
-                                <div class="form-text mt-2">Your evidence will be kept strictly confidential.</div>
-                            </div>
-                        </div>
-
-                        <!-- Step 4: Review & Confirm -->
-                        <div class="form-step" id="step-4" style="display: none;">
-                            <h5 class="mb-4">Step 4: Review & Confirm</h5>
-                            <div class="mb-3">
-                                <p class="text-muted mb-0">Name</p>
-                                <p id="review-name"></p>
-                            </div>
-                            <div class="mb-3">
-                                <p class="text-muted mb-0">Email</p>
-                                <p id="review-email"></p>
-                            </div>
-                            <div class="mb-3">
-                                <p class="text-muted mb-0">Category</p>
-                                <p id="review-category"></p>
-                            </div>
-                            <div class="mb-4">
-                                <p class="text-muted mb-1">Description:</p>
-                                <div class="p-3 bg-light rounded">
-                                    <p id="review-description" class="mb-0"></p>
-                                </div>
-                            </div>
-                            <div class="form-check mb-4">
-                                <input class="form-check-input" type="checkbox" value="" id="confirmation" required>
-                                <label class="form-check-label text-muted small" for="confirmation">
-                                    I verify that this report is true and accurate to the best of my knowledge.
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Navigation Buttons -->
-                        <div class="d-flex justify-content-between mt-4">
-                            <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Previous</button>
-                            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
-                            <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">Submit Report</button>
-                        </div>
-                    </form>
+                        <h3>Resources</h3>
+                        <p>Learn more about the platform and find help.</p>
+                    </a>
                 </div>
             </div>
+
+            <!-- Report Form Container (Initially Hidden) -->
+            <div id="form-container" style="display: none;">
+                <div th:replace="~{fragments/report-form :: report-form}"></div>
+            </div>
+
         </div>
     </div>
     
@@ -120,6 +74,37 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         document.addEventListener('DOMContentLoaded', (event) => {
             const successModal = new bootstrap.Modal(document.getElementById('successModal'));
             successModal.show();
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const bentoContainer = document.getElementById('bento-container');
+            const formContainer = document.getElementById('form-container');
+            const showReportFormBtn = document.getElementById('showReportForm');
+            
+            // We need to select the back button from within the form container after it's potentially loaded
+            let backToBentoBtn = formContainer.querySelector('#backToBento');
+
+            showReportFormBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                bentoContainer.style.display = 'none';
+                formContainer.style.display = 'block';
+                // Re-select the back button in case it was part of a fragment loaded dynamically
+                backToBentoBtn = formContainer.querySelector('#backToBento');
+                if(backToBentoBtn) {
+                    backToBentoBtn.addEventListener('click', handleBackToBento);
+                }
+            });
+
+            const handleBackToBento = (e) => {
+                if(e) e.preventDefault();
+                formContainer.style.display = 'none';
+                bentoContainer.style.display = 'block';
+                if(backToBentoBtn) {
+                    backToBentoBtn.removeEventListener('click', handleBackToBento);
+                }
+            };
         });
     </script>
 </body>

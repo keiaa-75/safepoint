@@ -4,38 +4,21 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 -->
 
-<div th:fragment="nav">
-    <div class="backdrop" id="backdrop"></div>
-    <div class="fab-container">
-        <button class="fab" id="fabToggle">
-            <i class="bi bi-list fab-list-icon"></i>
-        </button>
-
-        <ul class="nav-links">
-            <li>
-                <a href="/">
-                    <i class="bi bi-chat-right-dots-fill"></i>
-                    <span>Report</span>
-                </a>
-            </li>
-            <li>
-                <a href="/schedule">
-                    <i class="bi bi-calendar2-plus-fill"></i>
-                    <span>Schedule</span>
-                </a>
-            </li>
-            <li>
-                <a href="/track">
-                    <i class="bi bi-clipboard2-data-fill"></i>
-                    <span>Track</span>
-                </a>
-            </li>
-            <li>
-                <a href="/about">
-                    <i class="bi bi-info-circle-fill"></i>
-                    <span>About</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+<div th:fragment="nav" class="bottom-nav">
+    <a href="/">
+        <i class="bi bi-house-door-fill"></i>
+        <span>Home</span>
+    </a>
+    <a href="/schedule">
+        <i class="bi bi-calendar2-plus-fill"></i>
+        <span>Schedule</span>
+    </a>
+    <a href="/track">
+        <i class="bi bi-clipboard2-data-fill"></i>
+        <span>Track</span>
+    </a>
+    <a href="/about">
+        <i class="bi bi-info-circle-fill"></i>
+        <span>About</span>
+    </a>
 </div>
