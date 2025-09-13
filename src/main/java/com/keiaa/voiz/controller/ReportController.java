@@ -83,7 +83,7 @@ public class ReportController {
         redirectAttributes.addFlashAttribute("message", "We’ve received your report and will review it with care. If you’re unsafe right now, please contact campus security or emergency services first.");
         redirectAttributes.addFlashAttribute("reportId", report.getReportId()); 
         
-        return "redirect:/";
+        return "redirect:/report";
     }
 
     @GetMapping("/track")
