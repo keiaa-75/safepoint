@@ -1,6 +1,12 @@
-<div th:fragment="report-form" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Submit a Report')}"></head>
+<body>
+    <div th:replace="~{fragments/nav :: nav}"></div>
+    <div class="main-content">
+        <div class="container content-container py-5">
+            <div xmlns:th="http://www.thymeleaf.org">
     <div class="text-start mb-4">
-        <a href="#" id="backToBento" class="btn btn-outline-secondary mb-3"><i class="bi bi-arrow-left"></i> Back to Home</a>
         <h1 class="">Submit a Report</h1>
         <p class="text-muted">Submit a confidential report about bullying.</p>
     </div>
@@ -93,3 +99,19 @@
         </div>
     </form>
 </div>
+        </div>
+    </div>
+    
+    <div th:if="${message}" th:replace="~{fragments/success-modal :: success-modal(title='Report Received', text='Your report has been submitted. If you feel unsafe, please contact campus security immediately.', referenceId=${reportId}, referenceIdLabel='Your unique reference ID is:')}"></div>
+    
+    <div th:replace="~{fragments/common :: scripts}"></div>
+    <script src="/js/report-form.js"></script>
+
+    <script th:if="${message}">
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        });
+    </script>
+</body>
+</html>

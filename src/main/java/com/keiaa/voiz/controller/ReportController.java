@@ -51,6 +51,14 @@ public class ReportController {
         return "index";
     }
 
+    @GetMapping("/report")
+    public String showReportForm(Model model) {
+        if (!model.containsAttribute("report")) {
+            model.addAttribute("report", new Report());
+        }
+        return "report";
+    }
+
     @PostMapping("/submit-report")
     public String submitReport(@ModelAttribute("report") Report report, 
                                @RequestParam("files") MultipartFile[] files, 

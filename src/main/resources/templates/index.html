@@ -23,13 +23,13 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 <!-- Bento Grid -->
                 <div class="bento-grid">
                     <!-- Card 1: Submit Report -->
-                    <div id="showReportForm" class="bento-card">
+                    <a href="/report" class="bento-card">
                         <div class="icon-wrapper bg-primary-soft">
                             <i class="bi bi-chat-right-dots-fill"></i>
                         </div>
                         <h3>Submit a Report</h3>
                         <p>Provide details about an incident confidentially.</p>
-                    </div>
+                    </a>
                     <!-- Card 2: Schedule Session -->
                     <a href="/schedule" class="bento-card">
                          <div class="icon-wrapper bg-success-soft">
@@ -57,55 +57,9 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 </div>
             </div>
 
-            <!-- Report Form Container (Initially Hidden) -->
-            <div id="form-container" style="display: none;">
-                <div th:replace="~{fragments/report-form :: report-form}"></div>
             </div>
-
-        </div>
     </div>
     
-    <div th:if="${message}" th:replace="~{fragments/success-modal :: success-modal(title='Report Received', text='Your report has been submitted. If you feel unsafe, please contact campus security immediately.', referenceId=${reportId}, referenceIdLabel='Your unique reference ID is:')}"></div>
-    
     <div th:replace="~{fragments/common :: scripts}"></div>
-    <script src="/js/report-form.js"></script>
-
-    <script th:if="${message}">
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-            successModal.show();
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const bentoContainer = document.getElementById('bento-container');
-            const formContainer = document.getElementById('form-container');
-            const showReportFormBtn = document.getElementById('showReportForm');
-            
-            // We need to select the back button from within the form container after it's potentially loaded
-            let backToBentoBtn = formContainer.querySelector('#backToBento');
-
-            showReportFormBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                bentoContainer.style.display = 'none';
-                formContainer.style.display = 'block';
-                // Re-select the back button in case it was part of a fragment loaded dynamically
-                backToBentoBtn = formContainer.querySelector('#backToBento');
-                if(backToBentoBtn) {
-                    backToBentoBtn.addEventListener('click', handleBackToBento);
-                }
-            });
-
-            const handleBackToBento = (e) => {
-                if(e) e.preventDefault();
-                formContainer.style.display = 'none';
-                bentoContainer.style.display = 'block';
-                if(backToBentoBtn) {
-                    backToBentoBtn.removeEventListener('click', handleBackToBento);
-                }
-            };
-        });
-    </script>
 </body>
 </html>
