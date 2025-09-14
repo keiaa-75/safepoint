@@ -1,0 +1,42 @@
+<!--
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <div th:fragment="form-progress-bar(totalSteps)">
+        <div class="progress mb-4" style="height: 10px;">
+            <div id="progressBar" class="progress-bar" role="progressbar" th:style="'width: ' + (100.0 / ${totalSteps}) + '%;'" th:aria-valuenow="(100.0 / ${totalSteps})" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+
+    <div th:fragment="form-step-info">
+        <div class="form-step active" id="step-1">
+            <h5 class="mb-4 text-center">Step 1: Your Information</h5>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Name" required>
+                <label for="name">Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Email Address" required>
+                <label for="email">Email Address</label>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="form-navigation(submitText)">
+        <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Previous</button>
+            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+            <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;" th:text="${submitText}">Submit</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

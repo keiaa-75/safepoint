@@ -13,23 +13,9 @@
 
                 <form id="reportForm" th:action="@{/submit-report}" th:object="${report}" method="post" enctype="multipart/form-data" novalidate>
                     
-                    <!-- Progress Bar -->
-                    <div class="progress mb-4" style="height: 10px;">
-                        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
+                    <div th:replace="~{fragments/form-components :: form-progress-bar(totalSteps=4)}"></div>
 
-                    <!-- Step 1: Your Information -->
-                    <div class="form-step active" id="step-1">
-                        <h5 class="mb-4 text-center">Step 1: Your Information</h5>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Name" required>
-                            <label for="name">Name</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Email Address" required>
-                            <label for="email">Email Address</label>
-                        </div>
-                    </div>
+                    <div th:replace="~{fragments/form-components :: form-step-info}"></div>
 
                     <!-- Step 2: Incident Details -->
                     <div class="form-step" id="step-2" style="display: none;">
@@ -91,12 +77,7 @@
                         </div>
                     </div>
 
-                    <!-- Navigation Buttons -->
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Previous</button>
-                        <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
-                        <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">Submit Report</button>
-                    </div>
+                    <div th:replace="~{fragments/form-components :: form-navigation(submitText='Submit Report')}"></div>
                 </form>
             </div>
         </div>
