@@ -47,7 +47,9 @@ The application will start on port `9090`.
 
 ## Development Properties
 
-This project requires a file named `src/main/resources/application-dev.properties` for local development. This file contains sensitive configuration (such as email credentials) and is excluded from version control (`.gitignore`).
+This project requires a file named `src/main/resources/application-dev.properties` for local development. This file contains sensitive configuration (such as email credentials) and is excluded from version control. 
+
+The [EmailService](src/main/java/com/keiaa/voiz/service/EmailService.java) uses mail-related properties to send a copy of a report's unique reference ID. The `admin.key` is used for authenticating users on the administrative website.
 
 **You must create this file before running the app.**
 
@@ -70,3 +72,7 @@ admin.key=your-admin-key
 - Use an [App Password](https://support.google.com/accounts/answer/185833) for Gmail if 2FA is enabled.
 - Never commit real credentials to version control.
 - The `admin.key` is used for admin authentication.
+
+## License
+
+This repository is licensed under Mozilla Public License 2.0. Please refer to the [LICENSE](LICENSE) file for full details. Other resources included, such as images, are licensed under [Creative Commons Attribution Non-Commercial Share-Alike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/).
