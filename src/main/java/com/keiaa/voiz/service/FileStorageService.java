@@ -22,6 +22,11 @@ public class FileStorageService {
 
     private final Path root = Paths.get("data/uploads");
 
+    /**
+     * Initializes the file storage service by creating the root directory for uploads if it does not already exist.
+     * This method is called automatically after the bean's properties are set.
+     * @throws RuntimeException if the directory cannot be initialized.
+     */
     @PostConstruct
     public void init() {
         try {
@@ -31,6 +36,14 @@ public class FileStorageService {
         }
     }
 
+    /**
+     * Stores a given MultipartFile in the designated upload directory.
+     * Generates a unique filename to prevent collisions.
+     *
+     * @param file The MultipartFile to store.
+     * @return The unique filename under which the file was stored.
+     * @throws RuntimeException if the file could not be stored.
+     */
     public String store(MultipartFile file) {
         try {
             String originalFilenameRaw = file.getOriginalFilename();
@@ -43,6 +56,13 @@ public class FileStorageService {
         }
     }
 
+    /**
+     * Loads a file as a Spring Resource object.
+     *
+     * @param filename The name of the file to load.
+     * @return The Resource object for the requested file.
+     * @throws RuntimeException if the file cannot be read or found.
+     */
     public Resource load(String filename) {
         try {
             Path file = root.resolve(filename);
@@ -58,6 +78,12 @@ public class FileStorageService {
         }
     }
 
+    /**
+     * Loads all files currently stored in the upload directory.
+     *
+     * @return A Stream of Path objects representing the files in the upload directory.
+     * @throws RuntimeException if the files could not be loaded.
+     */
     public Stream<Path> loadAll() {
         try {
             return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
