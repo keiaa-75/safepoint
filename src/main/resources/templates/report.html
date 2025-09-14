@@ -1,3 +1,9 @@
+<!--
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+-->
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/common :: head('Submit a Report')}"></head>
@@ -17,7 +23,6 @@
 
                     <div th:replace="~{fragments/form-components :: form-step-info}"></div>
 
-                    <!-- Step 2: Incident Details -->
                     <div class="form-step" id="step-2" style="display: none;">
                         <h5 class="mb-4 text-center">Step 2: Incident Details</h5>
                         <div class="form-floating mb-3">
@@ -37,7 +42,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 3: Upload Evidence -->
                     <div class="form-step" id="step-3" style="display: none;">
                         <h5 class="mb-4 text-center">Step 3: Upload Evidence</h5>
                         <div class="mb-3">
@@ -48,7 +52,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 4: Review & Confirm -->
                     <div class="form-step" id="step-4" style="display: none;">
                         <h5 class="mb-4 text-center">Step 4: Review & Confirm</h5>
                         <div class="mb-3">

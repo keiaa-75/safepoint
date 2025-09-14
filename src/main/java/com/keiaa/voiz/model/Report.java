@@ -26,7 +26,6 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // New field for the unique report ID
     private String reportId;
     
     private String name;
@@ -39,6 +38,5 @@ public class Report {
     @ElementCollection
     private List<String> evidenceFilePaths;
 
-    // A default status for new reports
     private String status = "Pending Review";
 }
