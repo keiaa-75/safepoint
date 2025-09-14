@@ -8,6 +8,8 @@
     <img alt = "Java" src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white"/>
 </p>
 
+![SafePoint app screenshot](screenshot.png)
+
 SafePoint is a simple, full-stack web application to provide a platform for students to report bullying incidents and schedule one-on-one counseling sessions.
 
 ## Getting Started
@@ -68,10 +70,3 @@ admin.key=your-admin-key
 - Use an [App Password](https://support.google.com/accounts/answer/185833) for Gmail if 2FA is enabled.
 - Never commit real credentials to version control.
 - The `admin.key` is used for admin authentication.
-
-## Usage
-
-1. **Access the application:** Open your web browser and navigate to `http://localhost:9090`.
-2. **Submit a report:** Fill out the report form and click "Submit Report." A confirmation modal will appear, and the data will be saved to the H2 Database.
-3. **Schedule a session:** Navigate to the counseling scheduler page at `http://localhost:9090/schedule`. Fill out the form to request a session.
-4. **View the database:** You can view the stored reports and appointments by navigating to the H2 console at `http://localhost:9090/h2-console`. Use the JDBC URL configured in the `application.properties` file to connect.
