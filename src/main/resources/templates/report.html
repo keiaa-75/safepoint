@@ -105,6 +105,7 @@
     <div th:if="${message}" th:replace="~{fragments/success-modal :: success-modal(title='Report Received', text='Your report has been submitted. If you feel unsafe, please contact campus security immediately.', referenceId=${reportId}, referenceIdLabel='Your unique reference ID is:')}"></div>
     
     <div th:replace="~{fragments/common :: scripts}"></div>
+    <script src="/js/multi-step-form.js"></script>
     <script src="/js/report-form.js"></script>
 
     <script th:if="${message}">

@@ -5,38 +5,13 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Multi-step form logic for report form
-    const reportForm = document.getElementById('reportForm');
-    if (reportForm) {
-        let currentStep = 1;
-        const steps = Array.from(reportForm.querySelectorAll('.form-step'));
-        const nextBtn = reportForm.querySelector('#nextBtn');
-        const prevBtn = reportForm.querySelector('#prevBtn');
-        const submitBtn = reportForm.querySelector('#submitBtn');
-        const progressBar = reportForm.querySelector('#progressBar');
-        const filesInput = reportForm.querySelector('#files');
-        const fileError = reportForm.querySelector('#file-error');
-
-        const showStep = (stepNumber) => {
-            steps.forEach((step, index) => {
-                step.style.display = (index + 1 === stepNumber) ? 'block' : 'none';
-            });
-
-            const progress = (stepNumber / steps.length) * 100;
-            progressBar.style.width = `${progress}%`;
-            progressBar.setAttribute('aria-valuenow', progress);
-
-            prevBtn.style.display = (stepNumber > 1) ? 'inline-block' : 'none';
-            nextBtn.style.display = (stepNumber < steps.length) ? 'inline-block' : 'none';
-            submitBtn.style.display = (stepNumber === steps.length) ? 'inline-block' : 'none';
-        };
-
-        const validateStep = (stepNumber) => {
+    createMultiStepForm('reportForm', {
+        validateStep: (stepNumber) => {
             // Step 3 is the optional file upload, so we don't validate it
             if (stepNumber === 3) {
                 return true;
             }
-            const currentStepFields = steps[stepNumber - 1].querySelectorAll('[required]');
+            const currentStepFields = document.getElementById('reportForm').querySelectorAll('.form-step')[stepNumber - 1].querySelectorAll('[required]');
             let isValid = true;
             currentStepFields.forEach(field => {
                 if ((field.type === 'checkbox' && !field.checked) || (field.type !== 'checkbox' && !field.value.trim())) {
@@ -47,16 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             return isValid;
-        };
+        },
+        onStepChange: (currentStep) => {
+            const steps = document.getElementById('reportForm').querySelectorAll('.form-step');
+            if (currentStep === steps.length) {
+                document.getElementById('review-name').textContent = document.getElementById('name').value;
+                document.getElementById('review-email').textContent = document.getElementById('email').value;
+                const categorySelect = document.getElementById('category');
+                document.getElementById('review-category').textContent = categorySelect.options[categorySelect.selectedIndex].text;
+                document.getElementById('review-description').textContent = document.getElementById('description').value;
+            }
+        }
+    });
 
-        const updateReview = () => {
-            document.getElementById('review-name').textContent = document.getElementById('name').value;
-            document.getElementById('review-email').textContent = document.getElementById('email').value;
-            const categorySelect = document.getElementById('category');
-            document.getElementById('review-category').textContent = categorySelect.options[categorySelect.selectedIndex].text;
-            document.getElementById('review-description').textContent = document.getElementById('description').value;
-        };
+    const filesInput = document.querySelector('#files');
+    const fileError = document.querySelector('#file-error');
+    const nextBtn = document.querySelector('#nextBtn');
 
+    if (filesInput) {
         const validateFiles = () => {
             const maxFileSize = 1024 * 1024 * 1024; // 1 GB
             fileError.textContent = '';
@@ -74,33 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         filesInput.addEventListener('change', validateFiles);
-
-        nextBtn.addEventListener('click', () => {
-            if (validateStep(currentStep)) {
-                if (currentStep < steps.length) {
-                    currentStep++;
-                    if (currentStep === steps.length) {
-                        updateReview();
-                    }
-                    showStep(currentStep);
-                }
-            }
-        });
-
-        prevBtn.addEventListener('click', () => {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        });
-
-        reportForm.addEventListener('submit', (e) => {
-            if (!validateStep(currentStep)) {
-                e.preventDefault();
-            }
-        });
-
-        showStep(currentStep);
     }
 
     // Success Modal Logic
