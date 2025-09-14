@@ -47,7 +47,7 @@ The application will start on port `9090`.
 
 ## Development Properties
 
-This project requires a file named `src/main/resources/application-dev.properties` for local development. This file contains sensitive configuration (such as email credentials) and is excluded from version control. 
+This project requires a `src/main/resources/application-dev.properties` file for local development. This file contains sensitive configuration (such as email credentials) and is excluded from version control. 
 
 The [EmailService](src/main/java/com/keiaa/voiz/service/EmailService.java) uses mail-related properties to send a copy of a report's unique reference ID. The `admin.key` is used for authenticating users on the administrative website.
 
