@@ -49,7 +49,12 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                             <label for="files" class="form-label">Select files to upload:</label>
                             <input class="form-control" type="file" id="files" name="files" multiple>
                             <div id="file-error" class="text-danger mt-2"></div>
-                            <div class="form-text mt-2">Your evidence will be kept strictly confidential.</div>
+                            <div class="form-text mt-2">Your evidence will be kept strictly confidential. Max file size: 10MB.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="externalLink" class="form-label">External link:</label>
+                            <input type="url" class="form-control" id="externalLink" name="externalLink" placeholder="https://example.com/evidence">
+                            <div class="form-text mt-2">If your evidence is hosted on a cloud service, you can provide the link here.</div>
                         </div>
                     </div>
 

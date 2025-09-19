@@ -38,5 +38,7 @@ public class Report {
     @ElementCollection
     private List<String> evidenceFilePaths;
 
+    private String externalLink;
+
     private String status = "Pending Review";
 }

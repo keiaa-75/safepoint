@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const categorySelect = document.getElementById('category');
                 document.getElementById('review-category').textContent = categorySelect.options[categorySelect.selectedIndex].text;
                 document.getElementById('review-description').textContent = document.getElementById('description').value;
+                document.getElementById('review-externalLink').textContent = document.getElementById('externalLink').value || 'N/A';
             }
         }
     });
@@ -61,14 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (filesInput) {
         const validateFiles = () => {
-            const maxFileSize = 1024 * 1024 * 1024; // 1 GB
+            const maxFileSize = 10 * 1024 * 1024; // 10 MB
             fileError.textContent = '';
             nextBtn.disabled = false;
 
             if (filesInput.files.length > 0) {
                 for (const file of filesInput.files) {
                     if (file.size > maxFileSize) {
-                        fileError.textContent = `File "${file.name}" is too large. Maximum size is 1 GB.`;
+                        fileError.textContent = `File "${file.name}" is too large. Maximum size is 10 MB.`;
                         nextBtn.disabled = true;
                         return;
                     }
