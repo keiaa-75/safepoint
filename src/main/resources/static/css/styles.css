@@ -71,10 +71,40 @@ body.admin-body {
 .hero-section {
     background-color: #0D6EFD;
     color: #fff;
-    padding: 3rem 2rem;
+    padding: 2rem;
     border-radius: 1rem;
     text-align: center;
     margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.hero-logo {
+    height: 100px;
+    width: 100px;
+}
+
+.hero-text {
+    text-align: left;
+}
+
+@media (max-width: 576px) {
+    .hero-section {
+        flex-direction: column;
+        padding: 2rem 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .hero-logo {
+        height: 80px;
+        width: 80px;
+    }
+
+    .hero-text {
+        text-align: center;
+    }
 }
 
 .hero-section h1 {
