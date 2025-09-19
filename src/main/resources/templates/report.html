@@ -78,6 +78,23 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                 <p id="review-description" class="mb-0"></p>
                             </div>
                         </div>
+                        <div class="accordion mb-4" id="evidence-accordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="evidence-heading">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-evidence" aria-expanded="false" aria-controls="collapse-evidence">
+                                        Review Evidence
+                                    </button>
+                                </h2>
+                                <div id="collapse-evidence" class="accordion-collapse collapse" aria-labelledby="evidence-heading" data-bs-parent="#evidence-accordion">
+                                    <div class="accordion-body">
+                                        <p class="text-muted mb-2">Uploaded Files:</p>
+                                        <ul id="review-files" class="list-group mb-3"></ul>
+                                        <p class="text-muted mb-0">External Link:</p>
+                                        <p id="review-externalLink"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-check mb-4">
                             <input class="form-check-input" type="checkbox" value="" id="confirmation" required>
                             <label class="form-check-label text-muted small" for="confirmation">

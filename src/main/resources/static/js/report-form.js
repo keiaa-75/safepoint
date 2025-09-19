@@ -51,7 +51,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 const categorySelect = document.getElementById('category');
                 document.getElementById('review-category').textContent = categorySelect.options[categorySelect.selectedIndex].text;
                 document.getElementById('review-description').textContent = document.getElementById('description').value;
-                document.getElementById('review-externalLink').textContent = document.getElementById('externalLink').value || 'N/A';
+                
+                // Populate evidence accordion
+                const reviewFiles = document.getElementById('review-files');
+                reviewFiles.innerHTML = ''; // Clear previous entries
+                const files = document.getElementById('files').files;
+                if (files.length > 0) {
+                    for (const file of files) {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = file.name;
+                        reviewFiles.appendChild(li);
+                    }
+                } else {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item text-muted';
+                    li.textContent = 'No files uploaded.';
+                    reviewFiles.appendChild(li);
+                }
+
+                const externalLink = document.getElementById('externalLink').value;
+                document.getElementById('review-externalLink').textContent = externalLink || 'N/A';
             }
         }
     });
