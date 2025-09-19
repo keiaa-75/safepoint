@@ -36,4 +36,5 @@ build/
 *.mv.db
 *.db
 *dev*
+*LYFJSHS*
 data/
