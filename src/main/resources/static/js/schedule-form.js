@@ -6,6 +6,12 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const validationAlert = document.getElementById('validation-alert');
+    const form = document.getElementById('appointmentForm');
+    const spinnerOverlay = document.getElementById('spinner-overlay');
+
+    form.addEventListener('submit', () => {
+        spinnerOverlay.classList.add('show');
+    });
 
     createMultiStepForm('appointmentForm', {
         validateStep: (stepNumber) => {

@@ -77,7 +77,7 @@ public class ReportController {
         reportRepository.save(report);
 
         if (report.getEmail() != null && !report.getEmail().isEmpty()) {
-            emailService.sendConfirmationEmail(report);
+            emailService.sendReportConfirmation(report);
         }
         
         redirectAttributes.addFlashAttribute("message", "We’ve received your report and will review it with care. If you’re unsafe right now, please contact campus security or emergency services first.");

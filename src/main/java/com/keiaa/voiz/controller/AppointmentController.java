@@ -6,6 +6,7 @@
 
 package com.keiaa.voiz.controller;
 
+import com.keiaa.voiz.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,9 @@ public class AppointmentController {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping
     public String showForm(Model model) {
         if (!model.containsAttribute("appointment")) {
@@ -36,6 +40,7 @@ public class AppointmentController {
     @PostMapping
     public String submitAppointment(@ModelAttribute("appointment") Appointment appointment, RedirectAttributes redirectAttributes) {
         appointmentRepository.save(appointment);
+        emailService.sendAppointmentConfirmation(appointment);
         redirectAttributes.addFlashAttribute("message", "Your counseling session request has been submitted successfully!");
         return "redirect:/schedule";
     }

@@ -1,11 +1,12 @@
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+ * file, You can obtain one at https://www.mozilla.org/MPL/2.0/
  */
 
 package com.keiaa.voiz.service;
 
+import com.keiaa.voiz.model.Appointment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,7 +27,34 @@ public class EmailService {
     @Autowired
     private FileStorageService fileStorageService;
 
-    public void sendConfirmationEmail(Report report) {
+    public void sendAppointmentConfirmation(Appointment appointment) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false);
+            helper.setFrom("your-email@gmail.com");
+            helper.setTo(appointment.getEmail());
+            helper.setSubject("SafePoint: Counseling Session Request Received");
+
+            StringBuilder emailBody = new StringBuilder();
+            emailBody.append("<html><body>");
+            emailBody.append("<p>Dear ").append(appointment.getName()).append(",</p>");
+            emailBody.append("<p>We have received your request for a counseling session. We will review your preferred time and get back to you shortly to confirm the schedule.</p>");
+            emailBody.append("<h3>Your Request Details:</h3>");
+            emailBody.append("<ul>");
+            emailBody.append("<li><strong>Preferred Date and Time:</strong> ").append(appointment.getPreferredDateTime()).append("</li>");
+            emailBody.append("<li><strong>Reason for Session:</strong> ").append(appointment.getReason()).append("</li>");
+            emailBody.append("</ul>");
+            emailBody.append("</body></html>");
+
+            helper.setText(emailBody.toString(), true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendReportConfirmation(Report report) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true); // true for multipart
@@ -36,6 +64,7 @@ public class EmailService {
 
             StringBuilder emailBody = new StringBuilder();
             emailBody.append("<html><body>");
+            emailBody.append("<p>Dear ").append(report.getName()).append(",</p>");
             emailBody.append("<p>We’ve received your report and will review it with care. Your unique tracking ID is: <strong>").append(report.getReportId()).append("</strong>.</p>");
             emailBody.append("<p>Please save this ID to check the status of your report at a later time.</p>");
             emailBody.append("<h3>Here are the details you submitted:</h3>");
