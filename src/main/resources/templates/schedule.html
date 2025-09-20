@@ -64,7 +64,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         </div>
     </div>
 
-    <div th:if="${message}" th:replace="~{fragments/success-modal :: success-modal(title='Request Submitted!', text=${message}, referenceId=null, referenceIdLabel=null)}"></div>
+    <div th:if="${message}" th:replace="~{fragments/success-modal :: success-modal(title='Request Submitted!', text='Your counseling session request has been submitted successfully!', referenceId=null, referenceIdLabel=null)}"></div>
 
     <div th:replace="~{fragments/common :: scripts}"></div>
     <script src="/js/multi-step-form.js"></script>
