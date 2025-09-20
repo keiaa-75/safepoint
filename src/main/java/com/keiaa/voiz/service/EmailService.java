@@ -17,6 +17,7 @@ import com.keiaa.voiz.model.Report;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class EmailService {
@@ -35,13 +36,16 @@ public class EmailService {
             helper.setTo(appointment.getEmail());
             helper.setSubject("SafePoint: Counseling Session Request Received");
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a");
+            String formattedDateTime = appointment.getPreferredDateTime().format(formatter);
+
             StringBuilder emailBody = new StringBuilder();
             emailBody.append("<html><body>");
             emailBody.append("<p>Dear ").append(appointment.getName()).append(",</p>");
             emailBody.append("<p>We have received your request for a counseling session. We will review your preferred time and get back to you shortly to confirm the schedule.</p>");
             emailBody.append("<h3>Your Request Details:</h3>");
             emailBody.append("<ul>");
-            emailBody.append("<li><strong>Preferred Date and Time:</strong> ").append(appointment.getPreferredDateTime()).append("</li>");
+            emailBody.append("<li><strong>Preferred Date and Time:</strong> ").append(formattedDateTime).append("</li>");
             emailBody.append("<li><strong>Reason for Session:</strong> ").append(appointment.getReason()).append("</li>");
             emailBody.append("</ul>");
             emailBody.append("</body></html>");
