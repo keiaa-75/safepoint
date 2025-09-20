@@ -6,6 +6,21 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const validationAlert = document.getElementById('validation-alert');
+    const form = document.getElementById('reportForm');
+    const spinnerOverlay = document.getElementById('spinner-overlay');
+
+    form.addEventListener('submit', (event) => {
+        const confirmationCheckbox = document.getElementById('confirmation');
+        if (!confirmationCheckbox.checked) {
+            event.preventDefault();
+            const validationAlert = document.getElementById('validation-alert');
+            validationAlert.textContent = 'Please confirm that the report is true and accurate.';
+            validationAlert.classList.remove('d-none');
+            confirmationCheckbox.classList.add('is-invalid');
+            return;
+        }
+        spinnerOverlay.classList.add('show');
+    });
 
     createMultiStepForm('reportForm', {
         validateStep: (stepNumber) => {
@@ -67,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const li = document.createElement('li');
                     li.className = 'list-group-item text-muted';
                     li.textContent = 'No files uploaded.';
-                    reviewFiles.appendChild(li);
+                        reviewFiles.appendChild(li);
                 }
 
                 const externalLink = document.getElementById('externalLink').value;
