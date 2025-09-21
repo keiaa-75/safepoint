@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.keiaa.voiz.model.Appointment;
 import com.keiaa.voiz.model.Report;
@@ -101,6 +100,21 @@ public class AdminController {
                     return "report-detail";
                 })
                 .orElse("redirect:/admin/dashboard");
+    }
+
+    @GetMapping("/admin/appointment/{id}")
+    public String appointmentDetails(@PathVariable("id") Long id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
+            return "redirect:/admin-login";
+        }
+
+        return appointmentRepository.findById(id)
+                .map(appointment -> {
+                    model.addAttribute("appointment", appointment);
+                    return "appointment-detail";
+                })
+                .orElse("redirect:/admin/appointments");
     }
 
     @PostMapping("/admin/report/update-status")

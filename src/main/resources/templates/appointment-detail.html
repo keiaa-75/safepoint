@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-common :: head('Appointment Details')}"></head>
+<body class="admin-body">
+
+<div th:replace="~{fragments/admin-common :: admin-nav}"></div>
+
+<div class="container py-4 py-md-5" style="max-width: 1200px;">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+            <h1 class="h3 text-primary mb-2 mb-md-0" th:text="'Appointment #' + ${appointment.id}"></h1>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <p class="text-muted mb-1">Preferred Date & Time</p>
+                    <p th:text="${#temporals.format(appointment.preferredDateTime, 'dd-MMM-yyyy HH:mm')}"></p>
+                </div>
+                <div class="col-md-6">
+                    <p class="text-muted mb-1">Name</p>
+                    <p th:text="${appointment.name}"></p>
+                </div>
+                <div class="col-md-6">
+                    <p class="text-muted mb-1">Email Address</p>
+                    <p><a th:href="'mailto:' + ${appointment.email}" th:text="${appointment.email}"></a></p>
+                </div>
+                <div class="col-12">
+                    <p class="text-muted mb-1">Reason for Appointment</p>
+                    <p th:text="${appointment.reason}" class="bg-light p-3 rounded border" style="white-space: pre-wrap;"></p>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+                <a th:href="@{/admin/appointments}" class="btn btn-secondary">Back to Appointments</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/admin-common :: scripts}"></div>
+</body>
+</html>
