@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-common :: head('Admin Dashboard - Reports')}"></head>
+<body class="admin-body">
+    <div th:replace="~{fragments/admin-common :: admin-nav}"></div>
+    <div class="container py-4 py-md-5" style="max-width: 1200px;">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h5 mb-0">Submitted Reports</h2>
+            </div>
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(reports)}">
+                    <p class="text-center text-muted mb-0">No reports submitted yet.</p>
+                </div>
+                <div class="list-group" th:unless="${#lists.isEmpty(reports)}">
+                    <a th:each="report : ${reports}" th:href="@{/admin/report/{id}(id=${report.reportId})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <span>
+                            <span th:text="${#strings.substringBefore(report.reportId, '-')}" class="d-inline d-sm-none"></span>
+                            <span th:text="${report.reportId}" class="d-none d-sm-inline"></span>
+                        </span>
+                        <span class="badge rounded-pill" th:classappend="${report.status == 'Pending Review' ? 'bg-warning text-dark' : (report.status == 'Under Investigation' ? 'bg-info text-dark' : (report.status == 'Resolved' or report.status == 'Action Taken' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status}"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{fragments/admin-common :: scripts}"></div>
+</body>
+</html>

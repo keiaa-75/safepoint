@@ -13,56 +13,19 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         <div class="row">
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h2 class="h5 mb-0">Submitted Reports</h2>
-                    </div>
-                    <div class="card-body">
-                        <div th:if="${#lists.isEmpty(reports)}">
-                            <p class="text-center text-muted mb-0">No reports submitted yet.</p>
-                        </div>
-                        <div class="list-group" th:unless="${#lists.isEmpty(reports)}">
-                            <a th:each="report : ${reports}" th:href="@{/admin/report/{id}(id=${report.reportId})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <span>
-                                    <span th:text="${#strings.substringBefore(report.reportId, '-')}" class="d-inline d-sm-none"></span>
-                                    <span th:text="${report.reportId}" class="d-none d-sm-inline"></span>
-                                </span>
-                                <span class="badge rounded-pill" th:classappend="${report.status == 'Pending Review' ? 'bg-warning text-dark' : (report.status == 'Under Investigation' ? 'bg-info text-dark' : (report.status == 'Resolved' or report.status == 'Action Taken' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status}"></span>
-                            </a>
-                        </div>
+                    <div class="card-body text-center">
+                        <h2 class="h5 card-title">View Reports</h2>
+                        <p class="card-text">View and manage all submitted reports.</p>
+                        <a href="/admin/reports" class="btn btn-primary">Go to Reports</a>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h2 class="h5 mb-0">Appointment Requests</h2>
-                    </div>
-                    <div class="card-body">
-                        <div th:if="${#lists.isEmpty(appointments)}">
-                            <p class="text-center text-muted mb-0">No appointment requests yet.</p>
-                        </div>
-                        <div class="accordion" id="appointmentsAccordion" th:unless="${#lists.isEmpty(appointments)}">
-                            <div class="accordion-item" th:each="appointment, iterStat : ${appointments}">
-                                <h2 class="accordion-header" th:id="'heading' + ${iterStat.index}">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.index}" aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.index}">
-                                        <span class="fw-bold" th:text="${appointment.name}"></span>
-                                        <span class="ms-auto pe-4" th:text="${#temporals.format(appointment.preferredDateTime, 'dd-MMM-yyyy HH:mm')}"></span>
-                                    </button>
-                                </h2>
-                                <div th:id="'collapse' + ${iterStat.index}" class="accordion-collapse collapse" th:aria-labelledby="'heading' + ${iterStat.index}" data-bs-parent="#appointmentsAccordion">
-                                    <div class="accordion-body">
-                                        <p class="mb-2">
-                                            <strong>Reason:</strong><br>
-                                            <span th:text="${appointment.reason}"></span>
-                                        </p>
-                                        <p class="mb-0">
-                                            <strong>Email:</strong><br>
-                                            <a th:href="'mailto:' + ${appointment.email}" th:text="${appointment.email}"></a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body text-center">
+                        <h2 class="h5 card-title">View Appointments</h2>
+                        <p class="card-text">View and manage all appointment requests.</p>
+                        <a href="/admin/appointments" class="btn btn-primary">Go to Appointments</a>
                     </div>
                 </div>
             </div>

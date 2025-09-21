@@ -61,12 +61,31 @@ public class AdminController {
             return "redirect:/admin-login";
         }
 
-        List<Report> reports = reportRepository.findAll();
-        List<Appointment> appointments = appointmentRepository.findAll();
-
-        model.addAttribute("reports", reports);
-        model.addAttribute("appointments", appointments);
         return "admin-dashboard";
+    }
+
+    @GetMapping("/admin/reports")
+    public String showAdminReports(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
+            return "redirect:/admin-login";
+        }
+
+        List<Report> reports = reportRepository.findAll();
+        model.addAttribute("reports", reports);
+        return "admin-reports";
+    }
+
+    @GetMapping("/admin/appointments")
+    public String showAdminAppointments(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
+            return "redirect:/admin-login";
+        }
+
+        List<Appointment> appointments = appointmentRepository.findAll();
+        model.addAttribute("appointments", appointments);
+        return "admin-appointments";
     }
 
     @GetMapping("/admin/report/{id}")
