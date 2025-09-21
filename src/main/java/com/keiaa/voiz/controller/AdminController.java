@@ -64,7 +64,9 @@ public class AdminController {
         model.addAttribute("pendingReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.PENDING_REVIEW, ReportStatus.UNDER_INVESTIGATION)));
         model.addAttribute("resolvedReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.ACTION_TAKEN, ReportStatus.RESOLVED)));
         model.addAttribute("totalAppointmentsCount", appointmentRepository.count());
+        model.addAttribute("resolvedAppointmentsCount", appointmentRepository.countByPreferredDateTimeBefore(java.time.LocalDateTime.now()));
         model.addAttribute("categoryCounts", reportRepository.countByCategory());
+        model.addAttribute("recentReports", reportRepository.findTop3ByOrderByTimestampDesc());
 
         return "admin-dashboard";
     }

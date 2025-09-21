@@ -30,4 +30,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     @Query("SELECT new com.keiaa.voiz.model.dto.CategoryCount(r.category, COUNT(r)) FROM Report r GROUP BY r.category")
     List<CategoryCount> countByCategory();
+
+    List<Report> findTop3ByOrderByTimestampDesc();
 }
