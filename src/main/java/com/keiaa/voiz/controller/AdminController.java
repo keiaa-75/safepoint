@@ -121,23 +121,6 @@ public class AdminController {
         return "redirect:/admin/report/" + reportId;
     }
 
-    @Transactional
-    @PostMapping("/admin/report/delete")
-    public String deleteReport(@RequestParam("reportId") String reportId,
-                               HttpSession session,
-                               RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
-            redirectAttributes.addFlashAttribute("error", "Please login first.");
-            return "redirect:/admin-login";
-        }
-
-        reportRepository.findByReportId(reportId).ifPresent(report -> {
-            reportRepository.delete(report);
-        });
-
-        return "redirect:/admin/dashboard";
-    }
-
     @GetMapping("/admin/logout")
     public String logout(HttpSession session) {
         session.invalidate();
