@@ -14,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -40,5 +41,5 @@ public class Report {
 
     private String externalLink;
 
-    private String status = "Pending Review";
+    private ReportStatus status = ReportStatus.PENDING_REVIEW;
 }

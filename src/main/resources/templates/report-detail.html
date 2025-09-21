@@ -15,7 +15,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div class="card shadow-sm">
         <div class="card-header bg-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
             <h1 class="h3 text-primary mb-2 mb-md-0" th:text="'Report #' + ${report.reportId}"></h1>
-            <span class="badge rounded-pill fs-6" th:classappend="${report.status == 'Pending Review' ? 'bg-warning text-dark' : (report.status == 'Under Investigation' ? 'bg-info text-dark' : (report.status == 'Resolved' or report.status == 'Action Taken' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status}"></span>
+            <span class="badge rounded-pill fs-6" th:classappend="${report.status.displayName == 'Pending Review' ? 'bg-warning text-dark' : (report.status.displayName == 'Under Investigation' ? 'bg-info text-dark' : (report.status.displayName == 'Action Taken' or report.status.displayName == 'Resolved' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status.displayName}"></span>
         </div>
         <div class="card-body p-4">
             <div class="row g-4">
@@ -28,10 +28,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                     <form th:action="@{/admin/report/update-status}" method="post">
                         <input type="hidden" name="reportId" th:value="${report.reportId}" />
                         <select name="status" class="form-select" onchange="this.form.submit()">
-                            <option value="Pending Review" th:selected="${report.status == 'Pending Review'}">Pending Review</option>
-                            <option value="Under Investigation" th:selected="${report.status == 'Under Investigation'}">Under Investigation</option>
-                            <option value="Action Taken" th:selected="${report.status == 'Action Taken'}">Action Taken</option>
-                            <option value="Resolved" th:selected="${report.status == 'Resolved'}">Resolved</option>
+                            <option th:each="stat : ${statuses}" 
+                                    th:value="${stat}" 
+                                    th:text="${stat.displayName}" 
+                                    th:selected="${stat == report.status}"></option>
                         </select>
                     </form>
                 </div>

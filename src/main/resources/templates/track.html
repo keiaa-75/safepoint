@@ -32,7 +32,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                 Report #<span class="d-none d-md-inline" th:text="${report.reportId}"></span>
                                 <span class="d-inline d-md-none" th:text="${#strings.substring(report.reportId, 0, 8)} + '...'"></span>
                             </h5>
-                            <span class="badge" th:classappend="${report.status == 'Pending Review'} ? 'bg-warning text-dark' : (${report.status == 'Under Investigation'} ? 'bg-info text-dark' : 'bg-success')" th:text="${report.status}"></span>
+                            <span class="badge" th:classappend="${report.status.displayName == 'Pending Review'} ? 'bg-warning text-dark' : (${report.status.displayName == 'Under Investigation'} ? 'bg-info text-dark' : 'bg-success')" th:text="${report.status.displayName}"></span>
                         </div>
                         <p class="text-muted mb-1">Category</p>
                         <p class="mb-3" th:text="${report.category}"></p>

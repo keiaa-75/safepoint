@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.keiaa.voiz.model.Appointment;
 import com.keiaa.voiz.model.Report;
+import com.keiaa.voiz.model.ReportStatus;
 import com.keiaa.voiz.repository.AppointmentRepository;
 import com.keiaa.voiz.repository.ReportRepository;
 
@@ -97,6 +98,7 @@ public class AdminController {
         return reportRepository.findByReportId(reportId)
                 .map(report -> {
                     model.addAttribute("report", report);
+                    model.addAttribute("statuses", ReportStatus.values());
                     return "report-detail";
                 })
                 .orElse("redirect:/admin/dashboard");
@@ -119,7 +121,7 @@ public class AdminController {
 
     @PostMapping("/admin/report/update-status")
     public String updateReportStatus(@RequestParam("reportId") String reportId,
-                                     @RequestParam("status") String status,
+                                     @RequestParam("status") ReportStatus status,
                                      HttpSession session,
                                      RedirectAttributes redirectAttributes) {
         if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
