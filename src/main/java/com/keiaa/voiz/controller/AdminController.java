@@ -61,6 +61,11 @@ public class AdminController {
             return "redirect:/admin-login";
         }
 
+        model.addAttribute("pendingReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.PENDING_REVIEW, ReportStatus.UNDER_INVESTIGATION)));
+        model.addAttribute("resolvedReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.ACTION_TAKEN, ReportStatus.RESOLVED)));
+        model.addAttribute("totalAppointmentsCount", appointmentRepository.count());
+        model.addAttribute("categoryCounts", reportRepository.countByCategory());
+
         return "admin-dashboard";
     }
 

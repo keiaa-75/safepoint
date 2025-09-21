@@ -7,12 +7,16 @@
 package com.keiaa.voiz.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.keiaa.voiz.model.Report;
+import com.keiaa.voiz.model.ReportStatus;
+import com.keiaa.voiz.model.dto.CategoryCount;
 
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
@@ -21,4 +25,9 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     Optional<Report> findByReportId(String reportId);
 
     long countByTimestampBetween(LocalDateTime start, LocalDateTime end);
+
+    long countByStatusIn(List<ReportStatus> statuses);
+
+    @Query("SELECT new com.keiaa.voiz.model.dto.CategoryCount(r.category, COUNT(r)) FROM Report r GROUP BY r.category")
+    List<CategoryCount> countByCategory();
 }
