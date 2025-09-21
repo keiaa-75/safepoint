@@ -9,7 +9,6 @@ package com.keiaa.voiz.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -26,10 +25,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.keiaa.voiz.exception.DailyReportLimitExceededException;
 import com.keiaa.voiz.model.Report;
 import com.keiaa.voiz.repository.ReportRepository;
 import com.keiaa.voiz.service.EmailService;
 import com.keiaa.voiz.service.FileStorageService;
+import com.keiaa.voiz.service.ReportIdGenerator;
 
 @Controller
 public class ReportController {
@@ -42,6 +43,9 @@ public class ReportController {
 
     @Autowired
     private FileStorageService fileStorageService;
+
+    @Autowired
+    private ReportIdGenerator reportIdGenerator;
 
     @GetMapping("/")
     public String showForm(Model model) {
@@ -63,7 +67,12 @@ public class ReportController {
     public String submitReport(@ModelAttribute("report") Report report, 
                                @RequestParam("files") MultipartFile[] files, 
                                RedirectAttributes redirectAttributes) {
-        report.setReportId(UUID.randomUUID().toString());
+        try {
+            report.setReportId(reportIdGenerator.generateReportId());
+        } catch (DailyReportLimitExceededException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/report";
+        }
 
         List<String> fileNames = new ArrayList<>();
         for (MultipartFile file : files) {

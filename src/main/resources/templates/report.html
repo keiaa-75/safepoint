@@ -12,6 +12,9 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div class="main-content">
         <div class="container content-container">
             <div class="content-card">
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <span th:text="${error}"></span>
+                </div>
                 <div class="text-center mb-4">
                     <h1 class="">Submit a Report</h1>
                     <p class="text-muted">Submit a confidential report about bullying.</p>

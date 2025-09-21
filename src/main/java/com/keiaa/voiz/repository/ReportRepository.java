@@ -6,6 +6,7 @@
 
 package com.keiaa.voiz.repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     // This method will automatically be implemented by Spring Data JPA
     // to find a Report based on its unique reportId.
     Optional<Report> findByReportId(String reportId);
+
+    long countByTimestampBetween(LocalDateTime start, LocalDateTime end);
 }
