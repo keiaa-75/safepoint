@@ -20,9 +20,9 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 </div>
 
 <div th:fragment="admin-nav" xmlns:th="http://www.thymeleaf.org">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
-        <div class="container">
-            <a class="navbar-brand" th:href="@{/admin/dashboard}">Admin Dashboard</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top py-2">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fs-5" th:href="@{/admin/dashboard}">Admin Dashboard</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -35,7 +35,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <a class="nav-link" th:href="@{/admin/appointments}">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a th:href="@{/admin/logout}" class="btn btn-outline-light">Logout</a>
+                        <a class="nav-link" th:href="@{/admin/logout}">Logout</a>
                     </li>
                 </ul>
             </div>

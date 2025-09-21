@@ -7,7 +7,6 @@
     <div th:replace="~{fragments/admin-common :: admin-nav}"></div>
 
     <div class="container-fluid px-4 py-4">
-        <h1 class="h2 mb-4">Admin Dashboard</h1>
 
         <!-- Stat Cards -->
         <div class="row g-4 mb-4">
@@ -97,7 +96,25 @@
 
             <!-- Recent Reports -->
             <div class="col-lg-7">
-                
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Recent Reports</h5>
+                    </div>
+                    <div class="card-body">
+                         <div th:if="${#lists.isEmpty(recentReports)}">
+                            <p class="text-center text-muted mb-0">No recent reports.</p>
+                        </div>
+                        <div class="list-group list-group-flush" th:unless="${#lists.isEmpty(recentReports)}">
+                            <a th:each="report : ${recentReports}" th:href="@{'/admin/report/' + ${report.reportId}}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1" th:text="${report.category != null ? report.category + ' Report' : 'Report'}"></h6>
+                                    <small class="text-muted" th:text="${#temporals.format(report.timestamp, 'dd MMM yyyy HH:mm')}"></small>
+                                </div>
+                                <p class="mb-1 text-muted small" th:text="${#strings.abbreviate(report.description, 100)}"></p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
