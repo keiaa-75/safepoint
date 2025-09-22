@@ -48,11 +48,19 @@ document.addEventListener('DOMContentLoaded', () => {
         onStepChange: (currentStep) => {
             const steps = document.getElementById('appointmentForm').querySelectorAll('.form-step');
             if (currentStep === steps.length) {
+                const preferredDate = document.getElementById('preferredDate').value;
+                const preferredTime = document.getElementById('preferredTime').value;
+
+                if (preferredDate && preferredTime) {
+                    const combinedDateTime = `${preferredDate}T${preferredTime}`;
+                    document.getElementById('preferredDateTime').value = combinedDateTime;
+
+                    const formattedDate = new Date(combinedDateTime).toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' });
+                    document.getElementById('review-datetime').textContent = formattedDate;
+                }
+                
                 document.getElementById('review-name').textContent = document.getElementById('name').value;
                 document.getElementById('review-email').textContent = document.getElementById('email').value;
-                const dtInput = document.getElementById('preferredDateTime').value;
-                const formattedDate = new Date(dtInput).toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' });
-                document.getElementById('review-datetime').textContent = formattedDate;
                 document.getElementById('review-reason').textContent = document.getElementById('reason').value;
             }
         }
