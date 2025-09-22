@@ -5,6 +5,18 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const preferredDateInput = document.getElementById('preferredDate');
+    if (preferredDateInput) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const dd = String(today.getDate()).padStart(2, '0');
+        const minDate = `${yyyy}-${mm}-${dd}`;
+        const maxDate = `${yyyy}-12-31`;
+        preferredDateInput.setAttribute('min', minDate);
+        preferredDateInput.setAttribute('max', maxDate);
+    }
+
     const validationAlert = document.getElementById('validation-alert');
     const form = document.getElementById('appointmentForm');
     const spinnerOverlay = document.getElementById('spinner-overlay');
