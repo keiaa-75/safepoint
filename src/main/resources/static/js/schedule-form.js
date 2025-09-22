@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             dateFormat: "Y-m-d",
+            disableMobile: true
         });
     }
 
