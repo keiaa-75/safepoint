@@ -46,70 +46,32 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                     <form th:if="${appointment.status.name() == 'PENDING'}" id="confirm-form" th:action="@{/admin/appointment/confirm/{id}(id=${appointment.id})}" method="post">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmationModal">Confirm</button>
                     </form>
-                    <button th:if="${appointment.status.name() != 'COMPLETED'}" type="button" class="btn btn-warning" onclick="toggleRescheduleForm()">Reschedule</button>
+                    <button th:if="${appointment.status.name() != 'COMPLETED'}" type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#rescheduleModal">Reschedule</button>
                     <form th:if="${appointment.status.name() == 'CONFIRMED'}" th:action="@{/admin/appointment/complete/{id}(id=${appointment.id})}" method="post">
                         <button type="submit" class="btn btn-info">Mark as Done</button>
                     </form>
                 </div>
-            </div>
-
-            <!-- Reschedule Form -->
-            <div id="reschedule-form" class="mt-4 border p-3 rounded bg-light" style="display: none;">
-                <h5>Reschedule Appointment</h5>
-                <form th:action="@{/admin/appointment/reschedule/{id}(id=${appointment.id})}" method="post">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="newDate" name="newDate" placeholder="Select a date" required>
-                                <label for="newDate">New Date</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                <select class="form-select" id="newTime" name="newTime" required>
-                                    <option value="" disabled selected>Select a time</option>
-                                    <option value="09:00">9:00 AM</option>
-                                    <option value="10:00">10:00 AM</option>
-                                    <option value="13:00">1:00 PM</option>
-                                    <option value="14:00">2:00 PM</option>
-                                    <option value="15:00">3:00 PM</option>
-                                    <option value="16:00">4:00 PM</option>
-                                </select>
-                                <label for="newTime">New Time</label>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit Reschedule</button>
-                </form>
             </div>
         </div>
     </div>
 </div>
 
 <div th:replace="~{fragments/confirmation-modal :: confirmation-modal(modalId='confirmationModal', title='Confirm Appointment', text='Are you sure you want to confirm this appointment?', confirmButtonText='Confirm', formId='confirm-form')}"></div>
+<div th:replace="~{fragments/reschedule-modal :: reschedule-modal}"></div>
 
 <div th:replace="~{fragments/admin-common :: scripts}"></div>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="/js/flatpickr-config.js"></script>
 <script>
-    function toggleRescheduleForm() {
-        const form = document.getElementById('reschedule-form');
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    }
-
     function submitConfirmationForm(formId) {
         const spinnerOverlay = document.getElementById('spinner-overlay');
         spinnerOverlay.classList.add('show');
         document.getElementById(formId).submit();
     }
 
-    flatpickr("#newDate", {
-        minDate: "today",
-        disable: [
-            function(date) {
-                return (date.getDay() === 0 || date.getDay() === 6);
-            }
-        ],
-        dateFormat: "Y-m-d",
+    const rescheduleModal = document.getElementById('rescheduleModal');
+    rescheduleModal.addEventListener('shown.bs.modal', function () {
+        initializeFlatpickr('#newDate', { static: true });
     });
 </script>
 </body>

@@ -7,16 +7,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const preferredDateInput = document.getElementById('preferredDate');
     if (preferredDateInput) {
-        flatpickr(preferredDateInput, {
-            minDate: "today",
+        initializeFlatpickr('#preferredDate', {
             maxDate: new Date().getFullYear() + "-12-31",
-            disable: [
-                function(date) {
-                    // return true to disable
-                    return (date.getDay() === 0 || date.getDay() === 6);
-                }
-            ],
-            dateFormat: "Y-m-d",
             disableMobile: true
         });
     }
