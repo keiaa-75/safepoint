@@ -18,13 +18,24 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 <div th:if="${#maps.isEmpty(appointmentsByWeek)}">
                     <p class="text-center text-muted mb-0">No appointment requests yet.</p>
                 </div>
-                <div th:each="weekEntry : ${appointmentsByWeek}">
-                    <h5 class="mt-4 mb-3" th:text="${weekEntry.key}"></h5>
-                    <div class="list-group">
-                        <a th:each="appointment : ${weekEntry.value}" th:href="@{/admin/appointment/{id}(id=${appointment.id})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            <span class="fw-bold" th:text="${appointment.name}"></span>
-                            <span class="ms-auto pe-4" th:text="${#temporals.format(appointment.preferredDateTime, 'dd-MMM-yyyy HH:mm')}"></span>
-                        </a>
+                <div class="accordion" id="appointmentsAccordion" th:if="!${#maps.isEmpty(appointmentsByWeek)}">
+                    <div class="accordion-item" th:each="weekEntry, iterStat : ${appointmentsByWeek}">
+                        <h2 class="accordion-header" th:id="'heading' + ${iterStat.index}">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.index}" aria-expanded="true" th:aria-controls="'collapse' + ${iterStat.index}">
+                                <span th:text="${weekEntry.key}"></span>
+                                <span class="badge bg-primary rounded-pill ms-2" th:text="${#lists.size(weekEntry.value)}"></span>
+                            </button>
+                        </h2>
+                        <div th:id="'collapse' + ${iterStat.index}" class="accordion-collapse collapse" th:classappend="${iterStat.index == 0} ? 'show'" th:aria-labelledby="'heading' + ${iterStat.index}" data-bs-parent="#appointmentsAccordion">
+                            <div class="accordion-body p-0">
+                                <div class="list-group list-group-flush">
+                                    <a th:each="appointment : ${weekEntry.value}" th:href="@{/admin/appointment/{id}(id=${appointment.id})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                        <span class="fw-bold" th:text="${appointment.name}"></span>
+                                        <span class="ms-auto pe-4" th:text="${#temporals.format(appointment.preferredDateTime, 'E, dd-MMM-yyyy HH:mm')}"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
