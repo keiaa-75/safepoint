@@ -15,20 +15,19 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 <div th:if="${error}" class="alert alert-danger" role="alert">
                     <span th:text="${error}"></span>
                 </div>
-                <div class="text-center mb-4">
-                    <h1 class="">Submit a Report</h1>
+                <div class="text-center mb-5">
+                    <h1 class="fw-bold">Submit a Report</h1>
                     <p class="text-muted">Submit a confidential report about bullying.</p>
                 </div>
 
                 <div id="validation-alert" class="alert alert-danger d-none mb-4" role="alert"></div>
                 <form id="reportForm" th:action="@{/submit-report}" th:object="${report}" method="post" enctype="multipart/form-data" novalidate>
                     
-                    <div th:replace="~{fragments/form-components :: form-progress-bar(totalSteps=4)}"></div>
+                    <div th:replace="~{fragments/form-components :: form-progress-bar(totalSteps=4, stepLabels=${ {'Info', 'Details', 'Evidence', 'Review'} } )}"></div>
 
                     <div th:replace="~{fragments/form-components :: form-step-info}"></div>
 
                     <div class="form-step" id="step-2" style="display: none;">
-                        <h5 class="mb-4 text-center">Step 2: Incident Details</h5>
                         <div class="form-floating mb-3">
                             <select class="form-select" id="category" name="category" required>
                                 <option value="" selected disabled>Select a category</option>
@@ -47,7 +46,6 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                     </div>
 
                     <div class="form-step" id="step-3" style="display: none;">
-                        <h5 class="mb-4 text-center">Step 3: Upload Evidence</h5>
                         <div class="mb-3">
                             <label for="files" class="form-label">Select files to upload:</label>
                             <input class="form-control" type="file" id="files" name="files" multiple>
@@ -62,7 +60,6 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                     </div>
 
                     <div class="form-step" id="step-4" style="display: none;">
-                        <h5 class="mb-4 text-center">Step 4: Review & Confirm</h5>
                         <div class="mb-3">
                             <p class="text-muted mb-0">Name</p>
                             <p id="review-name"></p>

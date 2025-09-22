@@ -22,16 +22,21 @@ function createMultiStepForm(formId, options) {
     const nextBtn = form.querySelector('#nextBtn');
     const prevBtn = form.querySelector('#prevBtn');
     const submitBtn = form.querySelector('#submitBtn');
-    const progressBar = form.querySelector('#progressBar');
 
     const showStep = (stepNumber) => {
         steps.forEach((step, index) => {
             step.style.display = (index + 1 === stepNumber) ? 'block' : 'none';
         });
 
-        const progress = (stepNumber / steps.length) * 100;
-        progressBar.style.width = `${progress}%`;
-        progressBar.setAttribute('aria-valuenow', progress);
+        const progressItems = form.querySelectorAll('.step-progress-item');
+        progressItems.forEach((item, index) => {
+            item.classList.remove('is-current', 'is-done');
+            if (index + 1 < stepNumber) {
+                item.classList.add('is-done');
+            } else if (index + 1 === stepNumber) {
+                item.classList.add('is-current');
+            }
+        });
 
         prevBtn.style.display = (stepNumber > 1) ? 'inline-block' : 'none';
         nextBtn.style.display = (stepNumber < steps.length) ? 'inline-block' : 'none';
