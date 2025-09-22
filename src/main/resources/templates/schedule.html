@@ -29,7 +29,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="date" class="form-control" id="preferredDate" placeholder="Preferred Date" required>
+                                    <input type="text" class="form-control" id="preferredDate" placeholder="Select a date" required>
                                     <label for="preferredDate">Preferred Date</label>
                                 </div>
                             </div>
@@ -86,6 +86,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div th:if="${message}" th:replace="~{fragments/success-modal :: success-modal(title='Request Submitted!', text='Your counseling session request has been submitted successfully!', referenceId=null, referenceIdLabel=null)}"></div>
 
     <div th:replace="~{fragments/common :: scripts}"></div>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="/js/multi-step-form.js"></script>
     <script src="/js/schedule-form.js"></script>
 

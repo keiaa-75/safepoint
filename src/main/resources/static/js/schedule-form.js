@@ -7,14 +7,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     const preferredDateInput = document.getElementById('preferredDate');
     if (preferredDateInput) {
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-        const dd = String(today.getDate()).padStart(2, '0');
-        const minDate = `${yyyy}-${mm}-${dd}`;
-        const maxDate = `${yyyy}-12-31`;
-        preferredDateInput.setAttribute('min', minDate);
-        preferredDateInput.setAttribute('max', maxDate);
+        flatpickr(preferredDateInput, {
+            minDate: "today",
+            maxDate: new Date().getFullYear() + "-12-31",
+            disable: [
+                function(date) {
+                    // return true to disable
+                    return (date.getDay() === 0 || date.getDay() === 6);
+                }
+            ],
+            dateFormat: "Y-m-d",
+        });
     }
 
     const validationAlert = document.getElementById('validation-alert');
