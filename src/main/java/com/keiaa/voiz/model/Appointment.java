@@ -9,6 +9,8 @@ package com.keiaa.voiz.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,4 +30,7 @@ public class Appointment {
     private String email;
     private LocalDateTime preferredDateTime;
     private String reason;
+
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status = AppointmentStatus.PENDING;
 }

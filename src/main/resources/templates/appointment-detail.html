@@ -15,6 +15,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div class="card shadow-sm">
         <div class="card-header bg-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
             <h1 class="h3 text-primary mb-2 mb-md-0" th:text="'Appointment #' + ${appointment.id}"></h1>
+            <span class="badge" th:classappend="${appointment.status.name() == 'PENDING' ? 'bg-warning' : (appointment.status.name() == 'CONFIRMED' ? 'bg-success' : 'bg-secondary')}" th:text="${appointment.status.name()}"></span>
         </div>
         <div class="card-body p-4">
             <div class="row g-4">
@@ -38,13 +39,70 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
             <hr class="my-4">
 
+            <!-- Action Buttons -->
             <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
                 <a th:href="@{/admin/appointments}" class="btn btn-secondary">Back to Appointments</a>
+                <div class="d-flex gap-2">
+                    <form th:if="${appointment.status.name() == 'PENDING'}" th:action="@{/admin/appointment/confirm/{id}(id=${appointment.id})}" method="post">
+                        <button type="submit" class="btn btn-success">Confirm</button>
+                    </form>
+                    <button th:if="${appointment.status.name() != 'COMPLETED'}" type="button" class="btn btn-warning" onclick="toggleRescheduleForm()">Reschedule</button>
+                    <form th:if="${appointment.status.name() == 'CONFIRMED'}" th:action="@{/admin/appointment/complete/{id}(id=${appointment.id})}" method="post">
+                        <button type="submit" class="btn btn-info">Mark as Done</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Reschedule Form -->
+            <div id="reschedule-form" class="mt-4 border p-3 rounded bg-light" style="display: none;">
+                <h5>Reschedule Appointment</h5>
+                <form th:action="@{/admin/appointment/reschedule/{id}(id=${appointment.id})}" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="newDate" name="newDate" placeholder="Select a date" required>
+                                <label for="newDate">New Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="newTime" name="newTime" required>
+                                    <option value="" disabled selected>Select a time</option>
+                                    <option value="09:00">9:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="13:00">1:00 PM</option>
+                                    <option value="14:00">2:00 PM</option>
+                                    <option value="15:00">3:00 PM</option>
+                                    <option value="16:00">4:00 PM</option>
+                                </select>
+                                <label for="newTime">New Time</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Reschedule</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
 <div th:replace="~{fragments/admin-common :: scripts}"></div>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    function toggleRescheduleForm() {
+        const form = document.getElementById('reschedule-form');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    flatpickr("#newDate", {
+        minDate: "today",
+        disable: [
+            function(date) {
+                return (date.getDay() === 0 || date.getDay() === 6);
+            }
+        ],
+        dateFormat: "Y-m-d",
+    });
+</script>
 </body>
 </html>

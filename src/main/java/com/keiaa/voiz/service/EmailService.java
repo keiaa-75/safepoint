@@ -1,7 +1,7 @@
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://www.mozilla.org/MPL/2.0/
+ * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
 package com.keiaa.voiz.service;
@@ -17,6 +17,7 @@ import com.keiaa.voiz.model.Report;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -48,6 +49,91 @@ public class EmailService {
             emailBody.append("<li><strong>Preferred Date and Time:</strong> ").append(formattedDateTime).append("</li>");
             emailBody.append("<li><strong>Reason for Session:</strong> ").append(appointment.getReason()).append("</li>");
             emailBody.append("</ul>");
+            emailBody.append("</body></html>");
+
+            helper.setText(emailBody.toString(), true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendAdminConfirmationEmail(Appointment appointment) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false);
+            helper.setFrom("your-email@gmail.com");
+            helper.setTo(appointment.getEmail());
+            helper.setSubject("SafePoint: Your Counseling Session is Confirmed");
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a");
+            String formattedDateTime = appointment.getPreferredDateTime().format(formatter);
+
+            StringBuilder emailBody = new StringBuilder();
+            emailBody.append("<html><body>");
+            emailBody.append("<p>Dear ").append(appointment.getName()).append(",</p>");
+            emailBody.append("<p>Your counseling session has been confirmed. Please see the details below:</p>");
+            emailBody.append("<h3>Appointment Details:</h3>");
+            emailBody.append("<ul>");
+            emailBody.append("<li><strong>Date and Time:</strong> ").append(formattedDateTime).append("</li>");
+            emailBody.append("</ul>");
+            emailBody.append("<p>If you need to reschedule, please contact us as soon as possible.</p>");
+            emailBody.append("</body></html>");
+
+            helper.setText(emailBody.toString(), true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendRescheduleEmail(Appointment appointment, LocalDateTime oldDateTime) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false);
+            helper.setFrom("your-email@gmail.com");
+            helper.setTo(appointment.getEmail());
+            helper.setSubject("SafePoint: Your Counseling Session has been Rescheduled");
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a");
+            String oldFormattedDateTime = oldDateTime.format(formatter);
+            String newFormattedDateTime = appointment.getPreferredDateTime().format(formatter);
+
+            StringBuilder emailBody = new StringBuilder();
+            emailBody.append("<html><body>");
+            emailBody.append("<p>Dear ").append(appointment.getName()).append(",</p>");
+            emailBody.append("<p>Your counseling session has been rescheduled. Please see the updated details below:</p>");
+            emailBody.append("<h3>Updated Appointment Details:</h3>");
+            emailBody.append("<ul>");
+            emailBody.append("<li><strong>Previous Date and Time:</strong> ").append(oldFormattedDateTime).append("</li>");
+            emailBody.append("<li><strong>New Date and Time:</strong> ").append(newFormattedDateTime).append("</li>");
+            emailBody.append("</ul>");
+            emailBody.append("<p>If this new time does not work for you, please contact us immediately.</p>");
+            emailBody.append("</body></html>");
+
+            helper.setText(emailBody.toString(), true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendCompletionEmail(Appointment appointment) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false);
+            helper.setFrom("your-email@gmail.com");
+            helper.setTo(appointment.getEmail());
+            helper.setSubject("SafePoint: Your Counseling Session is Complete");
+
+            StringBuilder emailBody = new StringBuilder();
+            emailBody.append("<html><body>");
+            emailBody.append("<p>Dear ").append(appointment.getName()).append(",</p>");
+            emailBody.append("<p>This email is to confirm that your recent counseling session is now marked as complete. We hope it was a helpful and supportive experience.</p>");
+            emailBody.append("<p>If you need further assistance or wish to schedule another session, please don't hesitate to reach out.</p>");
             emailBody.append("</body></html>");
 
             helper.setText(emailBody.toString(), true);

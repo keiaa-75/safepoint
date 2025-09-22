@@ -7,6 +7,8 @@
 package com.keiaa.voiz.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
@@ -27,10 +29,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.keiaa.voiz.model.Appointment;
+import com.keiaa.voiz.model.AppointmentStatus;
 import com.keiaa.voiz.model.Report;
 import com.keiaa.voiz.model.ReportStatus;
 import com.keiaa.voiz.repository.AppointmentRepository;
 import com.keiaa.voiz.repository.ReportRepository;
+import com.keiaa.voiz.service.EmailService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -42,6 +46,9 @@ public class AdminController {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Value("${admin.key}")
     private String adminKey;
@@ -158,6 +165,61 @@ public class AdminController {
         });
         
         return "redirect:/admin/report/" + reportId;
+    }
+
+    @PostMapping("/admin/appointment/confirm/{id}")
+    public String confirmAppointment(@PathVariable("id") Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
+            return "redirect:/admin-login";
+        }
+
+        appointmentRepository.findById(id).ifPresent(appointment -> {
+            appointment.setStatus(AppointmentStatus.CONFIRMED);
+            appointmentRepository.save(appointment);
+            emailService.sendAdminConfirmationEmail(appointment);
+        });
+
+        return "redirect:/admin/appointment/" + id;
+    }
+
+    @PostMapping("/admin/appointment/reschedule/{id}")
+    public String rescheduleAppointment(@PathVariable("id") Long id,
+                                        @RequestParam("newDate") String newDate,
+                                        @RequestParam("newTime") String newTime,
+                                        HttpSession session, RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
+            return "redirect:/admin-login";
+        }
+
+        appointmentRepository.findById(id).ifPresent(appointment -> {
+            LocalDateTime oldDateTime = appointment.getPreferredDateTime();
+            LocalDate date = LocalDate.parse(newDate);
+            LocalTime time = LocalTime.parse(newTime);
+            appointment.setPreferredDateTime(LocalDateTime.of(date, time));
+            appointment.setStatus(AppointmentStatus.CONFIRMED);
+            appointmentRepository.save(appointment);
+            emailService.sendRescheduleEmail(appointment, oldDateTime);
+        });
+
+        return "redirect:/admin/appointment/" + id;
+    }
+
+    @PostMapping("/admin/appointment/complete/{id}")
+    public String completeAppointment(@PathVariable("id") Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
+            return "redirect:/admin-login";
+        }
+
+        appointmentRepository.findById(id).ifPresent(appointment -> {
+            appointment.setStatus(AppointmentStatus.COMPLETED);
+            appointmentRepository.save(appointment);
+            emailService.sendCompletionEmail(appointment);
+        });
+
+        return "redirect:/admin/appointment/" + id;
     }
 
     @GetMapping("/admin/logout")
