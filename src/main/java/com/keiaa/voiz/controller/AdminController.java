@@ -6,7 +6,15 @@
 
 package com.keiaa.voiz.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,8 +98,16 @@ public class AdminController {
             return "redirect:/admin-login";
         }
 
-        List<Appointment> appointments = appointmentRepository.findAll();
-        model.addAttribute("appointments", appointments);
+        List<Appointment> appointments = appointmentRepository.findAllByOrderByPreferredDateTimeAsc();
+        Map<String, List<Appointment>> appointmentsByWeek = appointments.stream()
+                .collect(Collectors.groupingBy(appointment -> {
+                    TemporalField fieldISO = WeekFields.of(Locale.getDefault()).dayOfWeek();
+                    LocalDate startOfWeek = appointment.getPreferredDateTime().toLocalDate().with(fieldISO, 1);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy");
+                    return "Week of " + startOfWeek.format(formatter);
+                }, LinkedHashMap::new, Collectors.toList()));
+
+        model.addAttribute("appointmentsByWeek", appointmentsByWeek);
         return "admin-appointments";
     }
 
