@@ -43,8 +43,8 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
             <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
                 <a th:href="@{/admin/appointments}" class="btn btn-secondary">Back to Appointments</a>
                 <div class="d-flex gap-2">
-                    <form th:if="${appointment.status.name() == 'PENDING'}" th:action="@{/admin/appointment/confirm/{id}(id=${appointment.id})}" method="post">
-                        <button type="submit" class="btn btn-success">Confirm</button>
+                    <form th:if="${appointment.status.name() == 'PENDING'}" id="confirm-form" th:action="@{/admin/appointment/confirm/{id}(id=${appointment.id})}" method="post">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmationModal">Confirm</button>
                     </form>
                     <button th:if="${appointment.status.name() != 'COMPLETED'}" type="button" class="btn btn-warning" onclick="toggleRescheduleForm()">Reschedule</button>
                     <form th:if="${appointment.status.name() == 'CONFIRMED'}" th:action="@{/admin/appointment/complete/{id}(id=${appointment.id})}" method="post">
@@ -86,12 +86,20 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     </div>
 </div>
 
+<div th:replace="~{fragments/confirmation-modal :: confirmation-modal(modalId='confirmationModal', title='Confirm Appointment', text='Are you sure you want to confirm this appointment?', confirmButtonText='Confirm', formId='confirm-form')}"></div>
+
 <div th:replace="~{fragments/admin-common :: scripts}"></div>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     function toggleRescheduleForm() {
         const form = document.getElementById('reschedule-form');
         form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function submitConfirmationForm(formId) {
+        const spinnerOverlay = document.getElementById('spinner-overlay');
+        spinnerOverlay.classList.add('show');
+        document.getElementById(formId).submit();
     }
 
     flatpickr("#newDate", {
