@@ -26,24 +26,9 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
                     <div class="form-step" id="step-2" style="display: none;">
                         <h5 class="mb-4 text-center">Step 2: Appointment Details</h5>
-                        <div class="mb-4">
-                            <label class="form-label">Select Date</label>
-                            <input type="date" class="form-control" id="appointmentDate" 
-                                   th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
-                                   th:max="${#temporals.format(#temporals.createNow().plusMonths(1), 'yyyy-MM-dd')}"
-                                   required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Available Time Slots</label>
-                            <div class="time-slots-container">
-                                <div class="alert alert-info" id="noSlotsMessage" style="display: none;">
-                                    No available time slots for the selected date.
-                                </div>
-                                <div id="timeSlotsList" class="row g-3">
-                                    <!-- Time slots will be populated dynamically -->
-                                </div>
-                            </div>
-                            <input type="hidden" id="preferredDateTime" th:field="*{preferredDateTime}">
+                        <div class="form-floating mb-3">
+                            <input type="datetime-local" class="form-control" id="preferredDateTime" th:field="*{preferredDateTime}" placeholder="Preferred Date and Time" required>
+                            <label for="preferredDateTime">Preferred Date and Time</label>
                         </div>
                         <div class="form-floating mb-4">
                             <textarea class="form-control" id="reason" th:field="*{reason}" placeholder="Brief Reason for Session" rows="5" required style="height: 120px;"></textarea>

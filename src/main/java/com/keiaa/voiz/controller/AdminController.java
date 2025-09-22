@@ -6,30 +6,23 @@
 
 package com.keiaa.voiz.controller;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.keiaa.voiz.model.Appointment;
 import com.keiaa.voiz.model.Report;
 import com.keiaa.voiz.model.ReportStatus;
-import com.keiaa.voiz.model.TimeSlot;
 import com.keiaa.voiz.repository.AppointmentRepository;
 import com.keiaa.voiz.repository.ReportRepository;
-import com.keiaa.voiz.repository.TimeSlotRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -41,9 +34,6 @@ public class AdminController {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
-
-    @Autowired
-    private TimeSlotRepository timeSlotRepository;
 
     @Value("${admin.key}")
     private String adminKey;
@@ -152,72 +142,6 @@ public class AdminController {
         });
         
         return "redirect:/admin/report/" + reportId;
-    }
-
-    @PostMapping("/admin/timeslot/add")
-    public String addTimeSlot(@RequestParam("dayOfWeek") DayOfWeek dayOfWeek,
-                            @RequestParam("startTime") String startTime,
-                            @RequestParam("endTime") String endTime,
-                            HttpSession session,
-                            RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
-            redirectAttributes.addFlashAttribute("error", "Please login first.");
-            return "redirect:/admin-login";
-        }
-
-        TimeSlot timeSlot = new TimeSlot(
-            dayOfWeek,
-            LocalTime.parse(startTime),
-            LocalTime.parse(endTime)
-        );
-        timeSlotRepository.save(timeSlot);
-        redirectAttributes.addFlashAttribute("success", "Time slot added successfully");
-        return "redirect:/admin/dashboard";
-    }
-
-    @PostMapping("/admin/timeslot/update/{id}")
-    public String updateTimeSlot(@PathVariable("id") Long id,
-                               @RequestParam("dayOfWeek") DayOfWeek dayOfWeek,
-                               @RequestParam("startTime") String startTime,
-                               @RequestParam("endTime") String endTime,
-                               @RequestParam("active") boolean active,
-                               HttpSession session,
-                               RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
-            redirectAttributes.addFlashAttribute("error", "Please login first.");
-            return "redirect:/admin-login";
-        }
-
-        timeSlotRepository.findById(id).ifPresent(timeSlot -> {
-            timeSlot.setDayOfWeek(dayOfWeek);
-            timeSlot.setStartTime(LocalTime.parse(startTime));
-            timeSlot.setEndTime(LocalTime.parse(endTime));
-            timeSlot.setActive(active);
-            timeSlotRepository.save(timeSlot);
-        });
-
-        redirectAttributes.addFlashAttribute("success", "Time slot updated successfully");
-        return "redirect:/admin/dashboard";
-    }
-
-    @PostMapping("/admin/timeslot/delete/{id}")
-    public String deleteTimeSlot(@PathVariable("id") Long id,
-                               HttpSession session,
-                               RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
-            redirectAttributes.addFlashAttribute("error", "Please login first.");
-            return "redirect:/admin-login";
-        }
-
-        timeSlotRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("success", "Time slot deleted successfully");
-        return "redirect:/admin/dashboard";
-    }
-
-    @GetMapping("/admin/timeslots/available")
-    @ResponseBody
-    public List<TimeSlot> getAvailableTimeSlots(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return timeSlotRepository.findByDayOfWeekAndIsActiveTrue(date.getDayOfWeek());
     }
 
     @GetMapping("/admin/logout")
