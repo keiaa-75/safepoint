@@ -6,19 +6,24 @@
 
 package com.keiaa.voiz.service;
 
-import com.keiaa.voiz.model.Appointment;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.keiaa.voiz.model.Appointment;
 import com.keiaa.voiz.model.Report;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class EmailService {
@@ -28,6 +33,18 @@ public class EmailService {
 
     @Autowired
     private FileStorageService fileStorageService;
+
+    private String loadEmailTemplate(String templateName) {
+        try {
+            ClassPathResource resource = new ClassPathResource("emails/" + templateName);
+            try (InputStream inputStream = resource.getInputStream()) {
+                return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Email template not found.";
+        }
+    }
 
     public void sendAppointmentConfirmation(Appointment appointment) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -40,18 +57,12 @@ public class EmailService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a");
             String formattedDateTime = appointment.getPreferredDateTime().format(formatter);
 
-            StringBuilder emailBody = new StringBuilder();
-            emailBody.append("<html><body>");
-            emailBody.append("<p>Dear ").append(appointment.getName()).append(",</p>");
-            emailBody.append("<p>We have received your request for a counseling session. We will review your preferred time and get back to you shortly to confirm the schedule.</p>");
-            emailBody.append("<h3>Your Request Details:</h3>");
-            emailBody.append("<ul>");
-            emailBody.append("<li><strong>Preferred Date and Time:</strong> ").append(formattedDateTime).append("</li>");
-            emailBody.append("<li><strong>Reason for Session:</strong> ").append(appointment.getReason()).append("</li>");
-            emailBody.append("</ul>");
-            emailBody.append("</body></html>");
+            String emailBody = loadEmailTemplate("appointment-confirmation.html");
+            emailBody = emailBody.replace("${name}", appointment.getName());
+            emailBody = emailBody.replace("${preferredDateTime}", formattedDateTime);
+            emailBody = emailBody.replace("${reason}", appointment.getReason());
 
-            helper.setText(emailBody.toString(), true);
+            helper.setText(emailBody, true);
 
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
@@ -70,18 +81,11 @@ public class EmailService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a");
             String formattedDateTime = appointment.getPreferredDateTime().format(formatter);
 
-            StringBuilder emailBody = new StringBuilder();
-            emailBody.append("<html><body>");
-            emailBody.append("<p>Dear ").append(appointment.getName()).append(",</p>");
-            emailBody.append("<p>Your counseling session has been confirmed. Please see the details below:</p>");
-            emailBody.append("<h3>Appointment Details:</h3>");
-            emailBody.append("<ul>");
-            emailBody.append("<li><strong>Date and Time:</strong> ").append(formattedDateTime).append("</li>");
-            emailBody.append("</ul>");
-            emailBody.append("<p>If you need to reschedule, please contact us as soon as possible.</p>");
-            emailBody.append("</body></html>");
+            String emailBody = loadEmailTemplate("admin-confirmation.html");
+            emailBody = emailBody.replace("${name}", appointment.getName());
+            emailBody = emailBody.replace("${preferredDateTime}", formattedDateTime);
 
-            helper.setText(emailBody.toString(), true);
+            helper.setText(emailBody, true);
 
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
@@ -101,19 +105,12 @@ public class EmailService {
             String oldFormattedDateTime = oldDateTime.format(formatter);
             String newFormattedDateTime = appointment.getPreferredDateTime().format(formatter);
 
-            StringBuilder emailBody = new StringBuilder();
-            emailBody.append("<html><body>");
-            emailBody.append("<p>Dear ").append(appointment.getName()).append(",</p>");
-            emailBody.append("<p>Your counseling session has been rescheduled. Please see the updated details below:</p>");
-            emailBody.append("<h3>Updated Appointment Details:</h3>");
-            emailBody.append("<ul>");
-            emailBody.append("<li><strong>Previous Date and Time:</strong> ").append(oldFormattedDateTime).append("</li>");
-            emailBody.append("<li><strong>New Date and Time:</strong> ").append(newFormattedDateTime).append("</li>");
-            emailBody.append("</ul>");
-            emailBody.append("<p>If this new time does not work for you, please contact us immediately.</p>");
-            emailBody.append("</body></html>");
+            String emailBody = loadEmailTemplate("reschedule.html");
+            emailBody = emailBody.replace("${name}", appointment.getName());
+            emailBody = emailBody.replace("${oldDateTime}", oldFormattedDateTime);
+            emailBody = emailBody.replace("${newDateTime}", newFormattedDateTime);
 
-            helper.setText(emailBody.toString(), true);
+            helper.setText(emailBody, true);
 
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
@@ -129,14 +126,10 @@ public class EmailService {
             helper.setTo(appointment.getEmail());
             helper.setSubject("SafePoint: Your Counseling Session is Complete");
 
-            StringBuilder emailBody = new StringBuilder();
-            emailBody.append("<html><body>");
-            emailBody.append("<p>Dear ").append(appointment.getName()).append(",</p>");
-            emailBody.append("<p>This email is to confirm that your recent counseling session is now marked as complete. We hope it was a helpful and supportive experience.</p>");
-            emailBody.append("<p>If you need further assistance or wish to schedule another session, please don't hesitate to reach out.</p>");
-            emailBody.append("</body></html>");
+            String emailBody = loadEmailTemplate("completion.html");
+            emailBody = emailBody.replace("${name}", appointment.getName());
 
-            helper.setText(emailBody.toString(), true);
+            helper.setText(emailBody, true);
 
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
@@ -152,23 +145,19 @@ public class EmailService {
             helper.setTo(report.getEmail());
             helper.setSubject("SafePoint: Report Submitted Successfully");
 
-            StringBuilder emailBody = new StringBuilder();
-            emailBody.append("<html><body>");
-            emailBody.append("<p>Dear ").append(report.getName()).append(",</p>");
-            emailBody.append("<p>We’ve received your report and will review it with care. Your unique tracking ID is: <strong>").append(report.getReportId()).append("</strong>.</p>");
-            emailBody.append("<p>Please save this ID to check the status of your report at a later time.</p>");
-            emailBody.append("<h3>Here are the details you submitted:</h3>");
-            emailBody.append("<ul>");
-            emailBody.append("<li><strong>Category:</strong> ").append(report.getCategory()).append("</li>");
-            emailBody.append("<li><strong>Description:</strong> ").append(report.getDescription()).append("</li>");
-            if (report.getExternalLink() != null && !report.getExternalLink().isEmpty()) {
-                emailBody.append("<li><strong>External Link:</strong> <a href=\"").append(report.getExternalLink()).append("\"> ").append(report.getExternalLink()).append("</a></li>");
-            }
-            emailBody.append("</ul>");
-            emailBody.append("<p>If you’re unsafe right now, please contact campus security or emergency services first.</p>");
-            emailBody.append("</body></html>");
+            String emailBody = loadEmailTemplate("report-confirmation.html");
+            emailBody = emailBody.replace("${name}", report.getName());
+            emailBody = emailBody.replace("${reportId}", report.getReportId());
+            emailBody = emailBody.replace("${category}", report.getCategory());
+            emailBody = emailBody.replace("${description}", report.getDescription());
 
-            helper.setText(emailBody.toString(), true); // true for HTML
+            String externalLinkHtml = "";
+            if (report.getExternalLink() != null && !report.getExternalLink().isEmpty()) {
+                externalLinkHtml = "<li><strong>External Link:</strong> <a href=\"" + report.getExternalLink() + "\"> " + report.getExternalLink() + "</a></li>";
+            }
+            emailBody = emailBody.replace("${externalLinkHtml}", externalLinkHtml);
+
+            helper.setText(emailBody, true); // true for HTML
 
             // Add attachments
             if (report.getEvidenceFilePaths() != null) {
