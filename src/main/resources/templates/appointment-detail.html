@@ -47,8 +47,8 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmationModal">Confirm</button>
                     </form>
                     <button th:if="${appointment.status.name() != 'COMPLETED'}" type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#rescheduleModal">Reschedule</button>
-                    <form th:if="${appointment.status.name() == 'CONFIRMED'}" th:action="@{/admin/appointment/complete/{id}(id=${appointment.id})}" method="post">
-                        <button type="submit" class="btn btn-info">Mark as Done</button>
+                    <form th:if="${appointment.status.name() == 'CONFIRMED'}" id="complete-form" th:action="@{/admin/appointment/complete/{id}(id=${appointment.id})}" method="post">
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#completeConfirmationModal">Mark as Done</button>
                     </form>
                 </div>
             </div>
@@ -57,13 +57,23 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 </div>
 
 <div th:replace="~{fragments/confirmation-modal :: confirmation-modal(modalId='confirmationModal', title='Confirm Appointment', text='Are you sure you want to confirm this appointment?', confirmButtonText='Confirm', formId='confirm-form')}"></div>
+<div th:replace="~{fragments/confirmation-modal :: confirmation-modal(modalId='completeConfirmationModal', title='Mark as Done', text='Are you sure you want to mark this appointment as done?', confirmButtonText='Confirm', formId='complete-form')}"></div>
 <div th:replace="~{fragments/reschedule-modal :: reschedule-modal}"></div>
 
 <div th:replace="~{fragments/admin-common :: scripts}"></div>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="/js/flatpickr-config.js"></script>
 <script>
-    function submitConfirmationForm(formId) {
+    function submitConfirmationForm(formId, modalId) {
+        if (modalId) {
+            const modalElement = document.getElementById(modalId);
+            if (modalElement) {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                }
+            }
+        }
         const spinnerOverlay = document.getElementById('spinner-overlay');
         spinnerOverlay.classList.add('show');
         document.getElementById(formId).submit();
