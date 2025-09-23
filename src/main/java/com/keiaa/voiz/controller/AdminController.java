@@ -76,8 +76,8 @@ public class AdminController {
             return "redirect:/admin-login";
         }
 
-        model.addAttribute("pendingReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.PENDING_REVIEW, ReportStatus.UNDER_INVESTIGATION)));
-        model.addAttribute("resolvedReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.ACTION_TAKEN, ReportStatus.RESOLVED)));
+        model.addAttribute("pendingReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.PENDING_REVIEW, ReportStatus.UNDER_INVESTIGATION, ReportStatus.ACTION_TAKEN)));
+        model.addAttribute("resolvedReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.RESOLVED)));
         model.addAttribute("totalAppointmentsCount", appointmentRepository.count());
         model.addAttribute("resolvedAppointmentsCount", appointmentRepository.countByPreferredDateTimeBefore(java.time.LocalDateTime.now()));
         model.addAttribute("categoryCounts", reportRepository.countByCategory());
