@@ -56,11 +56,12 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                     <div th:each="history, iterStat : ${report.history}" class="timeline-item mb-3">
                                         <div class="card">
                                             <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
                                                     <h6 class="mb-0">
-                                                        <span th:text="${history.oldStatus.displayName}"></span> → 
                                                         <span th:text="${history.newStatus.displayName}"></span>
                                                     </h6>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
                                                     <small class="text-muted" th:text="${#temporals.format(history.timestamp, 'dd-MMM-yyyy HH:mm')}"></small>
                                                 </div>
                                                 <p class="text-muted mb-1" th:text="${history.description}"></p>
