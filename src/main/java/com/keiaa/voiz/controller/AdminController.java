@@ -31,8 +31,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.keiaa.voiz.model.Appointment;
 import com.keiaa.voiz.model.AppointmentStatus;
 import com.keiaa.voiz.model.Report;
+import com.keiaa.voiz.model.ReportHistory;
 import com.keiaa.voiz.model.ReportStatus;
 import com.keiaa.voiz.repository.AppointmentRepository;
+import com.keiaa.voiz.repository.ReportHistoryRepository;
 import com.keiaa.voiz.repository.ReportRepository;
 import com.keiaa.voiz.service.EmailService;
 
@@ -43,6 +45,9 @@ public class AdminController {
 
     @Autowired
     private ReportRepository reportRepository;
+
+    @Autowired
+    private ReportHistoryRepository reportHistoryRepository;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -94,6 +99,13 @@ public class AdminController {
         }
 
         List<Report> reports = reportRepository.findAll();
+        
+        // Fetch history for each report
+        for (Report report : reports) {
+            List<ReportHistory> history = reportHistoryRepository.findByReportIdOrderByTimestampDesc(report.getId());
+            report.setHistory(history);
+        }
+        
         model.addAttribute("reports", reports);
         return "admin-reports";
     }
@@ -129,6 +141,11 @@ public class AdminController {
                 .map(report -> {
                     model.addAttribute("report", report);
                     model.addAttribute("statuses", ReportStatus.values());
+                    
+                    // Fetch history records for the report
+                    List<ReportHistory> history = reportHistoryRepository.findByReportIdOrderByTimestampDesc(report.getId());
+                    report.setHistory(history);
+                    
                     return "report-detail";
                 })
                 .orElse("redirect:/admin/dashboard");
@@ -165,6 +182,38 @@ public class AdminController {
         });
         
         return "redirect:/admin/report/" + reportId;
+    }
+    
+    @PostMapping("/admin/report/update-status-with-description")
+    public String updateReportStatusWithDescription(@RequestParam("reportId") String reportId,
+                                                    @RequestParam("status") ReportStatus status,
+                                                    @RequestParam("description") String description,
+                                                    HttpSession session,
+                                                    RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("adminLoggedIn") == null || !(Boolean) session.getAttribute("adminLoggedIn")) {
+            redirectAttributes.addFlashAttribute("error", "Please login first.");
+            return "redirect:/admin-login";
+        }
+        
+        return reportRepository.findByReportId(reportId)
+            .map(report -> {
+                // Create history record
+                ReportHistory history = new ReportHistory();
+                history.setReport(report);
+                history.setOldStatus(report.getStatus());
+                history.setNewStatus(status);
+                history.setDescription(description);
+                history.setUpdatedBy("Admin"); // In a real implementation, get the actual admin name
+                
+                reportHistoryRepository.save(history);
+                
+                // Update report status
+                report.setStatus(status);
+                reportRepository.save(report);
+                
+                return "redirect:/admin/report/" + reportId;
+            })
+            .orElse("redirect:/admin/dashboard");
     }
 
     @PostMapping("/admin/appointment/confirm/{id}")
