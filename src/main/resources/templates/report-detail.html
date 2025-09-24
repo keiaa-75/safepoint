@@ -24,12 +24,6 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                     <p th:text="${#temporals.format(report.timestamp, 'dd-MMM-yyyy HH:mm')}"></p>
                 </div>
                 <div class="col-md-6">
-                    <p class="text-muted mb-1">Change Status</p>
-                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#changeStatusModal">
-                        Change Status
-                    </button>
-                </div>
-                <div class="col-md-6">
                     <p class="text-muted mb-1">Category</p>
                     <p th:text="${report.category}"></p>
                 </div>
@@ -106,6 +100,9 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
             <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
                 <a th:href="@{/admin/reports}" class="btn btn-secondary">Back to Reports</a>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeStatusModal">
+                    Change Status
+                </button>
             </div>
         </div>
     </div>
