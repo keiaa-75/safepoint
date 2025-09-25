@@ -22,6 +22,9 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 </head>
 
 <div th:fragment="scripts" xmlns:th="http://www.thymeleaf.org">
+    <div id="offline-status-bar" class="offline-status-bar">
+        <i class="bi bi-wifi-off me-2"></i> You are offline. Some features may not be available.
+    </div>
     <div id="spinner-overlay" class="spinner-overlay">
         <div class="spinner-border text-light" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -33,6 +36,24 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         document.addEventListener('DOMContentLoaded', () => {
             const currentPath = window.location.pathname;
             const navLinks = document.querySelectorAll('.bottom-nav a');
+            const offlineStatusBar = document.getElementById('offline-status-bar');
+            
+            // Check initial online status
+            if (navigator.onLine) {
+                offlineStatusBar.classList.remove('show');
+            } else {
+                offlineStatusBar.classList.add('show');
+            }
+
+            // Listen for online event
+            window.addEventListener('online', () => {
+                offlineStatusBar.classList.remove('show');
+            });
+
+            // Listen for offline event
+            window.addEventListener('offline', () => {
+                offlineStatusBar.classList.add('show');
+            });
 
             navLinks.forEach(link => {
                 const linkPath = link.getAttribute('href');
