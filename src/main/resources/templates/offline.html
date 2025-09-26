@@ -1,0 +1,43 @@
+<!-- 
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Offline - SafePoint')}"></head>
+<body class="offline-page">
+    <div class="offline-container">
+        <div class="offline-content">
+            <div class="offline-icon">
+                <i class="bi bi-wifi-off"></i>
+            </div>
+            <h1 class="offline-title">You're Offline</h1>
+            <p class="offline-message">
+                You need an active internet connection to use SafePoint. 
+            </p>
+            <p class="offline-message">
+                Please check your connection and try again.
+            </p>
+            <button id="check-connection-btn" class="btn btn-primary" onclick="checkConnection()">
+                Try Again
+            </button>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/common :: scripts}"></div>
+    
+    <script>
+        function checkConnection() {
+            if (navigator.onLine) {
+                // Connection is back, redirect to home
+                window.location.href = '/';
+            } else {
+                // Still offline, show message
+                alert('You are still offline. Please check your internet connection.');
+            }
+        }
+    </script>
+</body>
+</html>
