@@ -197,3 +197,69 @@ Provides administrative functionality:
 - Integration tests for controllers and services likely needed
 - Unit tests for service layer business logic
 - Manual testing for UI components and workflows
+
+## Frontend Logic and Resources
+
+### Technologies Used
+- **Frontend Framework:** Thymeleaf templating engine for server-side rendering
+- **CSS Framework:** Bootstrap 5.3.2 with custom styles
+- **Icons:** Bootstrap Icons
+- **UI Components:** Custom CSS components and Bootstrap components
+- **Date Picker:** Flatpickr for date selection
+- **Progressive Web App (PWA):** Includes manifest.json and service worker for offline functionality
+
+### Frontend Structure
+- **Templates:** Located in `src/main/resources/templates/`
+  - Main pages: `index.html`, `report.html`, `schedule.html`, `track.html`, `about.html`
+  - Admin pages: `admin-*.html` templates
+  - Fragments: Reusable components in `fragments/` directory
+- **Static Resources:** Located in `src/main/resources/static/`
+  - CSS: Custom styles in `css/styles.css`
+  - JavaScript: Client-side logic in `js/` directory
+  - Assets: Icons, fonts, and the favicon in respective directories
+
+### Multi-Step Form Implementation
+- **Custom JavaScript:** `multi-step-form.js` handles the form navigation logic
+- **Progress Indicators:** Visual step progress bar with current/done states
+- **Validation:** Client-side validation before allowing step navigation
+- **Review Step:** Final step shows all entered data for confirmation before submission
+- **Dynamic Content:** Form content updates based on user input (e.g., review step)
+
+### JavaScript Components
+- **report-form.js:** Specific logic for report form validation, file handling, and confirmation checkbox
+- **schedule-form.js:** Logic for appointment scheduling including date/time handling
+- **flatpickr-config.js:** Custom configuration for date picker (min date tomorrow, disable weekends)
+- **pwa.js:** Service worker registration for PWA functionality
+
+### UI Features
+- **Bottom Navigation:** Mobile-friendly navigation bar on all main pages
+- **Bento Grid Layout:** For the main dashboard cards
+- **Responsive Design:** Mobile-first approach with responsive breakpoints
+- **Spinner Overlay:** Loading indicator during form submissions
+- **Offline Status Bar:** Shows when the user is offline
+- **Modals:** For confirmation and success messages
+
+### PWA Features
+- **Manifest:** `manifest.json` for app installation capability
+- **Service Worker:** `service-worker.js` for offline caching and functionality
+- **Offline Support:** Status bar indicates offline status and lists which features may not work
+- **Installable:** Can be installed as an app on mobile devices
+
+### Custom CSS Components
+- **Content Card:** Main container with rounded corners and shadow
+- **Step Progress Bar:** Visual indicator for multi-step forms
+- **Bento Cards:** Dashboard cards with icon wrappers and hover effects
+- **Hero Section:** Prominent header for the main page
+- **Bottom Navigation:** Fixed navigation at the bottom of the screen
+
+### Responsive Design
+- **Mobile-First Approach:** Design starts from mobile and scales up
+- **Bootstrap Grid System:** Uses Bootstrap's responsive grid classes
+- **Breakpoint Adjustments:** Specific media queries for mobile responsiveness
+- **Touch-Friendly Elements:** Sufficient spacing and sizes for touch interaction
+
+### Form Validation
+- **Client-Side Validation:** JavaScript validation for input fields
+- **Name Validation:** Uses regex to validate names with international characters
+- **File Validation:** Checks file size limits (10MB) and provides user feedback
+- **Required Field Validation:** Ensures all required fields are completed before proceeding
