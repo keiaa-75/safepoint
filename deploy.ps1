@@ -1,4 +1,8 @@
-#!/usr/bin/env pwsh
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 
 param(
     [Parameter(Mandatory=$true)]
@@ -12,7 +16,6 @@ $APP_URL = "http://localhost:$PORT"
 $SpringBootProcess = $null
 $CloudflaredJob = $null
 
-# Global variable to store the tunnel URL
 $Global:TunnelUrl = $null
 
 function Write-Log {
@@ -48,7 +51,6 @@ function Start-Application {
         exit 1
     }
 
-    # Find the JAR file in the target directory
     $jarFiles = Get-ChildItem -Path "$PSScriptRoot/target/" -Filter "*.jar" | Where-Object { $_.Name -notlike "*-sources.jar" }
     if ($jarFiles.Count -eq 0) {
         Write-Log "ERROR: No JAR file found in target directory."
@@ -58,11 +60,9 @@ function Start-Application {
     $jarPath = $jarFiles[0].FullName
     Write-Log "Starting Spring Boot application from JAR: $jarPath"
     
-    # Start the application using java -jar
     $SpringBootProcess = Start-Process -FilePath "java" -ArgumentList "-jar", "`"$jarPath`"", "--server.port=$PORT" -PassThru -WorkingDirectory "$PSScriptRoot" -NoNewWindow
     
-    # Wait for server to become available with retries
-    $maxRetries = 30  # 30 * 2 = 60 seconds max wait time
+    $maxRetries = 30
     $retryCount = 0
     $serverReady = $false
     
@@ -102,7 +102,6 @@ function Start-Tunnel {
     $foundUrl = $null
     
     while ($elapsed -lt $timeout) {
-        # Wait for job output with timeout to avoid missing output
         Wait-Job -Job $job -Timeout $checkInterval 2>$null
         Start-Sleep -Seconds $checkInterval
         $elapsed += $checkInterval
@@ -113,7 +112,7 @@ function Start-Tunnel {
             $regex = "https://[a-z0-9-]+\.trycloudflare\.com"
             if ($line -match $regex) {
                 $foundUrl = $matches[0]
-                $Global:TunnelUrl = $foundUrl  # Store the URL globally
+                $Global:TunnelUrl = $foundUrl
                 break
             }
         }
@@ -121,8 +120,7 @@ function Start-Tunnel {
         if ($foundUrl) {
             Write-Log "Found tunnel URL: $foundUrl"
 
-            # Keep the job running in the background
-            $Global:CloudflaredJob = $job  # Store the job globally
+            $Global:CloudflaredJob = $job
             return $foundUrl
         }
     }
@@ -184,23 +182,18 @@ function Stop-Processes {
     Write-Log "Stopping processes..."
     
     if ($SpringBootProcess -and !$SpringBootProcess.HasExited) {
-        # Try graceful shutdown first
         try {
-            # Send a termination signal first
             Stop-Process -Id $SpringBootProcess.Id -Force:$false
             Write-Log "Sent termination signal to Spring Boot process (PID: $($SpringBootProcess.Id))"
-            
-            # Wait a bit for graceful shutdown
+
             Start-Sleep -Seconds 3
-            
-            # Check if process is still running, if so force kill
+
             if (!$SpringBootProcess.HasExited) {
                 Stop-Process -Id $SpringBootProcess.Id -Force
                 Write-Log "Force stopped Spring Boot process (PID: $($SpringBootProcess.Id))"
             }
         }
         catch {
-            # If graceful shutdown fails, force kill
             Stop-Process -Id $SpringBootProcess.Id -Force
             Write-Log "Force stopped Spring Boot process (PID: $($SpringBootProcess.Id))"
         }
@@ -208,13 +201,11 @@ function Stop-Processes {
     
     if ($Global:CloudflaredJob -and (Get-Job -Id $Global:CloudflaredJob.Id -ErrorAction SilentlyContinue)) {
         try {
-            # Try to stop the job gracefully
             Stop-Job -Job $Global:CloudflaredJob
             Remove-Job -Job $Global:CloudflaredJob
             Write-Log "Stopped Cloudflared job (ID: $($Global:CloudflaredJob.Id))"
         }
         catch {
-            # If graceful stop fails, remove the job
             Remove-Job -Job $Global:CloudflaredJob -Force
             Write-Log "Force removed Cloudflared job (ID: $($Global:CloudflaredJob.Id))"
         }
