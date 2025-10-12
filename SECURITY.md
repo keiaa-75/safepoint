@@ -4,7 +4,7 @@ The project maintainer(s) take security bugs in SafePoint seriously. We apprecia
 
 ## Reporting a vulnerability
 
-If you believe you've discovered a security vulnerability in this project, please do not open a public issue. Instead, please use the [GitHub Security Advisory](https://github.com/keiaa-75/voiz/security/advisories/new) to privately report the issue.
+If you believe you've discovered a security vulnerability in this project, please do not open a public issue. Instead, please use the [GitHub Security Advisory](https://github.com/keiaa-75/safepoint/security/advisories/new) to privately report the issue.
 
 Please include:
 
