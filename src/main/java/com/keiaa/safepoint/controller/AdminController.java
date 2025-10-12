@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-package com.keiaa.voiz.controller;
+package com.keiaa.safepoint.controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,15 +28,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.keiaa.voiz.model.Appointment;
-import com.keiaa.voiz.model.AppointmentStatus;
-import com.keiaa.voiz.model.Report;
-import com.keiaa.voiz.model.ReportHistory;
-import com.keiaa.voiz.model.ReportStatus;
-import com.keiaa.voiz.repository.AppointmentRepository;
-import com.keiaa.voiz.repository.ReportHistoryRepository;
-import com.keiaa.voiz.repository.ReportRepository;
-import com.keiaa.voiz.service.EmailService;
+import com.keiaa.safepoint.model.Appointment;
+import com.keiaa.safepoint.model.AppointmentStatus;
+import com.keiaa.safepoint.model.Report;
+import com.keiaa.safepoint.model.ReportHistory;
+import com.keiaa.safepoint.model.ReportStatus;
+import com.keiaa.safepoint.repository.AppointmentRepository;
+import com.keiaa.safepoint.repository.ReportHistoryRepository;
+import com.keiaa.safepoint.repository.ReportRepository;
+import com.keiaa.safepoint.service.EmailService;
 
 import jakarta.servlet.http.HttpSession;
 

@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/ *
  */
 
-package com.keiaa.voiz.controller;
+package com.keiaa.safepoint.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.keiaa.voiz.exception.DailyReportLimitExceededException;
-import com.keiaa.voiz.model.Report;
-import com.keiaa.voiz.repository.ReportRepository;
-import com.keiaa.voiz.service.EmailService;
-import com.keiaa.voiz.service.FileStorageService;
-import com.keiaa.voiz.service.ReportIdGenerator;
+import com.keiaa.safepoint.exception.DailyReportLimitExceededException;
+import com.keiaa.safepoint.model.Report;
+import com.keiaa.safepoint.repository.ReportRepository;
+import com.keiaa.safepoint.service.EmailService;
+import com.keiaa.safepoint.service.FileStorageService;
+import com.keiaa.safepoint.service.ReportIdGenerator;
 
 @Controller
 public class ReportController {

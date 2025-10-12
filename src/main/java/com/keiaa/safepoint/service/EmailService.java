@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-package com.keiaa.voiz.service;
+package com.keiaa.safepoint.service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,8 +19,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.keiaa.voiz.model.Appointment;
-import com.keiaa.voiz.model.Report;
+import com.keiaa.safepoint.model.Appointment;
+import com.keiaa.safepoint.model.Report;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

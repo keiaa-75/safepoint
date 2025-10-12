@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/ *
  */
 
-package com.keiaa.voiz.exception;
+package com.keiaa.safepoint.exception;
 
 public class DailyReportLimitExceededException extends RuntimeException {
     public DailyReportLimitExceededException(String message) {

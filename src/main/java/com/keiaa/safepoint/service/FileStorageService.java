@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-package com.keiaa.voiz.service;
+package com.keiaa.safepoint.service;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

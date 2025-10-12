@@ -4,16 +4,19 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-package com.keiaa.voiz.repository;
+package com.keiaa.safepoint.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.keiaa.voiz.model.ReportHistory;
+import com.keiaa.safepoint.model.Appointment;
 
 @Repository
-public interface ReportHistoryRepository extends JpaRepository<ReportHistory, Long> {
-    List<ReportHistory> findByReportIdOrderByTimestampDesc(Long reportId);
+public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
+    long countByPreferredDateTimeBefore(LocalDateTime dateTime);
+
+    List<Appointment> findAllByOrderByPreferredDateTimeAsc();
 }
