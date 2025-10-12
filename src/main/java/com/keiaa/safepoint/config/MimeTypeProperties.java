@@ -6,17 +6,21 @@
 
 package com.keiaa.safepoint.config;
 
+import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
+@PropertySource("classpath:mime-types.properties")
 @ConfigurationProperties(prefix = "mime-types")
 public class MimeTypeProperties {
-    private Set<String> allowed;
-    private Map<String, String> extensions;
+    private Set<String> allowed = new HashSet<>();
+    private Map<String, String> extensions = new HashMap<>();
 
     public Set<String> getAllowed() {
         return allowed;
