@@ -1,10 +1,10 @@
-package com.keiaa.voiz;
+package com.keiaa.safepoint;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class VoizApplicationTests {
+class SafePointApplicationTests {
 
 	@Test
 	void contextLoads() {

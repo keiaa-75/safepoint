@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-const CACHE_NAME = 'voiz-cache-v1';
+const CACHE_NAME = 'safepoint-cache-v1';
 const URLS_TO_CACHE = [
   '/',
   '/css/styles.css',
