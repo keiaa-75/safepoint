@@ -32,7 +32,7 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     @Autowired
-    private FileStorageService fileStorageService;
+    private FileLoaderService fileLoaderService;
 
     private String loadEmailTemplate(String templateName) {
         try {
@@ -162,7 +162,7 @@ public class EmailService {
             // Add attachments
             if (report.getEvidenceFilePaths() != null) {
                 for (String filePath : report.getEvidenceFilePaths()) {
-                    Resource file = fileStorageService.load(filePath);
+                    Resource file = fileLoaderService.load(filePath);
                     String filename = file.getFilename();
                     if (filename == null) {
                         // Fallback to the path if filename is not available
