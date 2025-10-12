@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-package com.keiaa.voiz.repository;
+package com.keiaa.safepoint.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,9 +14,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.keiaa.voiz.model.Report;
-import com.keiaa.voiz.model.ReportStatus;
-import com.keiaa.voiz.model.dto.CategoryCount;
+import com.keiaa.safepoint.model.Report;
+import com.keiaa.safepoint.model.ReportStatus;
+import com.keiaa.safepoint.model.dto.CategoryCount;
 
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
@@ -28,7 +28,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     long countByStatusIn(List<ReportStatus> statuses);
 
-    @Query("SELECT new com.keiaa.voiz.model.dto.CategoryCount(r.category, COUNT(r)) FROM Report r GROUP BY r.category")
+    @Query("SELECT new com.keiaa.safepoint.model.dto.CategoryCount(r.category, COUNT(r)) FROM Report r GROUP BY r.category")
     List<CategoryCount> countByCategory();
 
     List<Report> findTop3ByOrderByTimestampDesc();

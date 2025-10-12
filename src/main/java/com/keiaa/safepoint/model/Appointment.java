@@ -4,39 +4,33 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-package com.keiaa.voiz.model;
+package com.keiaa.safepoint.model;
 
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "report_history")
+@Table(name = "appointments")
 @Data
-public class ReportHistory {
+public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "report_id")
-    private Report report;
+    private String name;
+    private String email;
+    private LocalDateTime preferredDateTime;
+    private String reason;
 
-    private ReportStatus oldStatus;
-
-    private ReportStatus newStatus;
-
-    private String description;
-
-    private LocalDateTime timestamp = LocalDateTime.now();
-
-    private String updatedBy;
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status = AppointmentStatus.PENDING;
 }

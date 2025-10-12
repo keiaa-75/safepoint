@@ -24,8 +24,8 @@ These instructions will get you a copy of the project up and running on your loc
 **1. Clone the repository:**
 
 ```sh
-git clone https://github.com/keiaa-75/voiz.git
-cd voiz
+git clone https://github.com/keiaa-75/safepoint.git
+cd safepoint
 ```
 
 **2. Build the project:**
@@ -36,7 +36,7 @@ mvn clean install
 
 **3. Run the application:**
 
-From your IDE, you can run the `VoizApplication.java` file as a Spring Boot app. Alternatively, you can use the command line:
+From your IDE, you can run the `SafePointApplication.java` file as a Spring Boot app. Alternatively, you can use the command line:
 
 ```sh
 mvn spring-boot:run
@@ -49,7 +49,7 @@ The application will start on port `9090`.
 
 This project requires a `src/main/resources/application-dev.properties` file for local development. This file contains sensitive configuration (such as email credentials) and is excluded from version control. 
 
-The [EmailService](src/main/java/com/keiaa/voiz/service/EmailService.java) uses mail-related properties to automatically communicate actions and updates to the user. The `admin.key` is used for authenticating users on the administrative dashboard.
+The [EmailService](src/main/java/com/keiaa/safepoint/service/EmailService.java) uses mail-related properties to automatically communicate actions and updates to the user. The `admin.key` is used for authenticating users on the administrative dashboard.
 
 **You must create this file before running the app.**
 

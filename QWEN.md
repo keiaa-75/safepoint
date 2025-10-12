@@ -15,14 +15,14 @@ Key technologies used:
 ```
 src/
 ├── main/
-│   ├── java/com/keiaa/voiz/
+│   ├── java/com/keiaa/safepoint/
 │   │   ├── config/           # Configuration classes
 │   │   ├── controller/       # Spring MVC controllers
 │   │   ├── exception/        # Custom exceptions
 │   │   ├── model/            # Entity models and DTOs
 │   │   ├── repository/       # JPA repositories
 │   │   ├── service/          # Business logic services
-│   │   └── VoizApplication.java # Main application class
+│   │   └── SafePointApplication.java # Main application class
 │   ├── resources/
 │   │   ├── emails/          # Email templates
 │   │   ├── static/          # Static assets (CSS, JS, images)
@@ -99,8 +99,8 @@ admin.key=your-admin-key
 ```
 
 ### Database
-- Uses H2 file-based database stored at `./data/voizdb`
-- Connection URL: `jdbc:h2:file:./data/voizdb`
+- Uses H2 file-based database stored at `./data/safepointdb`
+- Connection URL: `jdbc:h2:file:./data/safepointdb`
 - Automatically creates and updates schema (`spring.jpa.hibernate.ddl-auto=update`)
 
 ### Server
@@ -121,7 +121,7 @@ mvn clean install
 # Run the application
 mvn spring-boot:run
 
-# Or run from IDE by executing VoizApplication.java as Spring Boot app
+# Or run from IDE by executing SafePointApplication.java as Spring Boot app
 ```
 
 ### Accessing the Application

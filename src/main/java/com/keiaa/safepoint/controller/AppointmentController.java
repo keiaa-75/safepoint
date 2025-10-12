@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-package com.keiaa.voiz.controller;
+package com.keiaa.safepoint.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.keiaa.voiz.model.Appointment;
-import com.keiaa.voiz.repository.AppointmentRepository;
-import com.keiaa.voiz.service.EmailService;
+import com.keiaa.safepoint.model.Appointment;
+import com.keiaa.safepoint.repository.AppointmentRepository;
+import com.keiaa.safepoint.service.EmailService;
 
 @Controller
 @RequestMapping("/schedule")

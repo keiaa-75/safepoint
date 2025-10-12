@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.keiaa</groupId>
-	<artifactId>voiz</artifactId>
+	<artifactId>safepoint</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>voiz</name>
-	<description>A simple anti-bullying web application.</description>
+	<name>SafePoint</name>
+	<description>A safe reporting platform for students to report bullying and schedule counseling.</description>
 	<url/>
 	<licenses>
 		<license/>

@@ -4,16 +4,16 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-package com.keiaa.voiz;
+package com.keiaa.safepoint;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class VoizApplication {
+public class SafePointApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(VoizApplication.class, args);
+		SpringApplication.run(SafePointApplication.class, args);
 	}
 
 }

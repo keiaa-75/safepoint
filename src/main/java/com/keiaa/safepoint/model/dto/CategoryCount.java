@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/ *
  */
 
-package com.keiaa.voiz.model.dto;
+package com.keiaa.safepoint.model.dto;
 
 public class CategoryCount {
     private String category;

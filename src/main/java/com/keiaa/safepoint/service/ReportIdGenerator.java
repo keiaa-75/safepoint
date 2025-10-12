@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/ *
  */
 
-package com.keiaa.voiz.service;
+package com.keiaa.safepoint.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -13,8 +13,8 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.keiaa.voiz.exception.DailyReportLimitExceededException;
-import com.keiaa.voiz.repository.ReportRepository;
+import com.keiaa.safepoint.exception.DailyReportLimitExceededException;
+import com.keiaa.safepoint.repository.ReportRepository;
 
 @Service
 public class ReportIdGenerator {
