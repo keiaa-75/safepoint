@@ -29,6 +29,7 @@ import com.keiaa.safepoint.exception.DailyReportLimitExceededException;
 import com.keiaa.safepoint.model.Report;
 import com.keiaa.safepoint.repository.ReportRepository;
 import com.keiaa.safepoint.service.EmailService;
+import com.keiaa.safepoint.service.FileLoaderService;
 import com.keiaa.safepoint.service.FileStorageService;
 import com.keiaa.safepoint.service.ReportIdGenerator;
 
@@ -40,6 +41,9 @@ public class ReportController {
     
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private FileLoaderService fileLoaderService;
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -116,7 +120,7 @@ public class ReportController {
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-        Resource file = fileStorageService.load(filename);
+        Resource file = fileLoaderService.load(filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
