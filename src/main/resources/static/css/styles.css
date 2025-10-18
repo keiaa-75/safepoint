@@ -51,6 +51,13 @@ body.admin-body {
     border: 1px solid #e9ecef;
 }
 
+.profile-card {
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: none;
+}
+
 /* Step Progress Bar */
 .step-progress-bar {
     list-style: none;
