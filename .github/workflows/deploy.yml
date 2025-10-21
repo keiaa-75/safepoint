@@ -21,7 +21,7 @@ jobs:
         run: mvn -B clean package -DskipTests=false --file pom.xml
         
       - name: Deploy Artifact to VPS
-        uses: appleboy/scp-action@v.1.0.0
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
