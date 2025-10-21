@@ -112,6 +112,7 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<finalName>safepoint</finalName>
 				</configuration>
 			</plugin>
 		</plugins>

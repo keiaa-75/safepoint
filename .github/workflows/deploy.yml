@@ -1,0 +1,42 @@
+name: Deploy Spring Boot Application
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          
+      - name: Clean and Build with Maven
+        run: mvn -B clean package -DskipTests=false --file pom.xml
+        
+      - name: Deploy Artifact to VPS
+        uses: appleboy/scp-action@v.1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          source: "target/safepoint.jar"
+          target: "/opt/seatflow/"
+
+      - name: Restart service on VPS
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            sudo systemctl restart seatflow.service
+            echo "Deployment finished and service restarted."
