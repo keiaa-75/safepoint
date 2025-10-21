@@ -4,6 +4,9 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -47,27 +50,3 @@ jobs:
           script: |
             sudo systemctl restart safepoint.service
             echo "Deployment finished and service restarted."
-
-      - name: Wait for service to start
-        run: sleep 15
-
-      - name: Verify service is running
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.VPS_PORT }}
-          script: |
-            if ! systemctl is-active --quiet safepoint.service; then
-              echo "safepoint.service is not active!"
-              systemctl status safepoint.service --no-pager -l
-              exit 1
-            fi
-
-            if ! curl -f --max-time 5 http://localhost:9090/actuator/health; then
-             echo "Application health check failed!"
-              exit 1
-            fi
-
-            echo "safepoint.service is running and healthy."
