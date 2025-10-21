@@ -12,7 +12,7 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
+1
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -35,6 +35,7 @@ build/
 ### Project ###
 *.mv.db
 *.db
-*dev*
 *LYFJSHS*
 data/
+src/main/resources/app-secrets.properties
+src/main/resources/datasource.properties
