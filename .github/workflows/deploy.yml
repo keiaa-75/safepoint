@@ -17,6 +17,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           
+      - name: Import other properties
+        run: |
+          mkdir -p ./deploy-config
+          echo "${{ secrets.DATASOURCE }}" > ./src/main/resources/datasource.properties
+          echo "${{ secrets.APPSECRETS }}" > ./src/main/resources/app-secrets.properties
+
       - name: Clean and Build with Maven
         run: mvn -B clean package -DskipTests=false --file pom.xml
         
