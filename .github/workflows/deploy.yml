@@ -34,7 +34,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_PORT }}
           source: "target/safepoint.jar"
-          target: "/opt/seatflow/"
+          target: "/opt/safepoint/"
 
       - name: Restart service on VPS
         uses: appleboy/ssh-action@v1.2.2
@@ -44,5 +44,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            sudo systemctl restart seatflow.service
+            sudo systemctl restart safepoint.service
             echo "Deployment finished and service restarted."
