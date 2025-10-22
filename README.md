@@ -47,26 +47,11 @@ The application will start on port `9090`.
 
 ## Development Properties
 
-This project requires a `src/main/resources/application-dev.properties` file for local development. This file contains sensitive configuration (such as email credentials) and is excluded from version control. 
+This project requires `app-secrets.properties` and `datasource.properties` for local development. These files contain sensitive configuration (such as email credentials and database settings) and are therefore excluded from version control. You may refer to the included template files.
 
 The [EmailService](src/main/java/com/keiaa/safepoint/service/EmailService.java) uses mail-related properties to automatically communicate actions and updates to the user. The `admin.key` is used for authenticating users on the administrative dashboard.
 
-**You must create this file before running the app.**
-
-### Sample `application-dev.properties`
-
-```properties
-# Email properties
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=your-email@gmail.com
-spring.mail.password=your-app-password
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
-
-# Custom properties
-admin.key=your-admin-key
-```
+**You must create these files before running the app.**
 
 ## License
 
