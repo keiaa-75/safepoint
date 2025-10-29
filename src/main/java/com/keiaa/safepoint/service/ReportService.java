@@ -19,6 +19,7 @@ import com.keiaa.safepoint.model.Report;
 import com.keiaa.safepoint.repository.ReportRepository;
 import com.keiaa.safepoint.service.utility.EmailService;
 import com.keiaa.safepoint.service.utility.FileStorageService;
+import com.keiaa.safepoint.service.utility.InputSanitizer;
 import com.keiaa.safepoint.service.utility.ReportIdGenerator;
 
 @Service
@@ -36,6 +37,9 @@ public class ReportService {
     @Autowired
     private ReportIdGenerator reportIdGenerator;
 
+    @Autowired
+    private InputSanitizer inputSanitizer;
+
     /**
      * Submits a new report with associated files
      * 
@@ -45,10 +49,15 @@ public class ReportService {
      * @throws DailyReportLimitExceededException If the daily limit for reports is exceeded
      */
     public Report submitReport(Report report, MultipartFile[] files) throws DailyReportLimitExceededException {
-        // Generate report ID
+        report.setName(inputSanitizer.sanitizeName(report.getName()));
+        report.setCategory(inputSanitizer.sanitize(report.getCategory()));
+        report.setDescription(inputSanitizer.sanitizeDescription(report.getDescription()));
+        if (report.getExternalLink() != null) {
+            report.setExternalLink(inputSanitizer.sanitizeUrl(report.getExternalLink()));
+        }
+
         report.setReportId(reportIdGenerator.generateReportId());
 
-        // Store evidence files
         List<String> fileNames = new ArrayList<>();
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
@@ -58,10 +67,8 @@ public class ReportService {
         }
         report.setEvidenceFilePaths(fileNames);
 
-        // Save the report to the database
         Report savedReport = reportRepository.save(report);
 
-        // Send confirmation email if an email address is provided
         if (report.getEmail() != null && !report.getEmail().isEmpty()) {
             emailService.sendReportConfirmation(savedReport);
         }

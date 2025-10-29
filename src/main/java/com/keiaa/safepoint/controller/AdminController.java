@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.keiaa.safepoint.model.Appointment;
 import com.keiaa.safepoint.model.enums.ReportStatus;
 import com.keiaa.safepoint.service.AdminService;
+import com.keiaa.safepoint.service.utility.InputSanitizer;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -29,6 +30,9 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private InputSanitizer inputSanitizer;
 
     @Value("${admin.key}")
     private String adminKey;
@@ -132,7 +136,8 @@ public class AdminController {
             return "redirect:/admin-login";
         }
 
-        return adminService.findReportWithHistoryByReportId(reportId)
+        String sanitizedReportId = inputSanitizer.sanitize(reportId);
+        return adminService.findReportWithHistoryByReportId(sanitizedReportId)
                 .map(report -> {
                     model.addAttribute("report", report);
                     model.addAttribute("statuses", ReportStatus.values());
@@ -184,12 +189,13 @@ public class AdminController {
             return "redirect:/admin-login";
         }
         
-        boolean success = adminService.updateReportStatus(reportId, status);
+        String sanitizedReportId = inputSanitizer.sanitize(reportId);
+        boolean success = adminService.updateReportStatus(sanitizedReportId, status);
         if (!success) {
             redirectAttributes.addFlashAttribute("error", "Report not found");
         }
         
-        return "redirect:/admin/report/" + reportId;
+        return "redirect:/admin/report/" + sanitizedReportId;
     }
     
     /**
@@ -213,13 +219,16 @@ public class AdminController {
             return "redirect:/admin-login";
         }
         
-        boolean success = adminService.updateReportStatusWithDescription(reportId, status, description);
+        String sanitizedReportId = inputSanitizer.sanitize(reportId);
+        String sanitizedDescription = inputSanitizer.sanitize(description);
+
+        boolean success = adminService.updateReportStatusWithDescription(sanitizedReportId, status, sanitizedDescription);
         if (!success) {
             redirectAttributes.addFlashAttribute("error", "Report not found");
             return "redirect:/admin/dashboard";
         }
         
-        return "redirect:/admin/report/" + reportId;
+        return "redirect:/admin/report/" + sanitizedReportId;
     }
 
     /**
@@ -265,7 +274,10 @@ public class AdminController {
             return "redirect:/admin-login";
         }
 
-        boolean success = adminService.rescheduleAppointment(id, newDate, newTime);
+        String sanitizedNewDate = inputSanitizer.sanitize(newDate);
+        String sanitizedNewTime = inputSanitizer.sanitize(newTime);
+
+        boolean success = adminService.rescheduleAppointment(id, sanitizedNewDate, sanitizedNewTime);
         if (!success) {
             redirectAttributes.addFlashAttribute("error", "Appointment not found");
         }

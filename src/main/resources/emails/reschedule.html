@@ -1,10 +1,13 @@
-<html><body>
-<p>Dear ${name},</p>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<p>Dear <span th:text="${name}"></span>,</p>
 <p>Your counseling session has been rescheduled. Please see the updated details below:</p>
 <h3>Updated Appointment Details:</h3>
 <ul>
-<li><strong>Previous Date and Time:</strong> ${oldDateTime}</li>
-<li><strong>New Date and Time:</strong> ${newDateTime}</li>
+<li><strong>Previous Date and Time:</strong> <span th:text="${oldDateTime}"></span></li>
+<li><strong>New Date and Time:</strong> <span th:text="${newDateTime}"></span></li>
 </ul>
 <p>If this new time does not work for you, please contact us immediately.</p>
-</body></html>
+</body>
+</html>

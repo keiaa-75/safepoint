@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.keiaa.safepoint.model.Appointment;
 import com.keiaa.safepoint.service.AppointmentService;
+import com.keiaa.safepoint.service.utility.InputSanitizer;
 
 import jakarta.validation.Valid;
 
@@ -27,6 +28,9 @@ public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
+
+    @Autowired
+    private InputSanitizer inputSanitizer;
 
     /**
      * Displays the appointment scheduling form.
@@ -58,6 +62,9 @@ public class AppointmentController {
             redirectAttributes.addFlashAttribute("error", "Please correct the errors in the form");
             return "redirect:/schedule";
         }
+        
+        appointment.setName(inputSanitizer.sanitizeName(appointment.getName()));
+        appointment.setReason(inputSanitizer.sanitize(appointment.getReason()));
         
         appointmentService.submitAppointment(appointment);
         redirectAttributes.addFlashAttribute("message", "Your counseling session request has been submitted successfully!");

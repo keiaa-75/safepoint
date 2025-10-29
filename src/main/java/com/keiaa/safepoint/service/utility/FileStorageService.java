@@ -54,6 +54,10 @@ public class FileStorageService {
                 throw new RuntimeException("Failed to store empty file.");
             }
 
+            if (!fileValidationService.isValidFilename(file.getOriginalFilename())) {
+                throw new RuntimeException("Invalid filename.");
+            }
+
             String mimeType = fileValidationService.detectMimeType(file);
             if (!fileValidationService.isValidImageFile(file)) {
                 throw new RuntimeException("Only image files are allowed!");

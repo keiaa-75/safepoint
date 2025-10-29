@@ -1,9 +1,12 @@
-<html><body>
-<p>Dear ${name},</p>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<p>Dear <span th:text="${name}"></span>,</p>
 <p>Your counseling session has been confirmed. Please see the details below:</p>
 <h3>Appointment Details:</h3>
 <ul>
-<li><strong>Date and Time:</strong> ${preferredDateTime}</li>
+<li><strong>Date and Time:</strong> <span th:text="${preferredDateTime}"></span></li>
 </ul>
 <p>If you need to reschedule, please contact us as soon as possible.</p>
-</body></html>
+</body>
+</html>

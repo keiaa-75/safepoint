@@ -19,7 +19,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import org.hibernate.validator.constraints.URL;
 
 import com.keiaa.safepoint.model.enums.ReportStatus;
 
@@ -35,18 +39,29 @@ public class Report {
     private String reportId;
     
     @NotBlank(message = "Name is required")
+    @Size(max = 100, message = "Name must be at most 100 characters")
     private String name;
+    
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
+    @Size(max = 255, message = "Email must be at most 255 characters")
     private String email;
 
+    @Size(max = 10, message = "Category must be at most 10 characters")
+    @Pattern(regexp = "^(Physical|Verbal|Cyber|Social|Other)$", 
+             message = "Category must be one of the allowed values.")
     private String category;
+    
+    @NotBlank(message = "Description is required")
+    @Size(min = 10, max = 2000, message = "Description must be between 10 and 2000 characters")
     private String description;
+    
     private LocalDateTime timestamp = LocalDateTime.now();
 
     @ElementCollection
     private List<String> evidenceFilePaths;
 
+    @URL(message = "Link should be of proper format")
     private String externalLink;
 
     private ReportStatus status = ReportStatus.PENDING_REVIEW;
