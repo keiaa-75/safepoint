@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.keiaa.safepoint.model.Appointment;
-import com.keiaa.safepoint.repository.AppointmentRepository;
-import com.keiaa.safepoint.service.EmailService;
+import com.keiaa.safepoint.service.AppointmentService;
 
 import jakarta.validation.Valid;
 
@@ -27,11 +26,14 @@ import jakarta.validation.Valid;
 public class AppointmentController {
 
     @Autowired
-    private AppointmentRepository appointmentRepository;
+    private AppointmentService appointmentService;
 
-    @Autowired
-    private EmailService emailService;
-
+    /**
+     * Displays the appointment scheduling form.
+     *
+     * @param model the model to add appointment object to
+     * @return the name of the view template to render
+     */
     @GetMapping
     public String showForm(Model model) {
         if (!model.containsAttribute("appointment")) {
@@ -40,6 +42,14 @@ public class AppointmentController {
         return "schedule";
     }
 
+    /**
+     * Processes the submitted appointment request.
+     *
+     * @param appointment the validated appointment object containing user request
+     * @param bindingResult result of validation checks
+     * @param redirectAttributes attributes to pass to the redirected page
+     * @return redirect to schedule page with success or error message
+     */
     @PostMapping
     public String submitAppointment(@Valid @ModelAttribute("appointment") Appointment appointment, 
                                    BindingResult bindingResult, 
@@ -49,8 +59,7 @@ public class AppointmentController {
             return "redirect:/schedule";
         }
         
-        appointmentRepository.save(appointment);
-        emailService.sendAppointmentConfirmation(appointment);
+        appointmentService.submitAppointment(appointment);
         redirectAttributes.addFlashAttribute("message", "Your counseling session request has been submitted successfully!");
         return "redirect:/schedule";
     }
