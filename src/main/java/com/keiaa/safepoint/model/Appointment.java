@@ -16,7 +16,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import com.keiaa.safepoint.model.enums.AppointmentStatus;
@@ -31,12 +33,19 @@ public class Appointment {
     private Long id;
 
     @NotBlank(message = "Name is required")
+    @Size(max = 100, message = "Name must be at most 100 characters")
     private String name;
+    
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
+    @Size(max = 255, message = "Email must be at most 255 characters")
     private String email;
+    
+    @Future(message = "Preferred date and time must be in the future")
     private LocalDateTime preferredDateTime;
+    
     @NotBlank(message = "Reason is required")
+    @Size(min = 1, max = 500, message = "Reason must be between 1 and 500 characters")
     private String reason;
 
     @Enumerated(EnumType.STRING)
