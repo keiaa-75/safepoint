@@ -9,7 +9,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('reportForm');
     const spinnerOverlay = document.getElementById('spinner-overlay');
 
+    // Function to sanitize HTML content to prevent XSS
+    function sanitizeHTML(str) {
+        const temp = document.createElement('div');
+        temp.textContent = str;
+        return temp.innerHTML;
+    }
+
     form.addEventListener('submit', (event) => {
+        // Sanitize form fields before submission
+        const descriptionField = document.getElementById('description');
+        if (descriptionField) {
+            descriptionField.value = sanitizeHTML(descriptionField.value);
+        }
+        
+        const nameField = document.getElementById('name');
+        if (nameField) {
+            nameField.value = sanitizeHTML(nameField.value);
+        }
+        
+        const categoryField = document.getElementById('category');
+        if (categoryField) {
+            categoryField.value = sanitizeHTML(categoryField.value);
+        }
+        
+        const externalLinkField = document.getElementById('externalLink');
+        if (externalLinkField) {
+            externalLinkField.value = sanitizeHTML(externalLinkField.value);
+        }
+
         const confirmationCheckbox = document.getElementById('confirmation');
         if (!confirmationCheckbox.checked) {
             event.preventDefault();
@@ -61,11 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
         onStepChange: (currentStep) => {
             const steps = document.getElementById('reportForm').querySelectorAll('.form-step');
             if (currentStep === steps.length) {
-                document.getElementById('review-name').textContent = document.getElementById('name').value;
+                document.getElementById('review-name').textContent = sanitizeHTML(document.getElementById('name').value);
                 document.getElementById('review-email').textContent = document.getElementById('email').value;
                 const categorySelect = document.getElementById('category');
-                document.getElementById('review-category').textContent = categorySelect.options[categorySelect.selectedIndex].text;
-                document.getElementById('review-description').textContent = document.getElementById('description').value;
+                document.getElementById('review-category').textContent = sanitizeHTML(categorySelect.options[categorySelect.selectedIndex].text);
+                document.getElementById('review-description').textContent = sanitizeHTML(document.getElementById('description').value);
                 
                 const reviewFiles = document.getElementById('review-files');
                 reviewFiles.innerHTML = ''; // Clear previous entries
@@ -85,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const externalLink = document.getElementById('externalLink').value;
-                document.getElementById('review-externalLink').textContent = externalLink || 'N/A';
+                document.getElementById('review-externalLink').textContent = externalLink ? sanitizeHTML(externalLink) : 'N/A';
             }
         }
     });
