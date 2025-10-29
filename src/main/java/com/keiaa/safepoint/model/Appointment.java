@@ -45,7 +45,7 @@ public class Appointment {
     private LocalDateTime preferredDateTime;
     
     @NotBlank(message = "Reason is required")
-    @Size(min = 1, max = 500, message = "Reason must be between 1 and 500 characters")
+    @Size(max = 500, message = "Reason must be at most 500 characters")
     private String reason;
 
     @Enumerated(EnumType.STRING)

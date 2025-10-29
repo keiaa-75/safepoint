@@ -18,6 +18,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import com.keiaa.safepoint.model.Appointment;
 import com.keiaa.safepoint.model.Report;
@@ -34,17 +36,8 @@ public class EmailService {
     @Autowired
     private FileLoaderService fileLoaderService;
 
-    private String loadEmailTemplate(String templateName) {
-        try {
-            ClassPathResource resource = new ClassPathResource("emails/" + templateName);
-            try (InputStream inputStream = resource.getInputStream()) {
-                return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Email template not found.";
-        }
-    }
+    @Autowired
+    private TemplateEngine templateEngine;
 
     public void sendAppointmentConfirmation(Appointment appointment) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -57,10 +50,12 @@ public class EmailService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a");
             String formattedDateTime = appointment.getPreferredDateTime().format(formatter);
 
-            String emailBody = loadEmailTemplate("appointment-confirmation.html");
-            emailBody = emailBody.replace("${name}", appointment.getName());
-            emailBody = emailBody.replace("${preferredDateTime}", formattedDateTime);
-            emailBody = emailBody.replace("${reason}", appointment.getReason());
+            Context context = new Context();
+            context.setVariable("name", appointment.getName());
+            context.setVariable("preferredDateTime", formattedDateTime);
+            context.setVariable("reason", appointment.getReason());
+
+            String emailBody = templateEngine.process("appointment-confirmation", context);
 
             helper.setText(emailBody, true);
 
@@ -81,9 +76,11 @@ public class EmailService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy 'at' hh:mm a");
             String formattedDateTime = appointment.getPreferredDateTime().format(formatter);
 
-            String emailBody = loadEmailTemplate("admin-confirmation.html");
-            emailBody = emailBody.replace("${name}", appointment.getName());
-            emailBody = emailBody.replace("${preferredDateTime}", formattedDateTime);
+            Context context = new Context();
+            context.setVariable("name", appointment.getName());
+            context.setVariable("preferredDateTime", formattedDateTime);
+
+            String emailBody = templateEngine.process("admin-confirmation", context);
 
             helper.setText(emailBody, true);
 
@@ -105,10 +102,12 @@ public class EmailService {
             String oldFormattedDateTime = oldDateTime.format(formatter);
             String newFormattedDateTime = appointment.getPreferredDateTime().format(formatter);
 
-            String emailBody = loadEmailTemplate("reschedule.html");
-            emailBody = emailBody.replace("${name}", appointment.getName());
-            emailBody = emailBody.replace("${oldDateTime}", oldFormattedDateTime);
-            emailBody = emailBody.replace("${newDateTime}", newFormattedDateTime);
+            Context context = new Context();
+            context.setVariable("name", appointment.getName());
+            context.setVariable("oldDateTime", oldFormattedDateTime);
+            context.setVariable("newDateTime", newFormattedDateTime);
+
+            String emailBody = templateEngine.process("reschedule", context);
 
             helper.setText(emailBody, true);
 
@@ -126,8 +125,10 @@ public class EmailService {
             helper.setTo(appointment.getEmail());
             helper.setSubject("SafePoint: Your Counseling Session is Complete");
 
-            String emailBody = loadEmailTemplate("completion.html");
-            emailBody = emailBody.replace("${name}", appointment.getName());
+            Context context = new Context();
+            context.setVariable("name", appointment.getName());
+
+            String emailBody = templateEngine.process("completion", context);
 
             helper.setText(emailBody, true);
 
@@ -145,17 +146,14 @@ public class EmailService {
             helper.setTo(report.getEmail());
             helper.setSubject("SafePoint: Report Submitted Successfully");
 
-            String emailBody = loadEmailTemplate("report-confirmation.html");
-            emailBody = emailBody.replace("${name}", report.getName());
-            emailBody = emailBody.replace("${reportId}", report.getReportId());
-            emailBody = emailBody.replace("${category}", report.getCategory());
-            emailBody = emailBody.replace("${description}", report.getDescription());
+            Context context = new Context();
+            context.setVariable("name", report.getName());
+            context.setVariable("reportId", report.getReportId());
+            context.setVariable("category", report.getCategory());
+            context.setVariable("description", report.getDescription());
+            context.setVariable("externalLink", report.getExternalLink());
 
-            String externalLinkHtml = "";
-            if (report.getExternalLink() != null && !report.getExternalLink().isEmpty()) {
-                externalLinkHtml = "<li><strong>External Link:</strong> <a href=\"" + report.getExternalLink() + "\"> " + report.getExternalLink() + "</a></li>";
-            }
-            emailBody = emailBody.replace("${externalLinkHtml}", externalLinkHtml);
+            String emailBody = templateEngine.process("report-confirmation", context);
 
             helper.setText(emailBody, true); // true for HTML
 

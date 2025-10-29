@@ -1,9 +1,12 @@
-<html><body>
-<p>Dear ${name},</p>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<p>Dear <span th:text="${name}"></span>,</p>
 <p>We have received your request for a counseling session. We will review your preferred time and get back to you shortly to confirm the schedule.</p>
 <h3>Your Request Details:</h3>
 <ul>
-<li><strong>Preferred Date and Time:</strong> ${preferredDateTime}</li>
-<li><strong>Reason for Session:</strong> ${reason}</li>
+<li><strong>Preferred Date and Time:</strong> <span th:text="${preferredDateTime}"></span></li>
+<li><strong>Reason for Session:</strong> <span th:text="${reason}"></span></li>
 </ul>
-</body></html>
+</body>
+</html>

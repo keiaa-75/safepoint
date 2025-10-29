@@ -1,12 +1,15 @@
-<html><body>
-<p>Dear ${name},</p>
-<p>We’ve received your report and will review it with care. Your unique tracking ID is: <strong>${reportId}</strong>.</p>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<p>Dear <span th:text="${name}"></span>,</p>
+<p>We’ve received your report and will review it with care. Your unique tracking ID is: <strong th:text="${reportId}"></strong>.</p>
 <p>Please save this ID to check the status of your report at a later time.</p>
 <h3>Here are the details you submitted:</h3>
 <ul>
-<li><strong>Category:</strong> ${category}</li>
-<li><strong>Description:</strong> ${description}</li>
-${externalLinkHtml}
+<li><strong>Category:</strong> <span th:text="${category}"></span></li>
+<li><strong>Description:</strong> <span th:text="${description}"></span></li>
+<li th:if="${externalLink != null and !externalLink.isEmpty()}"><strong>External Link:</strong> <a th:href="${externalLink}" th:text="${externalLink}"></a></li>
 </ul>
 <p>If you’re unsafe right now, please contact campus security or emergency services first.</p>
-</body></html>
+</body>
+</html>

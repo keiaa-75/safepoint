@@ -52,6 +52,7 @@ public class Report {
              message = "Category must be one of the allowed values.")
     private String category;
     
+    @NotBlank(message = "Description is required")
     @Size(min = 10, max = 2000, message = "Description must be between 10 and 2000 characters")
     private String description;
     
