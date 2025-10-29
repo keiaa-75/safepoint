@@ -24,10 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.keiaa.safepoint.model.Appointment;
-import com.keiaa.safepoint.model.AppointmentStatus;
 import com.keiaa.safepoint.model.Report;
 import com.keiaa.safepoint.model.ReportHistory;
-import com.keiaa.safepoint.model.ReportStatus;
+import com.keiaa.safepoint.model.enums.AppointmentStatus;
+import com.keiaa.safepoint.model.enums.ReportStatus;
 import com.keiaa.safepoint.repository.AppointmentRepository;
 import com.keiaa.safepoint.repository.ReportHistoryRepository;
 import com.keiaa.safepoint.repository.ReportRepository;

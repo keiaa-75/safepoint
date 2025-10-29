@@ -19,6 +19,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import com.keiaa.safepoint.model.enums.AppointmentStatus;
+
 @Entity
 @Table(name = "appointments")
 @Data

@@ -4,7 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-package com.keiaa.safepoint.model;
+package com.keiaa.safepoint.model.enums;
 
 public enum AppointmentStatus {
     PENDING,

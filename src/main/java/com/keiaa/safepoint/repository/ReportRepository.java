@@ -15,8 +15,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.keiaa.safepoint.model.Report;
-import com.keiaa.safepoint.model.ReportStatus;
 import com.keiaa.safepoint.model.dto.CategoryCount;
+import com.keiaa.safepoint.model.enums.ReportStatus;
 
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
