@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.keiaa.safepoint.model.Report;
-import com.keiaa.safepoint.service.FileLoaderService;
 import com.keiaa.safepoint.service.ReportService;
+import com.keiaa.safepoint.service.utility.FileLoaderService;
 
 @Controller
 public class PageController {

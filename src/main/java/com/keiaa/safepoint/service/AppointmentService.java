@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.keiaa.safepoint.model.Appointment;
 import com.keiaa.safepoint.repository.AppointmentRepository;
+import com.keiaa.safepoint.service.utility.EmailService;
 
 @Service
 public class AppointmentService {

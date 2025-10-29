@@ -31,6 +31,7 @@ import com.keiaa.safepoint.model.ReportStatus;
 import com.keiaa.safepoint.repository.AppointmentRepository;
 import com.keiaa.safepoint.repository.ReportHistoryRepository;
 import com.keiaa.safepoint.repository.ReportRepository;
+import com.keiaa.safepoint.service.utility.EmailService;
 
 @Service
 public class AdminService {

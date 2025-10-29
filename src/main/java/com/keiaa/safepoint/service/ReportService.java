@@ -17,6 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.keiaa.safepoint.exception.DailyReportLimitExceededException;
 import com.keiaa.safepoint.model.Report;
 import com.keiaa.safepoint.repository.ReportRepository;
+import com.keiaa.safepoint.service.utility.EmailService;
+import com.keiaa.safepoint.service.utility.FileStorageService;
+import com.keiaa.safepoint.service.utility.ReportIdGenerator;
 
 @Service
 public class ReportService {
