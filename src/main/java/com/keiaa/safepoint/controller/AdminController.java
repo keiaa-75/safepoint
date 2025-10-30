@@ -6,6 +6,8 @@
 
 package com.keiaa.safepoint.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -140,11 +142,12 @@ public class AdminController {
     public String updateReportStatusWithDescription(@RequestParam("reportId") String reportId,
                                                     @RequestParam("status") ReportStatus status,
                                                     @RequestParam("description") String description,
-                                                    RedirectAttributes redirectAttributes) {
+                                                    RedirectAttributes redirectAttributes,
+                                                    Principal principal) {
         String sanitizedReportId = inputSanitizer.sanitize(reportId);
         String sanitizedDescription = inputSanitizer.sanitize(description);
 
-        boolean success = adminService.updateReportStatusWithDescription(sanitizedReportId, status, sanitizedDescription);
+        boolean success = adminService.updateReportStatusWithDescription(sanitizedReportId, status, sanitizedDescription, principal.getName());
         if (!success) {
             redirectAttributes.addFlashAttribute("error", "Report not found");
             return "redirect:/admin/dashboard";

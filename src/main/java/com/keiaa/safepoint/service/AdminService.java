@@ -156,7 +156,7 @@ public class AdminService {
      * @param description Description of the status change
      * @return true if the update was successful, false otherwise
      */
-    public boolean updateReportStatusWithDescription(String reportId, ReportStatus status, String description) {
+    public boolean updateReportStatusWithDescription(String reportId, ReportStatus status, String description, String username) {
         return reportRepository.findByReportId(reportId)
             .map(report -> {
                 // Create history record
@@ -165,7 +165,7 @@ public class AdminService {
                 history.setOldStatus(report.getStatus());
                 history.setNewStatus(status);
                 history.setDescription(description);
-                history.setUpdatedBy("Admin"); // In a real implementation, get the actual admin name
+                history.setUpdatedBy(username);
                 
                 reportHistoryRepository.save(history);
                 
