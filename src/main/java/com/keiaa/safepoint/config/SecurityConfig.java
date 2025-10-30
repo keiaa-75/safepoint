@@ -6,32 +6,40 @@
 
 package com.keiaa.safepoint.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.keiaa.safepoint.service.impl.AdminDetailsServiceImpl;
+import com.keiaa.safepoint.service.impl.StudentDetailsServiceImpl;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private AdminDetailsServiceImpl adminDetailsService;
+
+    @Autowired
+    private StudentDetailsServiceImpl studentDetailsService;
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    @Order(1)
+    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
+            .securityMatcher("/admin/**")
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/report", "/submit-report", "/schedule", "/track", "/track-report",
-                    "/files/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico",
-                    "/manifest.json", "/service-worker.js", "/about").permitAll()
-                .requestMatchers("/admin-login", "/admin-login-process").permitAll()
-                .requestMatchers("/admin/**").authenticated()
-                .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin
@@ -46,6 +54,35 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
                 .permitAll()
             )
+            .userDetailsService(adminDetailsService);
+
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain studentFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/", "/report", "/submit-report", "/schedule", "/track", "/track-report",
+                    "/files/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico",
+                    "/manifest.json", "/service-worker.js", "/about", "/student-signup", "/student-login", "/admin-login").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(formLogin -> formLogin
+                .loginPage("/student-login")
+                .loginProcessingUrl("/student-login")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/student-login?error=true")
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/student/logout")
+                .logoutSuccessUrl("/")
+                .permitAll()
+            )
+            .userDetailsService(studentDetailsService)
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/h2-console/**")
             )
@@ -54,10 +91,5 @@ public class SecurityConfig {
             );
 
         return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
