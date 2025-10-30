@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import com.keiaa.safepoint.service.impl.AdminDetailsServiceImpl;
 import com.keiaa.safepoint.service.impl.StudentDetailsServiceImpl;
@@ -66,7 +68,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/", "/report", "/submit-report", "/schedule", "/track", "/track-report",
                     "/files/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico",
-                    "/manifest.json", "/service-worker.js", "/about", "/student-signup", "/student-login", "/admin-login").permitAll()
+                    "/manifest.json", "/service-worker.js", "/about", "/student-signup", "/student-login", "/admin-login",
+                    "/verify-email", "/resend-verification").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
             )
@@ -74,7 +77,13 @@ public class SecurityConfig {
                 .loginPage("/student-login")
                 .loginProcessingUrl("/student-login")
                 .defaultSuccessUrl("/", true)
-                .failureUrl("/student-login?error=true")
+                .failureHandler((request, response, exception) -> {
+                    if (exception instanceof LockedException) {
+                        response.sendRedirect("/student-login?locked=true");
+                    } else {
+                        response.sendRedirect("/student-login?error=true");
+                    }
+                })
                 .permitAll()
             )
             .logout(logout -> logout

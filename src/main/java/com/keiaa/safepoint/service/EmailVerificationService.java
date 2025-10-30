@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.keiaa.safepoint.exception.VerificationTokenException;
@@ -27,7 +28,7 @@ public class EmailVerificationService {
     @Autowired
     private EmailService emailService;
     
-    public void createVerificationToken(Student student) {
+    public void createVerificationToken(Student student, String baseUrl) {
         // Remove any existing tokens for this student
         Optional<EmailVerificationToken> existingToken = tokenRepository.findByStudent(student);
         if (existingToken.isPresent()) {
@@ -40,11 +41,11 @@ public class EmailVerificationService {
         tokenRepository.save(emailToken);
         
         // Send verification email
-        sendVerificationEmail(student, token);
+        sendVerificationEmail(student, token, baseUrl);
     }
     
-    private void sendVerificationEmail(Student student, String token) {
-        String verificationUrl = "http://localhost:9090/verify-email?token=" + token;
+    private void sendVerificationEmail(Student student, String token, String baseUrl) {
+        String verificationUrl = baseUrl + "/verify-email?token=" + token;
         emailService.sendEmailVerification(student.getEmail(), student.getName(), verificationUrl);
     }
     

@@ -8,6 +8,7 @@ package com.keiaa.safepoint.service.impl;
 
 import com.keiaa.safepoint.model.Student;
 import com.keiaa.safepoint.repository.StudentRepository;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,6 +30,11 @@ public class StudentDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Student student = studentRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Student not found with email: " + email));
+
+        // Check if the email is verified, if not, throw an exception
+        if (!student.isEmailVerified()) {
+            throw new LockedException("Email not verified. Please verify your email before logging in.");
+        }
 
         return new User(student.getEmail(), student.getPassword(), Collections.emptyList());
     }

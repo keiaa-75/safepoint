@@ -14,12 +14,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.keiaa.safepoint.model.Student;
 import com.keiaa.safepoint.model.dto.EmailRequestDto;
 import com.keiaa.safepoint.service.StudentService;
 import com.keiaa.safepoint.service.EmailVerificationService;
 import com.keiaa.safepoint.exception.VerificationTokenException;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class StudentController {
@@ -43,7 +47,9 @@ public class StudentController {
         }
         Student savedStudent = studentService.registerStudent(student);
         // Create and send verification email after successful registration
-        emailVerificationService.createVerificationToken(savedStudent);
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+        emailVerificationService.createVerificationToken(savedStudent, appUrl);
         return "redirect:/student-login";
     }
 
@@ -85,7 +91,9 @@ public class StudentController {
         Student student = studentService.findByEmail(emailRequest.getEmail()).orElse(null);
         if (student != null && !student.isEmailVerified()) {
             // Create a new verification token for the student
-            emailVerificationService.createVerificationToken(student);
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+            String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+            emailVerificationService.createVerificationToken(student, appUrl);
             model.addAttribute("message", "A new verification email has been sent to your email address.");
         } else if (student != null && student.isEmailVerified()) {
             model.addAttribute("message", "Your email is already verified.");
