@@ -44,4 +44,7 @@ public class Student {
 
     @NotBlank(message = "Password is required")
     private String password;
+    
+    @Column(name = "email_verified", nullable = false)
+    private boolean emailVerified = false;
 }

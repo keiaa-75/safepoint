@@ -6,6 +6,8 @@
 
 package com.keiaa.safepoint.service.impl;
 
+import java.util.Optional;
+
 import com.keiaa.safepoint.model.Student;
 import com.keiaa.safepoint.repository.StudentRepository;
 import com.keiaa.safepoint.service.StudentService;
@@ -26,5 +28,10 @@ public class StudentServiceImpl implements StudentService {
     public Student registerStudent(Student student) {
         student.setPassword(passwordEncoder.encode(student.getPassword()));
         return studentRepository.save(student);
+    }
+
+    @Override
+    public Optional<Student> findByEmail(String email) {
+        return studentRepository.findByEmail(email);
     }
 }

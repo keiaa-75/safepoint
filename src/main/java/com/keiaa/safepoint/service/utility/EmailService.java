@@ -176,4 +176,26 @@ public class EmailService {
             e.printStackTrace();
         }
     }
+
+    public void sendEmailVerification(String email, String name, String verificationUrl) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false);
+            helper.setFrom("your-email@gmail.com");
+            helper.setTo(email);
+            helper.setSubject("SafePoint: Please Verify Your Email Address");
+
+            Context context = new Context();
+            context.setVariable("name", name);
+            context.setVariable("verificationUrl", verificationUrl);
+
+            String emailBody = templateEngine.process("email-verification", context);
+
+            helper.setText(emailBody, true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }

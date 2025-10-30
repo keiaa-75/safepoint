@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Email Verification</title>
+</head>
+<body>
+    <h1>Request Email Verification</h1>
+    <p>If you haven't received your verification email, enter your email address below to request a new one.</p>
+    
+    <form th:action="@{/resend-verification}" th:object="${emailRequest}" method="post">
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" th:field="*{email}" required>
+        </div>
+        <div>
+            <button type="submit">Resend Verification Email</button>
+        </div>
+    </form>
+    
+    <a href="/student-login">Back to Login</a>
+</body>
+</html>

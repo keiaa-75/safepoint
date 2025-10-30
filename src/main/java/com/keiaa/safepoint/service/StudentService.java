@@ -6,8 +6,11 @@
 
 package com.keiaa.safepoint.service;
 
+import java.util.Optional;
+
 import com.keiaa.safepoint.model.Student;
 
 public interface StudentService {
     Student registerStudent(Student student);
+    Optional<Student> findByEmail(String email);
 }
