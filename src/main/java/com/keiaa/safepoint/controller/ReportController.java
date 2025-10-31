@@ -38,9 +38,6 @@ public class ReportController {
 
     @GetMapping("/")
     public String showForm(Model model, Principal principal) {
-        if (principal != null) {
-            return "redirect:/dashboard";
-        }
         if (!model.containsAttribute("report")) {
             model.addAttribute("report", new Report());
         }
