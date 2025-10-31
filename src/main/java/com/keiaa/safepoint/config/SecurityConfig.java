@@ -69,7 +69,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/report", "/submit-report", "/schedule", "/track", "/track-report",
                     "/files/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico",
                     "/manifest.json", "/service-worker.js", "/about", "/student-signup", "/student-login", "/admin-login",
-                    "/verify-email", "/resend-verification").permitAll()
+                    "/verify-email", "/resend-verification", "/forgot-password", "/reset-password").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
             )

@@ -198,4 +198,25 @@ public class EmailService {
             e.printStackTrace();
         }
     }
+
+    public void sendPasswordResetEmail(String email, String resetLink) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false);
+            helper.setFrom("your-email@gmail.com");
+            helper.setTo(email);
+            helper.setSubject("SafePoint: Password Reset Request");
+
+            Context context = new Context();
+            context.setVariable("resetLink", resetLink);
+
+            String emailBody = templateEngine.process("password-reset", context);
+
+            helper.setText(emailBody, true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }
