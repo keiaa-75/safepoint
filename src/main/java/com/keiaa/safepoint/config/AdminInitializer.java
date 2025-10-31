@@ -28,21 +28,25 @@ public class AdminInitializer implements CommandLineRunner {
             if (console != null) {
                 System.out.println("Setting up the first admin account:");
                 String username = console.readLine("Enter admin username: ");
-                char[] password = console.readPassword("Enter admin password: ");
-                char[] confirmPassword = console.readPassword("Confirm admin password: ");
-                
-                String passwordStr = new String(password);
-                String confirmPasswordStr = new String(confirmPassword);
-                
-                if (passwordStr.equals(confirmPasswordStr)) {
-                    adminService.createAdmin(username, passwordStr);
-                    System.out.println("Admin account created successfully!");
-                } else {
-                    System.out.println("Passwords do not match. Admin account not created.");
+
+                while (true) {
+                    char[] password = console.readPassword("Enter admin password: ");
+                    char[] confirmPassword = console.readPassword("Confirm admin password: ");
+
+                    String passwordStr = new String(password);
+                    String confirmPasswordStr = new String(confirmPassword);
+
+                    java.util.Arrays.fill(password, ' ');
+                    java.util.Arrays.fill(confirmPassword, ' ');
+
+                    if (passwordStr.equals(confirmPasswordStr)) {
+                        adminService.createAdmin(username, passwordStr);
+                        System.out.println("Admin account created successfully!");
+                        break;
+                    } else {
+                        System.out.println("Passwords do not match. Please try again.");
+                    }
                 }
-                
-                java.util.Arrays.fill(password, ' ');
-                java.util.Arrays.fill(confirmPassword, ' ');
             } else {
                 System.out.println("No console available. Please create an admin user via the application interface or database.");
             }
