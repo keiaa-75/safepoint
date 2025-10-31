@@ -6,11 +6,13 @@
 
 package com.keiaa.safepoint.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.keiaa.safepoint.exception.VerificationTokenException;
@@ -29,18 +31,15 @@ public class EmailVerificationService {
     private EmailService emailService;
     
     public void createVerificationToken(Student student, String baseUrl) {
-        // Remove any existing tokens for this student
         Optional<EmailVerificationToken> existingToken = tokenRepository.findByStudent(student);
         if (existingToken.isPresent()) {
             tokenRepository.delete(existingToken.get());
         }
         
-        // Generate a new token
         String token = UUID.randomUUID().toString();
         EmailVerificationToken emailToken = new EmailVerificationToken(token, student);
         tokenRepository.save(emailToken);
         
-        // Send verification email
         sendVerificationEmail(student, token, baseUrl);
     }
     
@@ -63,14 +62,17 @@ public class EmailVerificationService {
                 throw new VerificationTokenException("Verification token has expired");
             }
             
-            // Mark the student as verified
             Student student = emailToken.getStudent();
             student.setEmailVerified(true);
             
-            // Delete the verification token
             tokenRepository.delete(emailToken);
         } else {
             throw new VerificationTokenException("Invalid verification token");
         }
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?") // Run every day at midnight
+    public void purgeExpiredTokens() {
+        tokenRepository.deleteAll(tokenRepository.findByExpiryDateBefore(LocalDateTime.now()));
     }
 }

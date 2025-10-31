@@ -10,7 +10,7 @@
         Invalid email or password.
     </div>
     <div th:if="${param.locked}">
-        Your email is not verified. Please check your email for verification instructions.
+        Your email is not verified. Please check your email for verification instructions or <a href="/resend-verification">request a new one</a>.
     </div>
     <div th:if="${param.logout}">
         You have been logged out.

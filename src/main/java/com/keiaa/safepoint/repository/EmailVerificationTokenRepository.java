@@ -6,6 +6,8 @@
 
 package com.keiaa.safepoint.repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +20,5 @@ import com.keiaa.safepoint.model.Student;
 public interface EmailVerificationTokenRepository extends JpaRepository<EmailVerificationToken, Long> {
     Optional<EmailVerificationToken> findByToken(String token);
     Optional<EmailVerificationToken> findByStudent(Student student);
+    List<EmailVerificationToken> findByExpiryDateBefore(LocalDateTime date);
 }

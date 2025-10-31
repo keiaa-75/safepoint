@@ -6,6 +6,8 @@
 
 package com.keiaa.safepoint.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +24,7 @@ import com.keiaa.safepoint.model.dto.EmailRequestDto;
 import com.keiaa.safepoint.service.StudentService;
 import com.keiaa.safepoint.service.EmailVerificationService;
 import com.keiaa.safepoint.exception.VerificationTokenException;
-
-import jakarta.servlet.http.HttpServletRequest;
+import com.keiaa.safepoint.service.utility.RateLimitingService;
 
 @Controller
 public class StudentController {
@@ -33,6 +34,9 @@ public class StudentController {
 
     @Autowired
     private EmailVerificationService emailVerificationService;
+
+    @Autowired
+    private RateLimitingService rateLimitingService;
 
     @GetMapping("/student-signup")
     public String showSignupForm(Model model) {
@@ -46,7 +50,6 @@ public class StudentController {
             return "student-signup";
         }
         Student savedStudent = studentService.registerStudent(student);
-        // Create and send verification email after successful registration
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
         emailVerificationService.createVerificationToken(savedStudent, appUrl);
@@ -82,16 +85,21 @@ public class StudentController {
     
     @PostMapping("/resend-verification")
     public String processResendVerificationForm(@ModelAttribute("emailRequest") EmailRequestDto emailRequest, 
-                                               BindingResult result, Model model) {
+                                               BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             return "resend-verification";
         }
+
+        String ipAddress = request.getRemoteAddr();
+        if (rateLimitingService.isBlocked(ipAddress)) {
+            model.addAttribute("message", "You have made too many requests. Please try again later.");
+            return "resend-verification";
+        }
+
+        rateLimitingService.incrementRequestCount(ipAddress);
         
-        // Find the student by email
         Student student = studentService.findByEmail(emailRequest.getEmail()).orElse(null);
         if (student != null && !student.isEmailVerified()) {
-            // Create a new verification token for the student
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
             String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
             emailVerificationService.createVerificationToken(student, appUrl);
             model.addAttribute("message", "A new verification email has been sent to your email address.");
