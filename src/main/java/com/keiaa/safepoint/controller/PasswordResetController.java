@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.keiaa.safepoint.service.PasswordResetService;
-import com.keiaa.safepoint.service.utility.RateLimitService;
+import com.keiaa.safepoint.service.utility.RateLimitingService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -25,7 +25,7 @@ public class PasswordResetController {
     private PasswordResetService passwordResetService;
     
     @Autowired
-    private RateLimitService rateLimitService;
+    private RateLimitingService rateLimitingService;
 
     @GetMapping("/forgot-password")
     public String showForgotPasswordForm() {
@@ -38,7 +38,7 @@ public class PasswordResetController {
                                       Model model) {
         String clientIP = getClientIP(request);
         
-        if (!rateLimitService.isAllowed(clientIP)) {
+        if (!rateLimitingService.isAllowedForPasswordReset(clientIP)) {
             model.addAttribute("error", "Too many requests. Please wait 5 minutes before trying again.");
             return "forgot-password";
         }

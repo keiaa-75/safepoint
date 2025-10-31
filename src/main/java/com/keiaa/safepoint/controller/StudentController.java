@@ -91,12 +91,10 @@ public class StudentController {
         }
 
         String ipAddress = request.getRemoteAddr();
-        if (rateLimitingService.isBlocked(ipAddress)) {
+        if (!rateLimitingService.isAllowedForReports(ipAddress)) {
             model.addAttribute("message", "You have made too many requests. Please try again later.");
             return "resend-verification";
         }
-
-        rateLimitingService.incrementRequestCount(ipAddress);
         
         Student student = studentService.findByEmail(emailRequest.getEmail()).orElse(null);
         if (student != null && !student.isEmailVerified()) {

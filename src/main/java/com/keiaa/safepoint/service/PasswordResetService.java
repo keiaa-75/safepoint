@@ -6,9 +6,7 @@
 
 package com.keiaa.safepoint.service;
 
-import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,7 @@ import com.keiaa.safepoint.model.Student;
 import com.keiaa.safepoint.repository.PasswordResetTokenRepository;
 import com.keiaa.safepoint.repository.StudentRepository;
 import com.keiaa.safepoint.service.utility.EmailService;
+import com.keiaa.safepoint.service.utility.TokenGenerator;
 
 @Service
 public class PasswordResetService {
@@ -37,13 +36,16 @@ public class PasswordResetService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TokenGenerator tokenGenerator;
+
     public boolean sendResetEmail(String email) {
         Optional<Student> student = studentRepository.findByEmail(email);
         if (student.isEmpty()) {
             return false;
         }
 
-        String token = generateToken();
+        String token = tokenGenerator.generateSecureToken();
         PasswordResetToken resetToken = new PasswordResetToken(token, email);
         tokenRepository.save(resetToken);
 
@@ -77,13 +79,6 @@ public class PasswordResetService {
     public boolean isValidToken(String token) {
         Optional<PasswordResetToken> resetToken = tokenRepository.findByTokenAndUsedFalse(token);
         return resetToken.isPresent() && !resetToken.get().isExpired();
-    }
-
-    private String generateToken() {
-        SecureRandom random = new SecureRandom();
-        byte[] bytes = new byte[32];
-        random.nextBytes(bytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
     @Transactional

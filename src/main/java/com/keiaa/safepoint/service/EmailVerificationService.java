@@ -8,7 +8,7 @@ package com.keiaa.safepoint.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
+import com.keiaa.safepoint.service.utility.TokenGenerator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +29,9 @@ public class EmailVerificationService {
     
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private TokenGenerator tokenGenerator;
     
     public void createVerificationToken(Student student, String baseUrl) {
         Optional<EmailVerificationToken> existingToken = tokenRepository.findByStudent(student);
@@ -36,7 +39,7 @@ public class EmailVerificationService {
             tokenRepository.delete(existingToken.get());
         }
         
-        String token = UUID.randomUUID().toString();
+        String token = tokenGenerator.generateUuidToken();
         EmailVerificationToken emailToken = new EmailVerificationToken(token, student);
         tokenRepository.save(emailToken);
         
@@ -71,7 +74,6 @@ public class EmailVerificationService {
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * ?") // Run every day at midnight
     public void purgeExpiredTokens() {
         tokenRepository.deleteAll(tokenRepository.findByExpiryDateBefore(LocalDateTime.now()));
     }

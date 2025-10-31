@@ -6,7 +6,7 @@
 
 package com.keiaa.safepoint.service.utility;
 
-import java.util.Map;
+import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Service;
@@ -14,25 +14,43 @@ import org.springframework.stereotype.Service;
 @Service
 public class RateLimitingService {
 
-    private final Map<String, Long> requestCounts = new ConcurrentHashMap<>();
-    private final Map<String, Long> blockTimestamps = new ConcurrentHashMap<>();
-    private static final int MAX_REQUESTS = 5;
-    private static final long BLOCK_DURATION_MS = 600000;
+    private final ConcurrentHashMap<String, LocalDateTime> lastRequestTimes = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Integer> requestCounts = new ConcurrentHashMap<>();
 
-    public boolean isBlocked(String key) {
-        Long blockTimestamp = blockTimestamps.get(key);
-        if (blockTimestamp != null && System.currentTimeMillis() - blockTimestamp < BLOCK_DURATION_MS) {
-            return true;
-        }
-        blockTimestamps.remove(key);
-        return false;
+    public boolean isAllowedForPasswordReset(String key) {
+        return isAllowedWithInterval(key, 5); // 5 minutes between password reset requests
     }
 
-    public void incrementRequestCount(String key) {
-        long newCount = requestCounts.merge(key, 1L, Long::sum);
-        if (newCount >= MAX_REQUESTS) {
-            blockTimestamps.put(key, System.currentTimeMillis());
-            requestCounts.remove(key);
+    public boolean isAllowedForReports(String key) {
+        LocalDateTime now = LocalDateTime.now();
+        Integer count = requestCounts.get(key);
+        LocalDateTime lastRequest = lastRequestTimes.get(key);
+
+        // Reset count if more than 10 minutes passed
+        if (lastRequest == null || lastRequest.plusMinutes(10).isBefore(now)) {
+            requestCounts.put(key, 1);
+            lastRequestTimes.put(key, now);
+            return true;
         }
+
+        if (count == null || count < 5) {
+            requestCounts.put(key, count == null ? 1 : count + 1);
+            lastRequestTimes.put(key, now);
+            return true;
+        }
+
+        return false; // Blocked for 10 minutes after 5 requests
+    }
+
+    private boolean isAllowedWithInterval(String key, int intervalMinutes) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime lastRequest = lastRequestTimes.get(key);
+        
+        if (lastRequest == null || lastRequest.plusMinutes(intervalMinutes).isBefore(now)) {
+            lastRequestTimes.put(key, now);
+            return true;
+        }
+        
+        return false;
     }
 }

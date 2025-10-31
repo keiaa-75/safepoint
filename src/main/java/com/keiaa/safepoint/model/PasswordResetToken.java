@@ -6,38 +6,24 @@
 
 package com.keiaa.safepoint.model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "password_reset_tokens")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class PasswordResetToken {
+public class PasswordResetToken extends BaseToken {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String token;
     private String email;
-    private LocalDateTime expiryDate;
     private boolean used = false;
 
     public PasswordResetToken(String token, String email) {
-        this.token = token;
+        super(token, 1); // 1 hour expiry
         this.email = email;
-        this.expiryDate = LocalDateTime.now().plusHours(1);
-    }
-
-    public boolean isExpired() {
-        return LocalDateTime.now().isAfter(expiryDate);
     }
 }

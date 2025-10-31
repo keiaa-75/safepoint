@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.keiaa.safepoint.service.EmailVerificationService;
 import com.keiaa.safepoint.service.PasswordResetService;
 
 @Component
@@ -18,8 +19,12 @@ public class ScheduledTasks {
     @Autowired
     private PasswordResetService passwordResetService;
 
-    @Scheduled(fixedRate = 3600000) // Run every hour
+    @Autowired
+    private EmailVerificationService emailVerificationService;
+
+    @Scheduled(cron = "0 0 * * * ?") // Run every hour
     public void cleanupExpiredTokens() {
         passwordResetService.cleanupExpiredTokens();
+        emailVerificationService.purgeExpiredTokens();
     }
 }
