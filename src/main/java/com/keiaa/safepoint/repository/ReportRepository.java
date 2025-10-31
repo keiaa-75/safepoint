@@ -32,4 +32,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<CategoryCount> countByCategory();
 
     List<Report> findTop3ByOrderByTimestampDesc();
+
+    List<Report> findByEmailOrderByTimestampDesc(String email);
 }

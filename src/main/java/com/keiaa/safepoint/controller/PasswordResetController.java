@@ -43,7 +43,7 @@ public class PasswordResetController {
             return "forgot-password";
         }
 
-        boolean sent = passwordResetService.sendResetEmail(email);
+        boolean sent = passwordResetService.sendResetEmail(email, getBaseUrl(request));
         if (sent) {
             model.addAttribute("message", "If an account with that email exists, a password reset link has been sent.");
         } else {
@@ -51,6 +51,10 @@ public class PasswordResetController {
         }
         
         return "forgot-password";
+    }
+
+    private String getBaseUrl(HttpServletRequest request) {
+        return request.getRequestURL().toString().replace(request.getRequestURI(), "");
     }
 
     @GetMapping("/reset-password")

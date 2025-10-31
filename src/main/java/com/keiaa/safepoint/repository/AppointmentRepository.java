@@ -19,4 +19,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     long countByPreferredDateTimeBefore(LocalDateTime dateTime);
 
     List<Appointment> findAllByOrderByPreferredDateTimeAsc();
+
+    List<Appointment> findByEmailOrderByPreferredDateTimeDesc(String email);
 }

@@ -6,6 +6,8 @@
 
 package com.keiaa.safepoint.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.keiaa.safepoint.model.Appointment;
+import com.keiaa.safepoint.model.Student;
+import com.keiaa.safepoint.repository.StudentRepository;
 import com.keiaa.safepoint.service.AppointmentService;
 import com.keiaa.safepoint.service.utility.InputSanitizer;
 
@@ -32,35 +36,46 @@ public class AppointmentController {
     @Autowired
     private InputSanitizer inputSanitizer;
 
-    /**
-     * Displays the appointment scheduling form.
-     *
-     * @param model the model to add appointment object to
-     * @return the name of the view template to render
-     */
+    @Autowired
+    private StudentRepository studentRepository;
+
     @GetMapping
-    public String showForm(Model model) {
+    public String showForm(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/student-login";
+        }
+        
         if (!model.containsAttribute("appointment")) {
-            model.addAttribute("appointment", new Appointment());
+            Appointment appointment = new Appointment();
+            Student student = studentRepository.findByEmail(principal.getName()).orElse(null);
+            if (student != null) {
+                appointment.setName(student.getName());
+                appointment.setEmail(student.getEmail());
+            }
+            model.addAttribute("appointment", appointment);
         }
         return "schedule";
     }
 
-    /**
-     * Processes the submitted appointment request.
-     *
-     * @param appointment the validated appointment object containing user request
-     * @param bindingResult result of validation checks
-     * @param redirectAttributes attributes to pass to the redirected page
-     * @return redirect to schedule page with success or error message
-     */
     @PostMapping
     public String submitAppointment(@Valid @ModelAttribute("appointment") Appointment appointment, 
                                    BindingResult bindingResult, 
-                                   RedirectAttributes redirectAttributes) {
+                                   RedirectAttributes redirectAttributes,
+                                   Principal principal) {
+        if (principal == null) {
+            return "redirect:/student-login";
+        }
+        
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", "Please correct the errors in the form");
             return "redirect:/schedule";
+        }
+        
+        // Auto-fill user info from authenticated user
+        Student student = studentRepository.findByEmail(principal.getName()).orElse(null);
+        if (student != null) {
+            appointment.setName(student.getName());
+            appointment.setEmail(student.getEmail());
         }
         
         appointment.setName(inputSanitizer.sanitizeName(appointment.getName()));

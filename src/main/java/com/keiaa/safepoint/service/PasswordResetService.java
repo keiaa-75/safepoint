@@ -39,7 +39,7 @@ public class PasswordResetService {
     @Autowired
     private TokenGenerator tokenGenerator;
 
-    public boolean sendResetEmail(String email) {
+    public boolean sendResetEmail(String email, String baseUrl) {
         Optional<Student> student = studentRepository.findByEmail(email);
         if (student.isEmpty()) {
             return false;
@@ -49,7 +49,7 @@ public class PasswordResetService {
         PasswordResetToken resetToken = new PasswordResetToken(token, email);
         tokenRepository.save(resetToken);
 
-        String resetLink = "http://localhost:9090/reset-password?token=" + token;
+        String resetLink = baseUrl + "/reset-password?token=" + token;
         emailService.sendPasswordResetEmail(email, resetLink);
         return true;
     }
