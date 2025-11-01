@@ -6,12 +6,13 @@
 
 package com.keiaa.safepoint.config;
 
-import com.keiaa.safepoint.service.AdminService;
+import java.io.Console;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.io.Console;
+import com.keiaa.safepoint.service.AdminService;
 
 @Component
 public class AdminInitializer implements CommandLineRunner {

@@ -6,8 +6,8 @@
 
 package com.keiaa.safepoint.service.impl;
 
-import com.keiaa.safepoint.model.Student;
-import com.keiaa.safepoint.repository.StudentRepository;
+import java.util.Collections;
+
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import com.keiaa.safepoint.model.Student;
+import com.keiaa.safepoint.repository.StudentRepository;
 
 @Service
 public class StudentDetailsServiceImpl implements UserDetailsService {

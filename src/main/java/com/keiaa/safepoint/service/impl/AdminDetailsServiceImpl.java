@@ -6,15 +6,16 @@
 
 package com.keiaa.safepoint.service.impl;
 
-import com.keiaa.safepoint.model.Admin;
-import com.keiaa.safepoint.repository.AdminRepository;
+import java.util.Collections;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import com.keiaa.safepoint.model.Admin;
+import com.keiaa.safepoint.repository.AdminRepository;
 
 @Service
 public class AdminDetailsServiceImpl implements UserDetailsService {
