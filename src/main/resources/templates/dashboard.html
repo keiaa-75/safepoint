@@ -10,93 +10,106 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <body>
     <div th:replace="~{fragments/nav :: nav}"></div>
     <div class="main-content">
-        <div class="container content-container py-5">
-            <div class="hero-section">
-                <div class="hero-text">
-                    <h1>My Dashboard</h1>
-                    <p class="lead">View and track your submitted reports and appointments.</p>
+        <div class="container content-container">
+            <div class="content-card">
+                <div class="text-center mb-5">
+                    <h1 class="fw-bold">My Dashboard</h1>
+                    <p class="text-muted">View and track your submitted reports and appointments.</p>
                 </div>
-            </div>
 
-            <div class="row g-4 mb-4">
-                <!-- Reports Card -->
-                <div class="col-lg-6">
-                    <div class="card shadow" style="height: 400px;">
-                        <div class="card-header py-3">
-                            <h4 class="mb-0">My Reports</h4>
+                <!-- Tabs Navigation -->
+                <ul class="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="reports-tab" data-bs-toggle="tab" data-bs-target="#reports" type="button" role="tab">
+                            Reports
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="appointments-tab" data-bs-toggle="tab" data-bs-target="#appointments" type="button" role="tab">
+                            Appointments
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="dashboardTabContent">
+                    <!-- Reports Tab -->
+                    <div class="tab-pane fade show active" id="reports" role="tabpanel">
+                        <div th:if="${reports.empty}" class="text-center py-5">
+                            <i class="bi bi-chat-right-dots text-muted" style="font-size: 4rem;"></i>
+                            <h4 class="mt-3 text-muted">No Reports Yet</h4>
+                            <p class="text-muted">You haven't submitted any reports yet.</p>
+                            <a href="/report" class="btn btn-primary">Submit Your First Report</a>
                         </div>
-                        <div class="card-body p-0 d-flex flex-column">
-                            <div th:if="${reports.empty}" class="text-center py-4 flex-grow-1 d-flex flex-column justify-content-center">
-                                <i class="bi bi-chat-right-dots text-muted" style="font-size: 3rem;"></i>
-                                <p class="text-muted mt-2">You haven't submitted any reports yet.</p>
-                                <a href="/report" class="btn btn-outline-primary">Submit Your First Report</a>
-                            </div>
-                            
-                            <div th:if="${!reports.empty}" class="flex-grow-1 overflow-auto">
-                                <table class="table table-hover mb-0">
-                                    <thead class="table-light sticky-top">
+                        
+                        <div th:if="${!reports.empty}">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
                                         <tr>
-                                            <th class="px-3">ID</th>
+                                            <th>ID</th>
                                             <th>Category</th>
                                             <th>Status</th>
+                                            <th>Submitted</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr th:each="report : ${reports}">
-                                            <td class="px-3">
-                                                <code class="small" th:text="${#strings.substring(report.reportId, #strings.indexOf(report.reportId, '-') + 1)}"></code>
+                                            <td>
+                                                <code class="small" th:text="${#strings.indexOf(report.reportId, '-') >= 0} ? ${#strings.substringAfter(report.reportId, '-')} : ${report.reportId}"></code>
                                             </td>
                                             <td>
-                                                <span class="badge bg-secondary small" th:text="${report.category}"></span>
+                                                <span class="badge bg-secondary" th:text="${report.category}"></span>
                                             </td>
                                             <td>
-                                                <span class="badge small" 
-                                                      th:classappend="${report.status.name() == 'PENDING_REVIEW'} ? 'bg-warning' : 
-                                                                     (${report.status.name() == 'UNDER_INVESTIGATION'} ? 'bg-info' : 
-                                                                     (${report.status.name() == 'RESOLVED'} ? 'bg-success' : 'bg-danger'))"
+                                                <span class="badge" 
+                                                      th:with="statusClass=${report.status.name() == 'PENDING_REVIEW'} ? 'bg-warning' : 
+                                                                (${report.status.name() == 'UNDER_INVESTIGATION'} ? 'bg-info' : 
+                                                                 (${report.status.name() == 'RESOLVED'} ? 'bg-success' : 'bg-danger'))"
+                                                      th:classappend="${statusClass}"
                                                       th:text="${report.status}"></span>
                                             </td>
+                                            <td class="text-muted small" th:text="${#temporals.format(report.timestamp, 'MMM dd, yyyy')}"></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Appointments Card -->
-                <div class="col-lg-6">
-                    <div class="card shadow" style="height: 400px;">
-                        <div class="card-header py-3">
-                            <h4 class="mb-0">My Appointments</h4>
+                    <!-- Appointments Tab -->
+                    <div class="tab-pane fade" id="appointments" role="tabpanel">
+                        <div th:if="${appointments.empty}" class="text-center py-5">
+                            <i class="bi bi-calendar2-plus text-muted" style="font-size: 4rem;"></i>
+                            <h4 class="mt-3 text-muted">No Appointments Yet</h4>
+                            <p class="text-muted">You haven't scheduled any appointments yet.</p>
+                            <a href="/schedule" class="btn btn-success">Schedule Your First Session</a>
                         </div>
-                        <div class="card-body p-0 d-flex flex-column">
-                            <div th:if="${appointments.empty}" class="text-center py-4 flex-grow-1 d-flex flex-column justify-content-center">
-                                <i class="bi bi-calendar2-plus text-muted" style="font-size: 3rem;"></i>
-                                <p class="text-muted mt-2">You haven't scheduled any appointments yet.</p>
-                                <a href="/schedule" class="btn btn-outline-success">Schedule Your First Session</a>
-                            </div>
-                            
-                            <div th:if="${!appointments.empty}" class="flex-grow-1 overflow-auto">
-                                <table class="table table-hover mb-0">
-                                    <thead class="table-light sticky-top">
+                        
+                        <div th:if="${!appointments.empty}">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
                                         <tr>
-                                            <th class="px-3">Date</th>
+                                            <th>Date</th>
                                             <th>Reason</th>
                                             <th>Status</th>
+                                            <th>Requested</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr th:each="appointment : ${appointments}">
-                                            <td class="px-3 small" th:text="${#temporals.format(appointment.preferredDateTime, 'MMM dd, hh:mm a')}"></td>
-                                            <td class="small" th:text="${#strings.abbreviate(appointment.reason, 20)}"></td>
+                                            <td th:text="${#temporals.format(appointment.preferredDateTime, 'MMM dd, yyyy hh:mm a')}"></td>
+                                            <td th:text="${#strings.abbreviate(appointment.reason, 30)}"></td>
                                             <td>
-                                                <span class="badge small" 
-                                                      th:classappend="${appointment.status.name() == 'PENDING'} ? 'bg-warning' : 
-                                                                     (${appointment.status.name() == 'CONFIRMED'} ? 'bg-success' : 
-                                                                     (${appointment.status.name() == 'COMPLETED'} ? 'bg-info' : 'bg-danger'))"
+                                                <span class="badge" 
+                                                      th:with="statusClass=${appointment.status.name() == 'PENDING'} ? 'bg-warning' : 
+                                                                (${appointment.status.name() == 'CONFIRMED'} ? 'bg-success' : 
+                                                                 (${appointment.status.name() == 'COMPLETED'} ? 'bg-info' : 'bg-danger'))"
+                                                      th:classappend="${statusClass}"
                                                       th:text="${appointment.status}"></span>
                                             </td>
+                                            <td class="text-muted small" th:text="${#temporals.format(appointment.preferredDateTime, 'MMM dd, yyyy')}"></td>
                                         </tr>
                                     </tbody>
                                 </table>
