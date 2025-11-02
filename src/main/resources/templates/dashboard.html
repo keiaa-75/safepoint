@@ -6,27 +6,27 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/common :: head('My Dashboard - SafePoint')}"></head>
+<head th:replace="~{fragments/common :: head('My Dash - SafePoint')}"></head>
 <body>
     <div th:replace="~{fragments/nav :: nav}"></div>
     <div class="main-content">
         <div class="container content-container">
             <div class="content-card">
-                <div class="text-center mb-5">
-                    <h1 class="fw-bold">My Dashboard</h1>
+                <div class="text-center mb-4">
+                    <h1 class="fw-bold">My Dash</h1>
                     <p class="text-muted">View and track your submitted reports and appointments.</p>
                 </div>
 
                 <!-- Tabs Navigation -->
-                <ul class="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
+                <ul class="nav nav-tabs mb-3" id="dashboardTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="reports-tab" data-bs-toggle="tab" data-bs-target="#reports" type="button" role="tab">
-                            Reports
+                            Report
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="appointments-tab" data-bs-toggle="tab" data-bs-target="#appointments" type="button" role="tab">
-                            Appointments
+                            Appointment
                         </button>
                     </li>
                 </ul>
@@ -35,91 +35,54 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 <div class="tab-content" id="dashboardTabContent">
                     <!-- Reports Tab -->
                     <div class="tab-pane fade show active" id="reports" role="tabpanel">
-                        <div th:if="${reports.empty}" class="text-center py-5">
-                            <i class="bi bi-chat-right-dots text-muted" style="font-size: 4rem;"></i>
-                            <h4 class="mt-3 text-muted">No Reports Yet</h4>
-                            <p class="text-muted">You haven't submitted any reports yet.</p>
-                            <a href="/report" class="btn btn-primary">Submit Your First Report</a>
-                        </div>
-                        
-                        <div th:if="${!reports.empty}">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Category</th>
-                                            <th>Status</th>
-                                            <th>Submitted</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="report : ${reports}">
-                                            <td>
-                                                <code class="small" th:text="${#strings.indexOf(report.reportId, '-') >= 0} ? ${#strings.substringAfter(report.reportId, '-')} : ${report.reportId}"></code>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-secondary" th:text="${report.category}"></span>
-                                            </td>
-                                            <td>
-                                                <span class="badge" 
-                                                      th:with="statusClass=${report.status.name() == 'PENDING_REVIEW'} ? 'bg-warning' : 
-                                                                (${report.status.name() == 'UNDER_INVESTIGATION'} ? 'bg-info' : 
-                                                                 (${report.status.name() == 'RESOLVED'} ? 'bg-success' : 'bg-danger'))"
-                                                      th:classappend="${statusClass}"
-                                                      th:text="${report.status}"></span>
-                                            </td>
-                                            <td class="text-muted small" th:text="${#temporals.format(report.timestamp, 'MMM dd, yyyy')}"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="dash-container">
+                            <div th:if="${!reports.empty}" class="dash-list">
+                                <div class="dash-item" th:each="report : ${reports}">
+                                    <div class="status-pill" 
+                                         th:with="statusColor=${report.status.name() == 'PENDING_REVIEW'} ? '#ffc107' : 
+                                                   (${report.status.name() == 'UNDER_INVESTIGATION'} ? '#0dcaf0' : 
+                                                    (${report.status.name() == 'RESOLVED'} ? '#198754' : '#dc3545'))"
+                                         th:style="'background-color: ' + ${statusColor}"></div>
+                                    <div class="dash-content">
+                                        <code class="report-id" th:text="${#strings.indexOf(report.reportId, '-') >= 0} ? ${#strings.substringAfter(report.reportId, '-')} : ${report.reportId}"></code>
+                                        <span class="badge bg-secondary ms-4" th:text="${report.category}"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Appointments Tab -->
                     <div class="tab-pane fade" id="appointments" role="tabpanel">
-                        <div th:if="${appointments.empty}" class="text-center py-5">
-                            <i class="bi bi-calendar2-plus text-muted" style="font-size: 4rem;"></i>
-                            <h4 class="mt-3 text-muted">No Appointments Yet</h4>
-                            <p class="text-muted">You haven't scheduled any appointments yet.</p>
-                            <a href="/schedule" class="btn btn-success">Schedule Your First Session</a>
-                        </div>
-                        
-                        <div th:if="${!appointments.empty}">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Reason</th>
-                                            <th>Status</th>
-                                            <th>Requested</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="appointment : ${appointments}">
-                                            <td th:text="${#temporals.format(appointment.preferredDateTime, 'MMM dd, yyyy hh:mm a')}"></td>
-                                            <td th:text="${#strings.abbreviate(appointment.reason, 30)}"></td>
-                                            <td>
-                                                <span class="badge" 
-                                                      th:with="statusClass=${appointment.status.name() == 'PENDING'} ? 'bg-warning' : 
-                                                                (${appointment.status.name() == 'CONFIRMED'} ? 'bg-success' : 
-                                                                 (${appointment.status.name() == 'COMPLETED'} ? 'bg-info' : 'bg-danger'))"
-                                                      th:classappend="${statusClass}"
-                                                      th:text="${appointment.status}"></span>
-                                            </td>
-                                            <td class="text-muted small" th:text="${#temporals.format(appointment.preferredDateTime, 'MMM dd, yyyy')}"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="dash-container">
+                            <div th:if="${!appointments.empty}" class="dash-list">
+                                <div class="dash-item" th:each="appointment : ${appointments}">
+                                    <div class="status-pill" 
+                                         th:with="statusColor=${appointment.status.name() == 'PENDING'} ? '#ffc107' : 
+                                                   (${appointment.status.name() == 'CONFIRMED'} ? '#198754' : 
+                                                    (${appointment.status.name() == 'COMPLETED'} ? '#0dcaf0' : '#dc3545'))"
+                                         th:style="'background-color: ' + ${statusColor}"></div>
+                                    <div class="dash-content">
+                                        <span th:text="${#temporals.format(appointment.preferredDateTime, 'MMM dd, yyyy')}"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Something's missing section -->
+                <div class="mt-4 d-flex align-items-center justify-content-between">
+                    <span class="text-muted">Something's missing?</span>
+                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle" style="width: 30px; height: 30px;" data-bs-toggle="modal" data-bs-target="#helpModal">
+                        ?
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+    <div th:replace="~{fragments/status-help-modal :: statusHelpModal}"></div>
     <div th:replace="~{fragments/common :: scripts}"></div>
 </body>
 </html>
