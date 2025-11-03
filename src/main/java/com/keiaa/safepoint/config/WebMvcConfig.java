@@ -20,12 +20,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(studentAuthInterceptor).addPathPatterns(
-            "/", 
+            "/",
             "/report",
             "/schedule",
-            "/submit-report",
-            "/track",
-            "/track-report"
+            "/submit-report"
         );
     }
 }

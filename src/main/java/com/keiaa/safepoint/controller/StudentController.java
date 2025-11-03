@@ -6,7 +6,6 @@
 
 package com.keiaa.safepoint.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.keiaa.safepoint.exception.VerificationTokenException;
 import com.keiaa.safepoint.model.Student;
 import com.keiaa.safepoint.model.dto.EmailRequestDto;
-import com.keiaa.safepoint.service.StudentService;
 import com.keiaa.safepoint.service.EmailVerificationService;
-import com.keiaa.safepoint.exception.VerificationTokenException;
+import com.keiaa.safepoint.service.StudentService;
 import com.keiaa.safepoint.service.utility.RateLimitingService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class StudentController {

@@ -8,11 +8,8 @@ package com.keiaa.safepoint.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import com.keiaa.safepoint.service.utility.TokenGenerator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.keiaa.safepoint.exception.VerificationTokenException;
@@ -20,6 +17,7 @@ import com.keiaa.safepoint.model.EmailVerificationToken;
 import com.keiaa.safepoint.model.Student;
 import com.keiaa.safepoint.repository.EmailVerificationTokenRepository;
 import com.keiaa.safepoint.service.utility.EmailService;
+import com.keiaa.safepoint.service.utility.TokenGenerator;
 
 @Service
 public class EmailVerificationService {

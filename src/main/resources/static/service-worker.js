@@ -12,9 +12,8 @@ const URLS_TO_CACHE = [
   '/js/report-form.js',
   '/js/schedule-form.js',
   '/about',
-  '/schedule',
-  '/track',
-  '/manifest.json',
+      '/schedule',
+      '/manifest.json',
   '/favicon.svg'
 ];
 

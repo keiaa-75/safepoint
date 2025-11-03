@@ -8,7 +8,6 @@ package com.keiaa.safepoint.controller;
 
 import java.security.Principal;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +24,8 @@ import com.keiaa.safepoint.model.Report;
 import com.keiaa.safepoint.model.Student;
 import com.keiaa.safepoint.repository.StudentRepository;
 import com.keiaa.safepoint.service.ReportService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class ReportController {

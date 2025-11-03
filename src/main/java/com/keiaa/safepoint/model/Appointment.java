@@ -8,6 +8,8 @@ package com.keiaa.safepoint.model;
 
 import java.time.LocalDateTime;
 
+import com.keiaa.safepoint.model.enums.AppointmentStatus;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,8 +22,6 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-
-import com.keiaa.safepoint.model.enums.AppointmentStatus;
 
 @Entity
 @Table(name = "appointments")
