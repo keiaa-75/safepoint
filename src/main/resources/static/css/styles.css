@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    padding-bottom: 80px; /* Space for bottom nav */
+    padding-bottom: 80px;
     text-align: left;
     background-color: #f8f9fa;
 }
@@ -53,6 +53,42 @@ body.admin-body {
     max-height: 120vh;
     display: flex;
     flex-direction: column;
+}
+
+/* Status Colors */
+:root {
+    --status-pending: #FFE5B4;       /* pastel yellow */
+    --status-under-review: #B6D7FF;  /* pastel blue */
+    --status-resolved: #C5EAC5;      /* pastel green */
+    --status-rejected: #FFC0CB;      /* pastel pink */
+}
+
+.status-pill {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.status-pending-review,
+.status-pending {
+    background-color: var(--status-pending);
+}
+
+.status-under-investigation,
+.status-confirmed {
+    background-color: var(--status-under-review);
+}
+
+.status-resolved,
+.status-completed {
+    background-color: var(--status-resolved);
+}
+
+.status-rejected,
+.status-cancelled {
+    background-color: var(--status-rejected);
 }
 
 .profile-card {
