@@ -1,0 +1,43 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+ */
+
+/* Status Colors */
+:root {
+    --status-pending: #FFE5B4;       /* pastel yellow */
+    --status-under-review: #B6D7FF;  /* pastel blue */
+    --status-resolved: #C5EAC5;      /* pastel green */
+    --status-rejected: #FFC0CB;      /* pastel pink */
+}
+
+.status-pill {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border for definition */
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05); /* Very subtle inner shadow for depth */
+}
+
+.status-pending-review,
+.status-pending {
+    background-color: var(--status-pending);
+}
+
+.status-under-investigation,
+.status-confirmed {
+    background-color: var(--status-under-review);
+}
+
+.status-resolved,
+.status-completed {
+    background-color: var(--status-resolved);
+}
+
+.status-rejected,
+.status-cancelled {
+    background-color: var(--status-rejected);
+}

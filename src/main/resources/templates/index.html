@@ -6,7 +6,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/common :: head('SafePoint')}"></head>
+<head th:replace="~{fragments/common :: head(title='Welcome to SafePoint')}"></head>
+<head>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
 <body>
     <div th:replace="~{fragments/nav :: nav}"></div>
     <div class="main-content">
