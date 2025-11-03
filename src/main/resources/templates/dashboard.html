@@ -12,7 +12,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div class="main-content">
         <div class="container content-container">
             <div class="content-card">
-                <div class="text-center mb-4">
+                <div class="text-center mb-3">
                     <h1 class="fw-bold">My Dash</h1>
                     <p class="text-muted">View and track your submitted reports and appointments.</p>
                 </div>
@@ -39,9 +39,9 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                             <div th:if="${!reports.empty}" class="dash-list">
                                 <div class="dash-item" th:each="report : ${reports}">
                                     <div class="status-pill" 
-                                         th:with="statusColor=${report.status.name() == 'PENDING_REVIEW'} ? '#ffc107' : 
-                                                   (${report.status.name() == 'UNDER_INVESTIGATION'} ? '#0dcaf0' : 
-                                                    (${report.status.name() == 'RESOLVED'} ? '#198754' : '#dc3545'))"
+                                         th:with="statusColor=${report.status.name() == 'PENDING_REVIEW'} ? '#FFE5B4' : 
+                                                   (${report.status.name() == 'UNDER_INVESTIGATION'} ? '#B6D7FF' : 
+                                                    (${report.status.name() == 'RESOLVED'} ? '#C5EAC5' : '#FFC0CB'))"
                                          th:style="'background-color: ' + ${statusColor}"></div>
                                     <div class="dash-content">
                                         <code class="report-id" th:text="${#strings.indexOf(report.reportId, '-') >= 0} ? ${#strings.substringAfter(report.reportId, '-')} : ${report.reportId}"></code>
@@ -58,9 +58,9 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                             <div th:if="${!appointments.empty}" class="dash-list">
                                 <div class="dash-item" th:each="appointment : ${appointments}">
                                     <div class="status-pill" 
-                                         th:with="statusColor=${appointment.status.name() == 'PENDING'} ? '#ffc107' : 
-                                                   (${appointment.status.name() == 'CONFIRMED'} ? '#198754' : 
-                                                    (${appointment.status.name() == 'COMPLETED'} ? '#0dcaf0' : '#dc3545'))"
+                                         th:with="statusColor=${appointment.status.name() == 'PENDING'} ? '#FFE5B4' : 
+                                                   (${appointment.status.name() == 'CONFIRMED'} ? '#B6D7FF' : 
+                                                    (${appointment.status.name() == 'COMPLETED'} ? '#C5EAC5' : '#FFC0CB'))"
                                          th:style="'background-color: ' + ${statusColor}"></div>
                                     <div class="dash-content">
                                         <span th:text="${#temporals.format(appointment.preferredDateTime, 'MMM dd, yyyy')}"></span>
@@ -72,7 +72,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 </div>
 
                 <!-- Something's missing section -->
-                <div class="mt-4 d-flex align-items-center justify-content-between">
+                <div class="mt-3 d-flex align-items-center justify-content-between">
                     <span class="text-muted">Something's missing?</span>
                     <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle" style="width: 30px; height: 30px;" data-bs-toggle="modal" data-bs-target="#helpModal">
                         ?

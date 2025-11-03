@@ -49,6 +49,10 @@ body.admin-body {
     padding: 2.5rem;
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     border: 1px solid #e9ecef;
+    min-height: 10vh;
+    max-height: 120vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .profile-card {
@@ -346,4 +350,10 @@ body.admin-body {
 .report-id {
     font-size: 0.875rem;
     color: #6c757d;
+}
+
+.tab-content {
+    flex-grow: 1; /* Allow tab content to take available space */
+    overflow-y: auto; /* Make tab content scrollable */
+    min-height: 0; /* Allow flex item to shrink */
 }
