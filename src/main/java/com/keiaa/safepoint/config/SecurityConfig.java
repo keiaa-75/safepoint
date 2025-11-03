@@ -17,18 +17,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.keiaa.safepoint.service.impl.AdminDetailsServiceImpl;
-import com.keiaa.safepoint.service.impl.StudentDetailsServiceImpl;
+import com.keiaa.safepoint.service.impl.UnifiedUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
-    private AdminDetailsServiceImpl adminDetailsService;
-
-    @Autowired
-    private StudentDetailsServiceImpl studentDetailsService;
+    private UnifiedUserDetailsService userDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,7 +52,7 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
                 .permitAll()
             )
-            .userDetailsService(adminDetailsService);
+            .userDetailsService(userDetailsService);
 
         return http.build();
     }
@@ -91,7 +87,7 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
                 .permitAll()
             )
-            .userDetailsService(studentDetailsService)
+            .userDetailsService(userDetailsService)
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/h2-console/**")
             )
