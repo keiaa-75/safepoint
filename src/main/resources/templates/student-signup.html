@@ -6,34 +6,35 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Student Signup</title>
-</head>
-<body>
-    <h1>Student Signup</h1>
-    <p>Please provide your information to create an account. After signing up, check your email for a verification link.</p>
-    <form th:action="@{/student-signup}" th:object="${student}" method="post">
-        <div>
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" th:field="*{name}" required>
+<head th:replace="~{fragments/common :: head(title='Student Signup')}"></head>
+<body class="d-flex justify-content-center align-items-center min-vh-100 p-3">
+    <div class="login-card">
+        <h1 class="text-center fw-bold mb-3">Student Signup</h1>
+        <p class="text-center text-muted mb-4">Create your SafePoint account. Check your email for verification after signing up.</p>
+
+        <form th:action="@{/student-signup}" th:object="${student}" method="post">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name" name="name" th:field="*{name}" placeholder="Full Name" required>
+                <label for="name">Full Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" name="email" th:field="*{email}" placeholder="Email" required>
+                <label for="email">Email</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="lrn" name="lrn" th:field="*{lrn}" placeholder="LRN" required>
+                <label for="lrn">LRN</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="password" name="password" th:field="*{password}" placeholder="Password" required>
+                <label for="password">Password</label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">Sign Up</button>
+        </form>
+
+        <div class="text-center">
+            <a href="/student-login" class="small">Already have an account? Login</a>
         </div>
-        <div>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" th:field="*{email}" required>
-        </div>
-        <div>
-            <label for="lrn">LRN</label>
-            <input type="text" id="lrn" name="lrn" th:field="*{lrn}" required>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" th:field="*{password}" required>
-        </div>
-        <div>
-            <button type="submit">Sign Up</button>
-        </div>
-    </form>
-    <a href="/student-login">Already have an account? Login</a>
+    </div>
 </body>
 </html>
