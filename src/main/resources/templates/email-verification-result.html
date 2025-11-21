@@ -6,32 +6,24 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Email Verification Result</title>
-</head>
-<body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card mt-5">
-                    <div class="card-body text-center">
-                        <h3 class="card-title" th:text="${title}">Verification Result</h3>
-                        <p th:text="${message}">Verification message</p>
-                        
-                        <div th:if="${success}" class="alert alert-success" role="alert">
-                            Your email has been successfully verified! You can now log in to your account.
-                        </div>
-                        
-                        <div th:unless="${success}" class="alert alert-danger" role="alert">
-                            <p th:text="${errorMessage}">Error message</p>
-                        </div>
-                        
-                        <a href="/student-login" class="btn btn-primary">Go to Login</a>
-                    </div>
-                </div>
-            </div>
+<head th:replace="~{fragments/common :: head(title='Email Verification Result')}"></head>
+<body class="d-flex justify-content-center align-items-center min-vh-100 p-3">
+    <div class="login-card text-center">
+        <div class="mb-4">
+            <i th:class="${success} ? 'bi bi-check-circle-fill text-success' : 'bi bi-exclamation-triangle-fill text-danger'" style="font-size: 3rem;"></i>
         </div>
+        <h1 class="fw-bold mb-3" th:text="${title}">Verification Result</h1>
+        <p class="text-muted mb-4" th:text="${message}">Verification message</p>
+        
+        <div th:if="${success}" class="alert alert-success" role="alert">
+            Your email has been successfully verified! You can now log in to your account.
+        </div>
+        
+        <div th:unless="${success}" class="alert alert-danger" role="alert">
+            <p th:text="${errorMessage}">Error message</p>
+        </div>
+        
+        <a href="/student-login" class="btn btn-primary">Go to Login</a>
     </div>
 </body>
 </html>
