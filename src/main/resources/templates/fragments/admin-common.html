@@ -43,7 +43,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <a class="nav-link" th:href="@{/admin/appointments}">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/admin/logout}">Logout</a>
+                        <form th:action="@{/admin/logout}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="nav-link btn btn-link" style="padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);">Logout</button>
+                        </form>
                     </li>
                 </ul>
             </div>

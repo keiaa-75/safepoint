@@ -1,0 +1,80 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+ */
+
+/* Step Progress Bar */
+.step-progress-bar {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.step-progress-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.step-progress-item::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #e9ecef;
+    z-index: 1;
+    margin-bottom: 0.5rem;
+}
+
+.step-progress-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    height: 2px;
+    width: 100%;
+    background-color: #e9ecef;
+    z-index: 0;
+}
+
+.step-progress-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    text-align: center;
+}
+
+/* States */
+.step-progress-item.is-current .step-progress-label,
+.step-progress-item.is-done .step-progress-label {
+    color: #0D6EFD;
+    font-weight: 500;
+}
+
+.step-progress-item.is-current::before {
+    border-color: #0D6EFD;
+    background-color: #fff;
+    background-image: url("../svgs/progress-current.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 8px 8px;
+}
+
+.step-progress-item.is-done::before {
+    border-color: #0D6EFD;
+    background-color: #0D6EFD;
+    background-image: url("../svgs/progress-done.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 12px 12px;
+}
+
+.step-progress-item.is-done::after {
+    background-color: #0D6EFD;
+}

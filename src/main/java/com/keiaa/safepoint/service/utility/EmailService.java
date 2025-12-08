@@ -6,14 +6,10 @@
 
 package com.keiaa.safepoint.service.utility;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -173,6 +169,49 @@ public class EmailService {
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             // Handle exception
+            e.printStackTrace();
+        }
+    }
+
+    public void sendEmailVerification(String email, String name, String verificationUrl) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false);
+            helper.setFrom("your-email@gmail.com");
+            helper.setTo(email);
+            helper.setSubject("SafePoint: Please Verify Your Email Address");
+
+            Context context = new Context();
+            context.setVariable("name", name);
+            context.setVariable("verificationUrl", verificationUrl);
+
+            String emailBody = templateEngine.process("email-verification", context);
+
+            helper.setText(emailBody, true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendPasswordResetEmail(String email, String resetLink) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false);
+            helper.setFrom("your-email@gmail.com");
+            helper.setTo(email);
+            helper.setSubject("SafePoint: Password Reset Request");
+
+            Context context = new Context();
+            context.setVariable("resetLink", resetLink);
+
+            String emailBody = templateEngine.process("password-reset", context);
+
+            helper.setText(emailBody, true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
             e.printStackTrace();
         }
     }

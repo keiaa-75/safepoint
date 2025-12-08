@@ -8,6 +8,8 @@ package com.keiaa.safepoint.model;
 
 import java.time.LocalDateTime;
 
+import com.keiaa.safepoint.model.enums.ReportStatus;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +18,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
-
-import com.keiaa.safepoint.model.enums.ReportStatus;
 
 @Entity
 @Table(name = "report_history")

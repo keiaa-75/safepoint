@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:fragment="head">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title th:text="${title} ?: 'SafePoint'"></title>
+        <link rel="stylesheet" th:href="@{/css/styles.css}" />
+        <link rel="stylesheet" th:href="@{/css/auth.css}" />
+    </div>
+</head>
+
+<body>
+    <div th:fragment="card(title, content)">
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <h2 th:text="${title}"></h2>
+            </div>
+            <div th:replace="${content}"></div>
+        </div>
+    </div>
+</body>
+
+</html>

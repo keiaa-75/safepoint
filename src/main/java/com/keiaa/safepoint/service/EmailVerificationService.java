@@ -1,0 +1,78 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+ */
+
+package com.keiaa.safepoint.service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.keiaa.safepoint.exception.VerificationTokenException;
+import com.keiaa.safepoint.model.EmailVerificationToken;
+import com.keiaa.safepoint.model.Student;
+import com.keiaa.safepoint.repository.EmailVerificationTokenRepository;
+import com.keiaa.safepoint.service.utility.EmailService;
+import com.keiaa.safepoint.service.utility.TokenGenerator;
+
+@Service
+public class EmailVerificationService {
+
+    @Autowired
+    private EmailVerificationTokenRepository tokenRepository;
+    
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private TokenGenerator tokenGenerator;
+    
+    public void createVerificationToken(Student student, String baseUrl) {
+        Optional<EmailVerificationToken> existingToken = tokenRepository.findByStudent(student);
+        if (existingToken.isPresent()) {
+            tokenRepository.delete(existingToken.get());
+        }
+        
+        String token = tokenGenerator.generateUuidToken();
+        EmailVerificationToken emailToken = new EmailVerificationToken(token, student);
+        tokenRepository.save(emailToken);
+        
+        sendVerificationEmail(student, token, baseUrl);
+    }
+    
+    private void sendVerificationEmail(Student student, String token, String baseUrl) {
+        String verificationUrl = baseUrl + "/verify-email?token=" + token;
+        emailService.sendEmailVerification(student.getEmail(), student.getName(), verificationUrl);
+    }
+    
+    public Optional<EmailVerificationToken> findByToken(String token) {
+        return tokenRepository.findByToken(token);
+    }
+    
+    public void verifyToken(String token) {
+        Optional<EmailVerificationToken> tokenOpt = findByToken(token);
+        
+        if (tokenOpt.isPresent()) {
+            EmailVerificationToken emailToken = tokenOpt.get();
+            
+            if (emailToken.isExpired()) {
+                throw new VerificationTokenException("Verification token has expired");
+            }
+            
+            Student student = emailToken.getStudent();
+            student.setEmailVerified(true);
+            
+            tokenRepository.delete(emailToken);
+        } else {
+            throw new VerificationTokenException("Invalid verification token");
+        }
+    }
+
+    public void purgeExpiredTokens() {
+        tokenRepository.deleteAll(tokenRepository.findByExpiryDateBefore(LocalDateTime.now()));
+    }
+}

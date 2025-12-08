@@ -6,7 +6,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/common :: head('SafePoint')}"></head>
+<head th:replace="~{fragments/common :: head(title='Welcome to SafePoint')}"></head>
+<head>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
 <body>
     <div th:replace="~{fragments/nav :: nav}"></div>
     <div class="main-content">
@@ -34,12 +37,12 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <h3>Schedule a Session</h3>
                         <p>Request a meeting with a counselor.</p>
                     </a>
-                    <a href="/track" class="bento-card">
+                    <a href="/dashboard" class="bento-card">
                          <div class="icon-wrapper bg-warning-soft">
                             <i class="bi bi-clipboard2-data-fill"></i>
                         </div>
-                        <h3>Track Your Report</h3>
-                        <p>Check the status of your submitted report.</p>
+                        <h3>Check my Dash</h3>
+                        <p>View and track your submitted reports and appointments.</p>
                     </a>
                     <a href="/about" class="bento-card">
                          <div class="icon-wrapper bg-info-soft">

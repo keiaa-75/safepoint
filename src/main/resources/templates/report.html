@@ -6,7 +6,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/common :: head('SafePoint - Submit a Report')}"></head>
+<head th:replace="~{fragments/common :: head(title='File a Report')}"></head>
+<head>
+    <link rel="stylesheet" href="/css/multi-step-form.css">
+</head>
 <body>
     <div th:replace="~{fragments/nav :: nav}"></div>
     <div class="main-content">
@@ -15,7 +18,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 <div th:if="${error}" class="alert alert-danger" role="alert">
                     <span th:text="${error}"></span>
                 </div>
-                <div class="text-center mb-5">
+                <div class="text-center mb-3">
                     <h1 class="fw-bold">Submit a Report</h1>
                     <p class="text-muted">Submit a confidential report about bullying.</p>
                 </div>

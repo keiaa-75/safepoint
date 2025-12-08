@@ -23,11 +23,13 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.keiaa.safepoint.model.Admin;
 import com.keiaa.safepoint.model.Appointment;
 import com.keiaa.safepoint.model.Report;
 import com.keiaa.safepoint.model.ReportHistory;
 import com.keiaa.safepoint.model.enums.AppointmentStatus;
 import com.keiaa.safepoint.model.enums.ReportStatus;
+import com.keiaa.safepoint.repository.AdminRepository;
 import com.keiaa.safepoint.repository.AppointmentRepository;
 import com.keiaa.safepoint.repository.ReportHistoryRepository;
 import com.keiaa.safepoint.repository.ReportRepository;
@@ -44,6 +46,9 @@ public class AdminService {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
     @Autowired
     private EmailService emailService;
@@ -151,7 +156,7 @@ public class AdminService {
      * @param description Description of the status change
      * @return true if the update was successful, false otherwise
      */
-    public boolean updateReportStatusWithDescription(String reportId, ReportStatus status, String description) {
+    public boolean updateReportStatusWithDescription(String reportId, ReportStatus status, String description, String username) {
         return reportRepository.findByReportId(reportId)
             .map(report -> {
                 // Create history record
@@ -160,7 +165,7 @@ public class AdminService {
                 history.setOldStatus(report.getStatus());
                 history.setNewStatus(status);
                 history.setDescription(description);
-                history.setUpdatedBy("Admin"); // In a real implementation, get the actual admin name
+                history.setUpdatedBy(username);
                 
                 reportHistoryRepository.save(history);
                 
@@ -228,5 +233,38 @@ public class AdminService {
                 return true;
             })
             .orElse(false);
+    }
+
+
+    /**
+     * Creates a new admin user with hashed password
+     * 
+     * @param username The admin username
+     * @param password The admin password
+     * @return The created admin user
+     */
+    public Admin createAdmin(String username, String password) {
+        Admin admin = new Admin();
+        admin.setUsername(username);
+        admin.setPassword(password);  // This will hash the password
+        return adminRepository.save(admin);
+    }
+
+    /**
+     * Gets the count of all admin users
+     * 
+     * @return The number of admin users in the database
+     */
+    public long getAllAdminsCount() {
+        return adminRepository.count();
+    }
+
+    /**
+     * Checks if any admin exists in the database
+     * 
+     * @return true if any admin exists, false otherwise
+     */
+    public boolean anyAdminExists() {
+        return adminRepository.count() > 0;
     }
 }
