@@ -16,7 +16,7 @@ We aim to acknowledge reports within 5 business days and will keep you informed 
 
 ## Scope
 
-This policy applies to all code in the main branch of the repository. As the project is currently in beta and not yet publicly released, only the latest development version is supported.
+This policy applies to all code in the main branch of the repository. As the project is currently in beta and not yet publicly released, only the latest deployed version is supported.
 
 At this time, security patches are no backported to older versions or branches.
 

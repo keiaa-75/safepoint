@@ -49,7 +49,7 @@ The application will start on port `9090`.
 
 This project requires `app-secrets.properties` and `datasource.properties` for local development. These files contain sensitive configuration (such as email credentials and database settings) and are therefore excluded from version control. You may refer to the included template files.
 
-The [EmailService](src/main/java/com/keiaa/safepoint/service/EmailService.java) uses mail-related properties to automatically communicate actions and updates to the user. The `admin.key` is used for authenticating users on the administrative dashboard.
+The [EmailService](src/main/java/com/keiaa/safepoint/service/EmailService.java) uses mail-related properties to automatically communicate actions and updates to the user.
 
 **You must create these files before running the app.**
 
