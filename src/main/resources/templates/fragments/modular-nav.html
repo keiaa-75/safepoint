@@ -6,8 +6,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
 <div th:fragment="nav(navItems)" class="bottom-nav" xmlns:th="http://www.thymeleaf.org">
     <a th:each="item : ${navItems}" 
-       th:href="${item.route}" 
-       th:classappend="${item.route == #httpServletRequest.requestURI} ? 'active' : ''">
+       th:href="${item.route}">
         <i th:class="${item.icon}"></i>
         <span th:text="${item.name}"></span>
     </a>

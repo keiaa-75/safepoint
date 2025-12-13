@@ -1,30 +1,26 @@
 package com.keiaa.safepoint.config;
 
+import java.util.List;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import java.util.List;
-import java.util.Map;
 
 @Configuration
 @ConfigurationProperties(prefix = "navigation")
 public class NavigationConfig {
     
-    private Map<String, List<NavItem>> navigation;
+    private List<NavItem> admin;
     
-    public Map<String, List<NavItem>> getNavigation() {
-        return navigation;
+    public List<NavItem> getAdmin() {
+        return admin;
     }
     
-    public void setNavigation(Map<String, List<NavItem>> navigation) {
-        this.navigation = navigation;
-    }
-    
-    public List<NavItem> getStudentNav() {
-        return navigation.get("student");
+    public void setAdmin(List<NavItem> admin) {
+        this.admin = admin;
     }
     
     public List<NavItem> getAdminNav() {
-        return navigation.get("admin");
+        return admin;
     }
     
     public static class NavItem {

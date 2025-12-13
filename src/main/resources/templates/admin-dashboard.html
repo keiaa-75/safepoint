@@ -13,7 +13,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 </head>
 
 <body class="admin-body">
-    <div th:replace="~{fragments/admin-common :: admin-nav}"></div>
+    <div th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.adminNav})}"></div>
 
     <div class="main-content">
         <div class="container-fluid px-4 py-4">
@@ -193,6 +193,8 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         }
 
     </style>
+    
+    <div th:replace="~{fragments/modular-nav :: nav-script}"></div>
 </body>
 
 </html>
