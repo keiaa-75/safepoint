@@ -13,12 +13,24 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         <div class="container content-container">
             <div th:replace="~{fragments/about-content :: about-content-cards}"></div>
 
-            <div class="content-card mt-4">
-                <div class="card-body text-center">
-                    <p class="card-text">You are logged in as an administrator.</p>
-                    <form th:action="@{/admin/logout}" method="post" class="d-inline">
+            <div class="card text-center mt-4" style="border: none; border-radius: 1rem; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);">
+                <div class="card-header text-white fw-semibold d-flex align-items-center justify-content-center" 
+                     style="background-color: #0d6efd; border-radius: 1rem 1rem 0 0; padding: 0.75rem 1rem; border-bottom: 3px solid #0b5ed7;">
+                    <i class="bi bi-person-gear me-2 fs-5"></i>
+                    Administrative Access
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <h5 class="card-title fw-bold text-dark mb-1">Session Active</h5>
+                        <p class="card-text text-muted small">
+                            Logged in as an administrator. Please secure your session before stepping away.
+                        </p>
+                    </div>
+                    <form th:action="@{/admin/logout}" method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" class="btn btn-danger">Logout</button>
+                        <button type="submit" class="btn btn-danger btn-lg w-100">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout Now
+                        </button>
                     </form>
                 </div>
             </div>
