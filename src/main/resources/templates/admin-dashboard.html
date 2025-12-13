@@ -7,9 +7,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/admin-common :: head(title='Admin Dashboard')}"></head>
+<head th:replace="~{fragments/common/admin-common :: head(title='Admin Dashboard')}"></head>
 <head>
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
 </head>
 
 <body class="admin-body">
@@ -139,60 +140,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         </div>
     </div>
 
-    <div th:replace="~{fragments/admin-common :: scripts}"></div>
-
-    <style>
-        .admin-body {
-            background-color: #f8f9fa;
-        }
-
-        .stat-card {
-            border: none;
-            border-radius: 0.75rem;
-            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-        }
-
-        .icon-wrapper {
-            width: 50px;
-            height: 50px;
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-wrapper i {
-            font-size: 1.75rem;
-        }
-
-        .bg-danger-soft {
-            background-color: rgba(var(--bs-danger-rgb), 0.1);
-        }
-
-        .bg-success-soft {
-            background-color: rgba(var(--bs-success-rgb), 0.1);
-        }
-
-        .bg-primary-soft {
-            background-color: rgba(var(--bs-primary-rgb), 0.1);
-        }
-
-        .bg-info-soft {
-            background-color: rgba(var(--bs-info-rgb), 0.1);
-        }
-
-        .card-header {
-            background-color: var(--bs-white);
-            border-bottom: 1px solid #dee2e6;
-        }
-
-    </style>
+    <div th:replace="~{fragments/common/admin-common :: scripts}"></div>
 </body>
 
 </html>
