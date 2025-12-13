@@ -35,6 +35,11 @@ public class AdminController {
         return "admin-login";
     }
 
+    @GetMapping("/admin/about")
+    public String showAdminAbout() {
+        return "admin-about";
+    }
+
     /**
      * Displays the admin dashboard with statistics and metrics.
      *

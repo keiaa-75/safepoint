@@ -28,28 +28,5 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 </div>
 
 <div th:fragment="admin-nav" xmlns:th="http://www.thymeleaf.org">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top py-2">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand fs-5" th:href="@{/admin/dashboard}">Admin Dashboard</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="adminNavbar">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/admin/reports}">Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/admin/appointments}">Appointments</a>
-                    </li>
-                    <li class="nav-item">
-                        <form th:action="@{/admin/logout}" method="post">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                            <button type="submit" class="nav-link btn btn-link" style="padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);">Logout</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
 </div>

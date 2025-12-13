@@ -35,7 +35,6 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const currentPath = window.location.pathname;
-            const navLinks = document.querySelectorAll('.bottom-nav a');
             const offlineStatusBar = document.getElementById('offline-status-bar');
             
             // Check initial online status
@@ -55,12 +54,16 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 offlineStatusBar.classList.add('show');
             });
 
-            navLinks.forEach(link => {
-                const linkPath = link.getAttribute('href');
-                if (linkPath === currentPath) {
-                    link.classList.add('active');
-                }
-            });
+            // Navigation highlighting with timeout to ensure nav is loaded
+            setTimeout(() => {
+                const navLinks = document.querySelectorAll('.bottom-nav a');
+                navLinks.forEach(link => {
+                    const linkPath = link.getAttribute('href');
+                    if (linkPath === currentPath) {
+                        link.classList.add('active');
+                    }
+                });
+            }, 100);
         });
     </script>
 </div>

@@ -1,0 +1,42 @@
+<!--
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+-->
+
+<div th:fragment="about-content-cards">
+    <div class="content-card">
+        <div class="text-center">
+            <h1 class="fw-bold">About SafePoint</h1>
+            <p class="text-muted mb-4">Know more about the project and its mission.</p>
+
+            <p class="text-muted mt-4 mb-4">
+                SafePoint is a simple platform designed to help students report incidents of bullying and seek support. Our mission is to create a safer school environment for everyone.
+            </p>
+            <div class="mt-4">
+                <p class="text-muted">
+                    This project is open source and licensed under the Mozilla Public License 2.0 and Creative Commons BY-NC-SA 4.0.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="survey-block">
+    <div class="content-card mt-4">
+        <div class="card-body">
+            <h5 class="card-title fw-bold mb-3">How can we do better?</h5>
+            <p class="card-text">Your feedback helps us improve SafePoint and create a safer, more supportive environment for all students. We value your thoughts and suggestions.</p>
+            <a href="https://forms.gle/KCjcypnSS3TsmerM9" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                Take the survey
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="about-content">
+    <div class="container content-container">
+        <div th:replace="~{:: about-content-cards}"></div>
+        <div th:replace="~{:: survey-block}"></div>
+    </div>
+</div>

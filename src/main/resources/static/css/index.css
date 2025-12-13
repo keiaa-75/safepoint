@@ -10,11 +10,10 @@
     color: #fff; /* white */
     padding: 2rem;
     border-radius: 1rem;
-    text-align: center;
     margin-bottom: 2rem;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 2rem;
 }
 

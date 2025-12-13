@@ -1,0 +1,31 @@
+<!--
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-common :: head('About SafePoint')}"></head>
+<body>
+    <div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
+    <div class="main-content">
+        <div class="container content-container">
+            <div th:replace="~{fragments/about-content :: about-content-cards}"></div>
+
+            <div class="content-card mt-4">
+                <div class="card-body text-center">
+                    <p class="card-text">You are logged in as an administrator.</p>
+                    <form th:action="@{/admin/logout}" method="post" class="d-inline">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/admin-common :: scripts}"></div>
+
+</body>
+</html>
