@@ -9,7 +9,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <head th:replace="~{fragments/common :: head(title='Report Details')}"></head>
 <body class="admin-body">
 
-<div th:replace="~{fragments/admin-common :: admin-nav}"></div>
+<div th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.adminNav})}"></div>
 
 <div class="container py-4 py-md-5" style="max-width: 1200px;">
     <div class="card shadow-sm">

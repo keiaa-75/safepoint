@@ -10,18 +10,18 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         <i th:class="${item.icon}"></i>
         <span th:text="${item.name}"></span>
     </a>
-</div>
-
-<script th:fragment="nav-script">
-document.addEventListener('DOMContentLoaded', () => {
-    const navLinks = document.querySelectorAll('.bottom-nav a');
-    const currentPath = window.location.pathname;
     
-    navLinks.forEach(link => {
-        const linkPath = link.getAttribute('href');
-        if (linkPath === currentPath) {
-            link.classList.add('active');
-        }
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const navLinks = document.querySelectorAll('.bottom-nav a');
+        const currentPath = window.location.pathname;
+        
+        navLinks.forEach(link => {
+            const linkPath = link.getAttribute('href');
+            if (linkPath === currentPath) {
+                link.classList.add('active');
+            }
+        });
     });
-});
-</script>
+    </script>
+</div>
