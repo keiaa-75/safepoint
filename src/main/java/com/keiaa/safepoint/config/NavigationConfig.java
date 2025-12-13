@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class NavigationConfig {
     
     private List<NavItem> admin;
+    private List<NavItem> student;
     
     public List<NavItem> getAdmin() {
         return admin;
@@ -19,8 +20,20 @@ public class NavigationConfig {
         this.admin = admin;
     }
     
+    public List<NavItem> getStudent() {
+        return student;
+    }
+    
+    public void setStudent(List<NavItem> student) {
+        this.student = student;
+    }
+    
     public List<NavItem> getAdminNav() {
         return admin;
+    }
+    
+    public List<NavItem> getStudentNav() {
+        return student;
     }
     
     public static class NavItem {
