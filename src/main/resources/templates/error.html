@@ -8,7 +8,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/common :: head('Error')}"></head>
 <body>
-    <div th:replace="~{fragments/nav :: nav}"></div>
+    <div th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.studentNav})}"></div>
     <div class="main-content">
         <div class="container content-container">
             <div class="content-card text-center">

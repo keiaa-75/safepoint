@@ -8,7 +8,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/common :: head('About SafePoint')}"></head>
 <body>
-    <div th:replace="~{fragments/nav :: nav}"></div>
+    <div th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.studentNav})}"></div>
     <div class="main-content">
         <div th:replace="~{fragments/about-content :: about-content}"></div>
     </div>
