@@ -5,7 +5,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 -->
 
 <div class="modal fade" th:id="${modalId}" tabindex="-1" th:aria-labelledby="${modalId} + 'Label'" aria-hidden="true" th:fragment="confirmation-modal(modalId, title, text, confirmButtonText, formId)">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" th:id="${modalId} + 'Label'" th:text="${title}">Confirmation</h5>
