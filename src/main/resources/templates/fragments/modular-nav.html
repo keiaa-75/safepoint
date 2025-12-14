@@ -16,12 +16,29 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         const navLinks = document.querySelectorAll('.bottom-nav a');
         const currentPath = window.location.pathname;
         
+        let bestMatchLink = null;
+        let maxMatchLength = 0;
+
         navLinks.forEach(link => {
             const linkPath = link.getAttribute('href');
-            if (linkPath === currentPath) {
-                link.classList.add('active');
+
+            if (currentPath === linkPath) {
+                if (linkPath.length > maxMatchLength) {
+                    bestMatchLink = link;
+                    maxMatchLength = linkPath.length;
+                }
+            } 
+            else if (currentPath.startsWith(linkPath + '/') && linkPath !== '/') {
+                 if (linkPath.length > maxMatchLength) {
+                    bestMatchLink = link;
+                    maxMatchLength = linkPath.length;
+                }
             }
         });
+
+        if (bestMatchLink) {
+            bestMatchLink.classList.add('active');
+        }
     });
     </script>
 </div>

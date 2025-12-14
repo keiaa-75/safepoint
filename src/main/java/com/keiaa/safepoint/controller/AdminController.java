@@ -58,7 +58,7 @@ public class AdminController {
      * @param model the model to add reports to
      * @return the name of the view template to render
      */
-    @GetMapping("/admin/reports")
+    @GetMapping("/admin/report")
     public String showAdminReports(Model model) {
         model.addAttribute("reports", adminService.getAllReportsWithHistory());
         return "admin-reports";
@@ -70,7 +70,7 @@ public class AdminController {
      * @param model the model to add appointments to
      * @return the name of the view template to render
      */
-    @GetMapping("/admin/appointments")
+    @GetMapping("/admin/appointment")
     public String showAdminAppointments(Model model) {
         model.addAttribute("appointmentsByWeek", adminService.getAppointmentsGroupedByWeek());
         return "admin-appointments";
@@ -110,7 +110,7 @@ public class AdminController {
                     model.addAttribute("appointment", appointment);
                     return "appointment-detail";
                 })
-                .orElse("redirect:/admin/appointments");
+                .orElse("redirect:/admin/appointment");
     }
 
     /**
