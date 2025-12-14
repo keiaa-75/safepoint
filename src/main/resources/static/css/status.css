@@ -41,3 +41,33 @@
 .status-cancelled {
     background-color: var(--status-rejected);
 }
+
+/* Expanded Status Badges */
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.status-pending {
+    background-color: var(--status-pending);
+    color: #8B6914;
+}
+
+.status-badge.status-confirmed {
+    background-color: var(--status-under-review);
+    color: #1E3A8A;
+}
+
+.status-badge.status-completed {
+    background-color: var(--status-resolved);
+    color: #166534;
+}
+
+.status-badge.status-cancelled {
+    background-color: var(--status-rejected);
+    color: #BE185D;
+}
