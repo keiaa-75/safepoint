@@ -7,8 +7,16 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/common :: head('Error')}"></head>
+<style>
+.project-card {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+</style>
 <body>
-    <div th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.studentNav})}"></div>
+    <div th:replace="~{fragments/modular-nav :: nav(${navItems})}"></div>
     <div class="main-content">
         <div class="container content-container">
             <div class="content-card text-center">
@@ -17,9 +25,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 </div>
                 <h1 class="fw-bold" th:text="${error != null ? error : 'An error occurred'}">An error occurred</h1>
                 <p class="text-muted mb-4">Something went wrong, but we're working on fixing it.</p>
-                
+
                 <div class="d-grid gap-2 d-md-flex justify-content-center">
-                    <a href="/" class="btn btn-primary btn-lg me-md-2">
+                    <!-- Show appropriate home link based on navigation type -->
+                    <a th:href="${navType == 'admin' ? '/admin/dashboard' : '/'}" class="btn btn-primary btn-lg me-md-2">
                         <i class="bi bi-house-door me-1"></i>
                         Go Home
                     </a>
@@ -31,34 +40,41 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
             </div>
 
             <!-- Repository promotion section -->
-            <div class="card mt-4 shadow">
-                <div class="card-header py-3">
-                    <h4 class="mb-0">Check out these projects</h4>
+            <div class="card project-card mt-4">
+
+                <!-- Header -->
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-3 ps-4 pe-4">
+                    <h4 class="fw-bold mb-0">Check out these projects</h4>
                 </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start py-2 mb-2">
-                        <div class="flex-grow-1 me-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <h6 class="mb-1">seatflow</h6>
-                                <a href="https://github.com/xinnsuu/DSASLYFJSHS/" class="btn btn-outline-primary btn-sm ms-2">
-                                    <i class="bi bi-github"></i> GitHub
-                                </a>
-                            </div>
-                            <p class="text-muted mb-0 small">A simple web-app for seating assignment, in aid of classroom management.</p>
+
+                <!-- List Group Body -->
+                <ul class="list-group list-group-flush border-top">
+
+                    <!-- Project Item 1: seatflow -->
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3 ps-4 pe-4">
+                        <div class="me-2">
+                            <h6 class="mb-0 fw-semibold">seatflow</h6>
+                            <p class="text-muted small mb-0">A simple web-app for seating assignment, in aid of classroom management.</p>
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-start py-2">
-                        <div class="flex-grow-1 me-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <h6 class="mb-1">inquestia</h6>
-                                <a href="https://github.com/kalachuuchiiii/inquestia" class="btn btn-outline-primary btn-sm ms-2">
-                                    <i class="bi bi-github"></i> GitHub
-                                </a>
-                            </div>
-                            <p class="text-muted mb-0 small">A survey platform built to bridge the gap between researchers and participants.</p>
+                        <!-- GitHub Button -->
+                        <a href="https://github.com/xinnsuu/DSASLYFJSHS/" class="btn btn-outline-primary btn-sm flex-shrink-0">
+                            <i class="bi bi-github me-1"></i> GitHub
+                        </a>
+                    </li>
+
+                    <!-- Project Item 2: inquestia -->
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3 ps-4 pe-4">
+                        <div class="me-2">
+                            <h6 class="mb-0 fw-semibold">inquestia</h6>
+                            <p class="text-muted small mb-0">A survey platform built to bridge the gap between researchers and participants.</p>
                         </div>
-                    </div>
-                </div>
+                        <!-- GitHub Button -->
+                        <a href="https://github.com/kalachuuchiiii/inquestia" class="btn btn-outline-primary btn-sm flex-shrink-0">
+                            <i class="bi bi-github me-1"></i> GitHub
+                        </a>
+                    </li>
+
+                </ul>
             </div>
         </div>
     </div>
