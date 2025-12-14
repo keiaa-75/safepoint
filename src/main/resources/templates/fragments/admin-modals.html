@@ -6,12 +6,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
 <!-- Admin Creation Modal -->
 <div th:fragment="create-admin-modal" class="modal fade" id="createAdminModal" tabindex="-1" aria-labelledby="createAdminModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createAdminModalLabel">
-                    <i class="bi bi-person-plus me-2"></i>Create New Admin
-                </h5>
+                <h5 class="modal-title" id="createAdminModalLabel">Create New Admin</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="createAdminForm" th:action="@{/admin/create-admin}" method="post">
@@ -44,12 +42,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
 <!-- Confirmation Modal -->
 <div th:fragment="confirm-modal" class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmModalLabel">
-                    <i class="bi bi-exclamation-triangle me-2"></i>Confirm Action
-                </h5>
+                <h5 class="modal-title" id="confirmModalLabel">Confirm Action</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
