@@ -26,18 +26,40 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                             Logged in as an administrator. Please secure your session before stepping away.
                         </p>
                     </div>
-                    <form th:action="@{/admin/logout}" method="post">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" class="btn btn-danger btn-lg w-100">
-                            <i class="bi bi-box-arrow-right me-2"></i>Logout Now
+                    
+                    <!-- Success/Error Messages -->
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle me-2"></i><span th:text="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i><span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-flex flex-column flex-md-row gap-2">
+                        <button type="button" class="btn btn-primary btn-lg flex-fill order-2 order-md-1" data-bs-toggle="modal" data-bs-target="#createAdminModal">
+                            <i class="bi bi-person-plus me-2"></i>New Admin
                         </button>
-                    </form>
+                        <form th:action="@{/admin/logout}" method="post" class="flex-fill order-1 order-md-2">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-danger btn-lg w-100">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout Now
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modals -->
+    <div th:replace="~{fragments/admin-modals :: create-admin-modal}"></div>
+    <div th:replace="~{fragments/admin-modals :: confirm-modal}"></div>
+
     <div th:replace="~{fragments/admin-common :: scripts}"></div>
+    <div th:replace="~{fragments/admin-modals :: admin-modal-scripts}"></div>
 
 </body>
 </html>

@@ -219,4 +219,29 @@ public class AdminController {
 
         return "redirect:/admin/appointment/" + id;
     }
+
+    /**
+     * Creates a new admin user.
+     *
+     * @param username the username for the new admin
+     * @param password the password for the new admin
+     * @param redirectAttributes attributes to pass to the redirected page
+     * @return redirect to admin about page
+     */
+    @PostMapping("/admin/create-admin")
+    public String createAdmin(@RequestParam("username") String username,
+                              @RequestParam("password") String password,
+                              RedirectAttributes redirectAttributes) {
+        try {
+            String sanitizedUsername = inputSanitizer.sanitize(username);
+            String sanitizedPassword = inputSanitizer.sanitize(password);
+            
+            adminService.createAdmin(sanitizedUsername, sanitizedPassword);
+            redirectAttributes.addFlashAttribute("success", "Admin created successfully");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to create admin");
+        }
+
+        return "redirect:/admin/about";
+    }
 }
