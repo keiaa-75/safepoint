@@ -25,7 +25,15 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                 <span th:text="${#strings.substringBefore(report.reportId, '-')}" class="d-inline d-sm-none"></span>
                                 <span th:text="${report.reportId}" class="d-none d-sm-inline"></span>
                             </span>
-                            <span class="badge rounded-pill" th:classappend="${report.status.displayName == 'Pending Review' ? 'bg-warning text-dark' : (report.status.displayName == 'Under Review' ? 'bg-info text-dark' : (report.status.displayName == 'Resolved' ? 'bg-success' : 'bg-secondary'))}" th:text="${report.status.displayName}"></span>
+                            <div class="d-flex align-items-center">
+                                <!-- Desktop: status badge -->
+                                <span class="status-badge d-none d-md-inline" 
+                                      th:class="'status-badge d-none d-md-inline status-' + ${#strings.replace(#strings.toLowerCase(report.status.name()), '_', '-')}" 
+                                      th:text="${report.status.displayName}"></span>
+                                <!-- Mobile: circular pill -->
+                                <span class="status-pill d-md-none" 
+                                      th:class="'status-pill d-md-none status-' + ${#strings.replace(#strings.toLowerCase(report.status.name()), '_', '-')}"></span>
+                            </div>
                         </a>
                     </div>
                 </div>

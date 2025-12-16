@@ -57,7 +57,17 @@
     color: #8B6914;
 }
 
+.status-badge.status-pending-review {
+    background-color: var(--status-pending);
+    color: #8B6914;
+}
+
 .status-badge.status-confirmed {
+    background-color: var(--status-under-review);
+    color: #1E3A8A;
+}
+
+.status-badge.status-under-review {
     background-color: var(--status-under-review);
     color: #1E3A8A;
 }
@@ -67,7 +77,17 @@
     color: #166534;
 }
 
+.status-badge.status-resolved {
+    background-color: var(--status-resolved);
+    color: #166534;
+}
+
 .status-badge.status-cancelled {
+    background-color: var(--status-rejected);
+    color: #BE185D;
+}
+
+.status-badge.status-rejected {
     background-color: var(--status-rejected);
     color: #BE185D;
 }
