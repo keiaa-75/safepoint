@@ -8,9 +8,9 @@ package com.keiaa.safepoint.model.enums;
 
 public enum ReportStatus {
     PENDING_REVIEW("Pending Review"),
-    UNDER_INVESTIGATION("Under Investigation"),
-    ACTION_TAKEN("Action Taken"),
-    RESOLVED("Resolved");
+    UNDER_REVIEW("Under Review"),
+    RESOLVED("Resolved"),
+    REJECTED("Rejected");
 
     private final String displayName;
 

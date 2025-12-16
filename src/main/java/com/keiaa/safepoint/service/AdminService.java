@@ -61,7 +61,7 @@ public class AdminService {
     public Map<String, Object> getDashboardStatistics() {
         Map<String, Object> stats = new HashMap<>();
         
-        stats.put("pendingReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.PENDING_REVIEW, ReportStatus.UNDER_INVESTIGATION, ReportStatus.ACTION_TAKEN)));
+        stats.put("pendingReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.PENDING_REVIEW, ReportStatus.UNDER_REVIEW)));
         stats.put("resolvedReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.RESOLVED)));
         stats.put("totalAppointmentsCount", appointmentRepository.count());
         stats.put("resolvedAppointmentsCount", appointmentRepository.countByPreferredDateTimeBefore(LocalDateTime.now()));

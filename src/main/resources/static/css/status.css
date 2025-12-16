@@ -27,7 +27,7 @@
     background-color: var(--status-pending);
 }
 
-.status-under-investigation,
+.status-under-review,
 .status-confirmed {
     background-color: var(--status-under-review);
 }

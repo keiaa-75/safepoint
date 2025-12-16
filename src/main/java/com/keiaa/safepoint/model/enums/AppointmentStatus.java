@@ -9,5 +9,6 @@ package com.keiaa.safepoint.model.enums;
 public enum AppointmentStatus {
     PENDING,
     CONFIRMED,
-    COMPLETED
+    COMPLETED,
+    CANCELLED
 }
