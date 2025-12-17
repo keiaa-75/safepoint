@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.keiaa.safepoint.model.Admin;
@@ -99,6 +101,24 @@ public class AdminService {
     }
 
     /**
+     * Gets paginated reports with their associated history
+     * 
+     * @param pageable pagination information
+     * @return Page of reports with history
+     */
+    public Page<Report> getAllReportsWithHistory(Pageable pageable) {
+        Page<Report> reportsPage = reportRepository.findAllByOrderByTimestampDesc(pageable);
+        
+        // Fetch history for each report
+        reportsPage.getContent().forEach(report -> {
+            List<ReportHistory> history = reportHistoryRepository.findByReportIdOrderByTimestampDesc(report.getId());
+            report.setHistory(history);
+        });
+        
+        return reportsPage;
+    }
+
+    /**
      * Groups appointments by week for display
      * 
      * @return Map of weeks to appointments in that week
@@ -113,6 +133,16 @@ public class AdminService {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy");
                     return "Week of " + startOfWeek.format(formatter);
                 }, LinkedHashMap::new, Collectors.toList()));
+    }
+
+    /**
+     * Gets paginated appointments
+     * 
+     * @param pageable pagination information
+     * @return Page of appointments
+     */
+    public Page<Appointment> getAllAppointmentsPaginated(Pageable pageable) {
+        return appointmentRepository.findAllByOrderByPreferredDateTimeAsc(pageable);
     }
 
     /**

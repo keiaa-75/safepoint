@@ -9,6 +9,8 @@ package com.keiaa.safepoint.controller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,23 +58,25 @@ public class AdminController {
      * Displays all reports with their history.
      *
      * @param model the model to add reports to
+     * @param pageable pagination information
      * @return the name of the view template to render
      */
     @GetMapping("/admin/report")
-    public String showAdminReports(Model model) {
-        model.addAttribute("reports", adminService.getAllReportsWithHistory());
+    public String showAdminReports(Model model, @PageableDefault(size = 10, sort = "timestamp") Pageable pageable) {
+        model.addAttribute("reportsPage", adminService.getAllReportsWithHistory(pageable));
         return "admin-reports";
     }
 
     /**
-     * Displays all appointments grouped by week.
+     * Displays all appointments with pagination.
      *
      * @param model the model to add appointments to
+     * @param pageable pagination information
      * @return the name of the view template to render
      */
     @GetMapping("/admin/appointment")
-    public String showAdminAppointments(Model model) {
-        model.addAttribute("appointmentsByWeek", adminService.getAppointmentsGroupedByWeek());
+    public String showAdminAppointments(Model model, @PageableDefault(size = 10, sort = "preferredDateTime") Pageable pageable) {
+        model.addAttribute("appointmentsPage", adminService.getAllAppointmentsPaginated(pageable));
         return "admin-appointments";
     }
 

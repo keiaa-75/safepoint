@@ -1,0 +1,25 @@
+<!--
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+-->
+
+<div th:fragment="pagination(page, url)" th:if="${page.totalPages > 1}">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${page.first} ? 'disabled'">
+                <a class="page-link" th:href="${page.first} ? '#' : ${url + '?page=' + (page.number - 1) + '&size=' + page.size}">Previous</a>
+            </li>
+            
+            <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" 
+                class="page-item" 
+                th:classappend="${i == page.number} ? 'active'">
+                <a class="page-link" th:href="${url + '?page=' + i + '&size=' + page.size}" th:text="${i + 1}"></a>
+            </li>
+            
+            <li class="page-item" th:classappend="${page.last} ? 'disabled'">
+                <a class="page-link" th:href="${page.last} ? '#' : ${url + '?page=' + (page.number + 1) + '&size=' + page.size}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
