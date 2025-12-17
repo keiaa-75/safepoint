@@ -21,10 +21,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 <div class="list-group" th:unless="${#lists.isEmpty(reports)}">
                     <div th:each="report : ${reports}" class="mb-2">
                         <a th:href="@{/admin/report/{id}(id=${report.reportId})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            <span>
-                                <span th:text="${#strings.substringBefore(report.reportId, '-')}" class="d-inline d-sm-none"></span>
-                                <span th:text="${report.reportId}" class="d-none d-sm-inline"></span>
-                            </span>
+                            <span th:text="${report.reportId}"></span>
                             <div class="d-flex align-items-center">
                                 <!-- Desktop: status badge -->
                                 <span class="status-badge d-none d-md-inline" 
