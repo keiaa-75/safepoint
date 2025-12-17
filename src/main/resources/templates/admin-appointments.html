@@ -32,7 +32,8 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                     <a th:each="appointment : ${weekEntry.value}" th:href="@{/admin/appointment/{id}(id=${appointment.id})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                         <span class="fw-bold" th:text="${appointment.name}"></span>
                                         <div class="d-flex align-items-center">
-                                            <span class="ms-auto pe-3" th:text="${#temporals.format(appointment.preferredDateTime, 'E, dd-MMM-yyyy HH:mm')}"></span>
+                                            <span class="ms-auto pe-3 d-none d-md-inline" th:text="${#temporals.format(appointment.preferredDateTime, 'E, dd-MMM-yyyy HH:mm')}"></span>
+                                            <span class="ms-auto pe-3 d-md-none" th:text="${#temporals.format(appointment.preferredDateTime, 'E-dd HH:mm')}"></span>
                                             <div class="status-pill" 
                                                  th:classappend="${'status-' + #strings.replace(#strings.toLowerCase(appointment.status.name()), '_', '-')}"></div>
                                         </div>
