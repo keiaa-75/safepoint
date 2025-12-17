@@ -62,7 +62,7 @@ public class AdminController {
      * @return the name of the view template to render
      */
     @GetMapping("/admin/report")
-    public String showAdminReports(Model model, @PageableDefault(size = 10, sort = "timestamp") Pageable pageable) {
+    public String showAdminReports(Model model, @PageableDefault(size = 12, sort = "timestamp") Pageable pageable) {
         model.addAttribute("reportsPage", adminService.getAllReportsWithHistory(pageable));
         return "admin-reports";
     }
