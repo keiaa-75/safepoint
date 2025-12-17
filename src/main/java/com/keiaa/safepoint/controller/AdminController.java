@@ -75,7 +75,7 @@ public class AdminController {
      * @return the name of the view template to render
      */
     @GetMapping("/admin/appointment")
-    public String showAdminAppointments(Model model, @PageableDefault(size = 10, sort = "preferredDateTime") Pageable pageable) {
+    public String showAdminAppointments(Model model, @PageableDefault(size = 12, sort = "preferredDateTime") Pageable pageable) {
         model.addAttribute("appointmentsPage", adminService.getAllAppointmentsPaginated(pageable));
         return "admin-appointments";
     }
