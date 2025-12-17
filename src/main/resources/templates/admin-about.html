@@ -39,12 +39,12 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                     
                     <!-- Action Buttons -->
                     <div class="d-flex flex-column flex-md-row gap-2">
-                        <button type="button" class="btn btn-primary btn-lg flex-fill order-2 order-md-1" data-bs-toggle="modal" data-bs-target="#createAdminModal">
+                        <button type="button" class="btn btn-primary flex-fill order-1 order-md-1" data-bs-toggle="modal" data-bs-target="#createAdminModal">
                             <i class="bi bi-person-plus me-2"></i>New Admin
                         </button>
-                        <form th:action="@{/admin/logout}" method="post" class="flex-fill order-1 order-md-2">
+                        <form th:action="@{/admin/logout}" method="post" class="flex-fill order-2 order-md-2">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                            <button type="submit" class="btn btn-danger btn-lg w-100">
+                            <button type="submit" class="btn btn-danger w-100">
                                 <i class="bi bi-box-arrow-right me-2"></i>Logout Now
                             </button>
                         </form>
