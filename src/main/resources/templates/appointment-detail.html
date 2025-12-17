@@ -90,7 +90,16 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
     const rescheduleModal = document.getElementById('rescheduleModal');
     rescheduleModal.addEventListener('shown.bs.modal', function () {
-        initializeFlatpickr('#newDate', { static: true });
+        setTimeout(() => {
+            initializeFlatpickr('#newDate', {
+                maxDate: new Date().getFullYear() + "-12-31",
+                disableMobile: false,  // Enable mobile support
+                allowInput: true
+            });
+        }, 100);
+
+        const dateInput = document.getElementById('newDate');
+        dateInput.classList.add('form-control');
     });
 </script>
 </body>

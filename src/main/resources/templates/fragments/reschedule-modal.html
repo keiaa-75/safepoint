@@ -15,14 +15,13 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 <form id="reschedule-form" th:action="@{/admin/appointment/reschedule/{id}(id=${appointment.id})}" method="post">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="newDate" class="form-label small text-muted">New Date</label>
+                            <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="newDate" name="newDate" placeholder="Select a date" required>
+                                <label for="newDate" class="small text-muted">New Date</label>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="newTime" class="form-label small text-muted">New Time</label>
+                            <div class="form-floating mb-3">
                                 <select class="form-select" id="newTime" name="newTime" required>
                                     <option value="" disabled selected>Select a time</option>
                                     <option value="09:00">9:00 AM</option>
@@ -32,6 +31,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                     <option value="15:00">3:00 PM</option>
                                     <option value="16:00">4:00 PM</option>
                                 </select>
+                                <label for="newTime" class="small text-muted">New Time</label>
                             </div>
                         </div>
                     </div>
