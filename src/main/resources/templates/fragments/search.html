@@ -1,0 +1,15 @@
+<!-- Search Input -->
+<div th:fragment="searchInput(placeholder)" class="mb-3">
+    <input type="text" class="form-control" id="searchInput" th:placeholder="${placeholder}">
+</div>
+
+<!-- Search Script -->
+<script th:fragment="searchScript(selector)" th:inline="javascript">
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        document.querySelectorAll([[${selector}]]).forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(query) ? '' : 'none';
+        });
+    });
+</script>
