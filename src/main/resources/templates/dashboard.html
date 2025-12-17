@@ -35,6 +35,11 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                     </li>
                 </ul>
 
+                <!-- Search -->
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search reports and appointments...">
+                </div>
+
                 <!-- Tab Content -->
                 <div class="tab-content" id="dashboardTabContent">
                     <!-- Reports Tab -->
@@ -82,5 +87,15 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
     <div th:replace="~{fragments/status-help-modal :: statusHelpModal}"></div>
     <div th:replace="~{fragments/common :: scripts}"></div>
+    
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('.dash-item').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+    </script>
 </body>
 </html>
