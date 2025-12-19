@@ -43,7 +43,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                     <div class="tab-pane fade show active" id="reports" role="tabpanel">
                         <div class="dash-container">
                             <div th:if="${!reports.empty}" class="dash-list">
-                                <div class="dash-item" th:each="report : ${reports}">
+                                <div class="dash-item" th:each="report : ${reports}" 
+                                     style="cursor: pointer;" 
+                                     data-bs-toggle="modal" 
+                                     th:data-bs-target="'#reportModal' + ${report.id}">
                                     <div class="status-pill" 
                                          th:classappend="${'status-' + #strings.replace(#strings.toLowerCase(report.status.name()), '_', '-')}"></div>
                                     <div class="dash-content">
@@ -59,7 +62,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                     <div class="tab-pane fade" id="appointments" role="tabpanel">
                         <div class="dash-container">
                             <div th:if="${!appointments.empty}" class="dash-list">
-                                <div class="dash-item" th:each="appointment : ${appointments}">
+                                <div class="dash-item" th:each="appointment : ${appointments}"
+                                     style="cursor: pointer;"
+                                     data-bs-toggle="modal"
+                                     th:data-bs-target="'#appointmentModal' + ${appointment.id}">
                                     <div class="status-pill" 
                                          th:classappend="${'status-' + #strings.replace(#strings.toLowerCase(appointment.status.name()), '_', '-')}"></div>
                                     <div class="dash-content">
@@ -80,6 +86,16 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Report Modals -->
+    <div th:each="report : ${reports}">
+        <div th:replace="~{fragments/dashboard-modals :: reportModal(${report})}"></div>
+    </div>
+
+    <!-- Appointment Modals -->
+    <div th:each="appointment : ${appointments}">
+        <div th:replace="~{fragments/dashboard-modals :: appointmentModal(${appointment})}"></div>
     </div>
 
     <div th:replace="~{fragments/status-help-modal :: statusHelpModal}"></div>

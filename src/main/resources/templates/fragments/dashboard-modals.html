@@ -1,0 +1,69 @@
+<!--
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://mozilla.org/MPL/2.0/.
+-->
+
+<!-- Report Detail Modal -->
+<div th:fragment="reportModal(report)" class="modal fade" th:id="'reportModal' + ${report.id}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Report Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <span class="badge" 
+                          th:classappend="${'bg-' + (report.status.name() == 'PENDING_REVIEW' ? 'warning' : 
+                                                    report.status.name() == 'RESOLVED' ? 'success' : 
+                                                    report.status.name() == 'UNDER_REVIEW' ? 'primary' : 'secondary')}"
+                          th:text="${#strings.replace(report.status.name(), '_', ' ')}"></span>
+                </div>
+                <div class="mb-3">
+                    <strong>Submitted:</strong> 
+                    <span th:text="${#temporals.format(report.timestamp, 'MMMM dd, yyyy hh:mma')}"></span>
+                </div>
+                <div class="mb-3">
+                    <strong>Category:</strong> 
+                    <span th:text="${report.category}"></span>
+                </div>
+                <div class="mb-3">
+                    <strong>Description:</strong>
+                    <p class="mt-2" th:text="${report.description}"></p>
+                </div>
+                <div th:if="${report.history != null and !report.history.empty}">
+                    <strong>Status History:</strong>
+                    <div class="mt-2">
+                        <div th:each="history : ${report.history}" class="small text-muted mb-1">
+                            <span th:text="${#temporals.format(history.timestamp, 'MMM dd, yyyy hh:mm a')}"></span> - 
+                            <span th:text="${#strings.replace(history.newStatus.name(), '_', ' ')}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Appointment Detail Modal -->
+<div th:fragment="appointmentModal(appointment)" class="modal fade" th:id="'appointmentModal' + ${appointment.id}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Appointment Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <strong>Preferred Date & Time:</strong> 
+                    <span th:text="${#temporals.format(appointment.preferredDateTime, 'MMMM dd, yyyy hh:mma')}"></span>
+                </div>
+                <div class="mb-3">
+                    <strong>Reason for Appointment:</strong>
+                    <p class="mt-2" th:text="${appointment.reason}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
