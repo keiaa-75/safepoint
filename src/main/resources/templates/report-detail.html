@@ -14,7 +14,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <div class="container py-4 py-md-5" style="max-width: 1200px;">
     <div class="card shadow-sm">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <h2 class="text-primary mb-0" th:text="'Report #' + ${report.reportId}"></h2>
+            <h2 class="text-primary mb-0">
+                <span class="d-none d-md-inline" th:text="'Report #' + ${report.reportId}"></span>
+                <span class="d-md-none" th:text="'#' + ${report.reportId}"></span>
+            </h2>
             <!-- Desktop: expanded badge -->
             <span class="status-badge d-none d-md-inline" 
                   th:class="'status-badge d-none d-md-inline status-' + ${#strings.replace(#strings.toLowerCase(report.status.name()), '_', '-')}" 
