@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.keiaa</groupId>
 	<artifactId>safepoint</artifactId>
-	<version>0.2.2-beta</version>
+	<version>0.2.3-beta</version>
 	<name>SafePoint</name>
 	<description>A safe reporting platform for students to report bullying and schedule counseling.</description>
 	<url/>
