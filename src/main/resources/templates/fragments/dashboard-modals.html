@@ -6,7 +6,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 <!-- Report Detail Modal -->
 <div th:fragment="reportModal(report)" class="modal fade" th:id="'reportModal' + ${report.id}" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable mx-2 mx-md-auto">
         <div class="modal-content">
             <div class="modal-header bg-white d-flex justify-content-between align-items-center">
                 <h5 class="text-primary mb-0">
@@ -82,7 +82,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 <!-- Appointment Detail Modal -->
 <div th:fragment="appointmentModal(appointment)" class="modal fade" th:id="'appointmentModal' + ${appointment.id}" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable mx-2 mx-md-auto">
         <div class="modal-content">
             <div class="modal-header bg-white d-flex justify-content-between align-items-center">
                 <h5 class="text-primary mb-0" th:text="'Appointment #' + ${appointment.id}"></h5>
