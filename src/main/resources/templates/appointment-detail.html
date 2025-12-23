@@ -56,7 +56,15 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 <!-- Action buttons - top on mobile, right on desktop -->
                 <div class="d-flex gap-2 order-1 order-md-2">
                     <form th:if="${appointment.status.name() == 'PENDING'}" id="confirm-form" th:action="@{/admin/appointment/confirm/{id}(id=${appointment.id})}" method="post" class="flex-fill flex-md-grow-0">
-                        <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#confirmationModal">Confirm</button>
+                        <button type="button" 
+                                th:if="${appointment.preferredDateTime.isAfter(T(java.time.LocalDateTime).now())}"
+                                class="btn btn-success w-100" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#confirmationModal">Confirm</button>
+                        <button type="button" 
+                                th:unless="${appointment.preferredDateTime.isAfter(T(java.time.LocalDateTime).now())}"
+                                class="btn btn-secondary w-100" 
+                                disabled>Past Due</button>
                     </form>
                     <button th:if="${appointment.status.name() != 'COMPLETED'}" type="button" class="btn btn-warning flex-fill flex-md-grow-0" data-bs-toggle="modal" data-bs-target="#rescheduleModal">Reschedule</button>
                     <form th:if="${appointment.status.name() == 'CONFIRMED'}" id="complete-form" th:action="@{/admin/appointment/complete/{id}(id=${appointment.id})}" method="post" class="flex-fill flex-md-grow-0">
