@@ -2,26 +2,103 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>SafePoint Email Verification</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafePoint - Email Verification</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #F6F5F4;
+            color: #414141;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(65, 65, 65, 0.1);
+        }
+        
+        .header {
+            background-color: #3fB6DC;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 32px 24px;
+        }
+        
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #3fB6DC;
+            color: white !important;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            margin: 16px 0;
+        }
+        
+        .btn-center {
+            text-align: center;
+        }
+        
+        .footer {
+            background-color: #F6F5F4;
+            padding: 20px 24px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .content { padding: 24px 16px; }
+            .btn { display: block; text-align: center; }
+        }
+    </style>
 </head>
 <body>
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #2c3e50;">Welcome to SafePoint, <span th:text="${name}">User</span>!</h2>
-        <p>Thank you for registering with SafePoint. Please click the link below to verify your email address:</p>
-        <p style="text-align: center; margin: 30px 0;">
-            <a href="#" th:href="${verificationUrl}" 
-               style="background-color: #3498db; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
-               Verify Email Address
-            </a>
-        </p>
-        <p>If you're having trouble clicking the button, copy and paste the following link into your browser:</p>
-        <p><a href="#" th:href="${verificationUrl}" style="word-break: break-all;" th:text="${verificationUrl}">Verification URL</a></p>
-        <p>This link will expire in 24 hours.</p>
-        <p>If you didn't sign up for SafePoint, please ignore this email.</p>
-        <hr style="margin: 30px 0; border: none; border-top: 1px solid #ecf0f1;">
-        <p style="color: #7f8c8d; font-size: 12px;">
-            This email was sent to you because you signed up for SafePoint. Please do not reply to this email.
-        </p>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">SafePoint</h1>
+        </div>
+        <div class="content">
+            <p class="greeting">Welcome to SafePoint, <span th:text="${name}">User</span>!</p>
+            <p>Thank you for registering with SafePoint. Please click the link below to verify your email address:</p>
+            
+            <div class="btn-center">
+                <a href="#" th:href="${verificationUrl}" class="btn">Verify Email Address</a>
+            </div>
+            
+            <p>If you're having trouble clicking the button, copy and paste the following link into your browser:</p>
+            <p><a href="#" th:href="${verificationUrl}" style="word-break: break-all;" th:text="${verificationUrl}">Verification URL</a></p>
+            <p>This link will expire in 24 hours.</p>
+            <p>If you didn't sign up for SafePoint, please ignore this email.</p>
+        </div>
+        <div class="footer">
+            <p>SafePoint - Your Safe Space for Support</p>
+            <p>This is an automated message. Please do not reply.</p>
+        </div>
     </div>
 </body>
 </html>

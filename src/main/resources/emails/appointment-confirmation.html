@@ -1,12 +1,111 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafePoint - Appointment Request Received</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #F6F5F4;
+            color: #414141;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(65, 65, 65, 0.1);
+        }
+        
+        .header {
+            background-color: #3fB6DC;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 32px 24px;
+        }
+        
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .details {
+            background-color: #F6F5F4;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        
+        .details h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .details ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .details li {
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            background-color: #F6F5F4;
+            padding: 20px 24px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .content { padding: 24px 16px; }
+        }
+    </style>
+</head>
 <body>
-<p>Dear <span th:text="${name}"></span>,</p>
-<p>We have received your request for a counseling session. We will review your preferred time and get back to you shortly to confirm the schedule.</p>
-<h3>Your Request Details:</h3>
-<ul>
-<li><strong>Preferred Date and Time:</strong> <span th:text="${preferredDateTime}"></span></li>
-<li><strong>Reason for Session:</strong> <span th:text="${reason}"></span></li>
-</ul>
+    <div class="container">
+        <div class="header">
+            <img src="cid:logo" alt="SafePoint" style="height: 40px; margin-bottom: 8px;">
+            <h1 class="logo">SafePoint</h1>
+        </div>
+        <div class="content">
+            <p class="greeting">Dear <span th:text="${name}"></span>,</p>
+            <p>We have received your request for a counseling session. We will review your preferred time and get back to you shortly to confirm the schedule.</p>
+            
+            <div class="details">
+                <h3>Your Request Details:</h3>
+                <ul>
+                    <li><strong>Preferred Date and Time:</strong> <span th:text="${preferredDateTime}"></span></li>
+                    <li><strong>Reason for Session:</strong> <span th:text="${reason}"></span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer">
+            <p>SafePoint - Your Safe Space for Support</p>
+            <p>This is an automated message. Please do not reply.</p>
+        </div>
+    </div>
 </body>
 </html>
