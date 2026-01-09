@@ -49,6 +49,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
                 <!-- Login Form -->
                 <form th:action="@{/student-login}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <div class="auth-form-floating">
                         <label for="email">Email</label>
                         <input type="email" class="form-control" id="email" name="username" placeholder="Enter your email" required>
