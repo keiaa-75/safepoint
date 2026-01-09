@@ -62,7 +62,7 @@ public class SecurityConfig {
     public SecurityFilterChain studentFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/files/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico",
+                .requestMatchers("/", "/files/**", "/css/**", "/js/**", "/img/**", "/images/**", "/webjars/**", "/favicon.ico",
                     "/manifest.json", "/service-worker.js", "/about", "/student-signup", "/student-login", "/admin-login",
                     "/verify-email", "/resend-verification", "/forgot-password", "/reset-password").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
