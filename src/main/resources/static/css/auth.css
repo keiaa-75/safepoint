@@ -62,7 +62,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: var(--sp-spacing-xl) var(--sp-spacing-lg);
+    padding: var(--sp-spacing-lg) var(--sp-spacing-md);
 }
 
 .auth-logo-container {
@@ -73,8 +73,8 @@ body {
 }
 
 .auth-logo {
-    width: 80px;
-    height: 80px;
+    width: clamp(60px, 15vw, 80px);
+    height: clamp(60px, 15vw, 80px);
 }
 
 .auth-brand-text {
@@ -82,14 +82,14 @@ body {
 }
 
 .auth-brand-text .welcome {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
     color: var(--auth-brand-color);
     font-weight: 400;
     font-family: 'Inter', sans-serif;
 }
 
 .auth-brand-text .brand-name {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 4vw, 2rem);
     font-weight: 700;
     font-family: 'Inter', sans-serif;
 }
@@ -109,7 +109,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--sp-spacing-xl) var(--sp-spacing-lg);
+    padding: var(--sp-spacing-lg) var(--sp-spacing-md);
     flex: 1;
     overflow: hidden;
 }
@@ -128,7 +128,7 @@ body {
     position: relative;
     z-index: 10;
     width: 100%;
-    max-width: 320px;
+    max-width: calc(100% - 2rem);
 }
 
 /* Tab Switcher */
@@ -208,7 +208,7 @@ body {
 }
 
 .auth-forgot-link:hover {
-    text-decoration: underline;
+    opacity: 0.8;
 }
 
 .auth-btn {
@@ -223,6 +223,14 @@ body {
     cursor: pointer;
     transition: background-color 0.2s;
     font-family: 'Inter', sans-serif;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: normal;
+    line-height: 1.4;
+    word-wrap: break-word;
+    text-align: center;
 }
 
 .auth-btn:hover {
@@ -245,7 +253,7 @@ body {
 }
 
 .auth-additional-links a:hover {
-    text-decoration: underline;
+    opacity: 0.8;
 }
 
 /* Admin Badge - Only admin-specific override */
@@ -321,7 +329,41 @@ body {
     box-shadow: var(--sp-shadow-box-md);
 }
 
-.status-icon {
+/* Auth Status Card - Centered in viewport */
+.auth-status-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: var(--sp-bg-white);
+    border-radius: var(--sp-radius-xl);
+    padding: var(--sp-spacing-xl);
+    box-shadow: var(--sp-shadow-box-lg);
+    width: 100%;
+    max-width: calc(100% - 2rem);
+    margin: 0 auto;
+}
+
+.auth-status-action {
+    width: 100%;
+    margin-top: var(--sp-spacing-lg);
+    text-align: center;
+}
+
+.auth-status-action .auth-btn {
+    min-height: 48px;
+    height: auto;
+    text-align: center;
+    line-height: 1.4;
+    padding: var(--sp-spacing-md) var(--sp-spacing-lg);
+    white-space: normal;
+    word-wrap: break-word;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Status Icon */
     width: 80px;
     height: 80px;
     margin: 0 auto var(--sp-spacing-lg);
@@ -343,10 +385,10 @@ body {
 }
 
 .status-title {
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
     font-weight: 700;
     color: var(--auth-brand-dark);
-    margin-bottom: var(--sp-spacing-sm);
+    margin-bottom: var(--sp-spacing-lg);
     font-family: 'Inter', sans-serif;
 }
 
@@ -378,6 +420,20 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 479px) {
+    .auth-btn {
+        font-size: 0.875rem;
+        padding: var(--sp-spacing-sm) var(--sp-spacing-md);
+        min-height: 44px;
+    }
+    
+    .auth-status-action .auth-btn {
+        font-size: 0.875rem;
+        padding: var(--sp-spacing-sm) var(--sp-spacing-md);
+        min-height: 44px;
+    }
+}
+
 @media (min-width: 768px) {
     .auth-container {
         flex-direction: row;
@@ -388,18 +444,18 @@ body {
         padding: 3rem;
     }
 
-    .auth-logo {
-        width: 120px;
-        height: 120px;
-    }
+        .auth-logo {
+            width: clamp(80px, 15vw, 120px);
+            height: clamp(80px, 15vw, 120px);
+        }
 
-    .auth-brand-text .welcome {
-        font-size: 1.5rem;
-    }
+        .auth-brand-text .welcome {
+            font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+        }
 
-    .auth-brand-text .brand-name {
-        font-size: 2.5rem;
-    }
+        .auth-brand-text .brand-name {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+        }
 
     .auth-form-section {
         width: 50%;
@@ -408,5 +464,9 @@ body {
 
     .auth-form-container {
         max-width: 360px;
+    }
+    
+    .auth-status-card {
+        max-width: 320px;
     }
 }
