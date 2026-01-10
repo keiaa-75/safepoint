@@ -10,16 +10,16 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <head>
     <link rel="stylesheet" href="/css/auth.css">
 </head>
-<body>
-    <div class="admin-auth-container">
+<body class="admin-theme">
+    <div class="auth-container">
         <!-- Left Branding Section -->
-        <div class="admin-auth-branding">
+        <div class="auth-branding">
             <div class="auth-logo-container">
                 <div class="admin-logo-wrapper">
                     <img src="/img/safepoint.webp" alt="SafePoint Admin" class="auth-logo">
                     <div class="admin-badge">🛡</div>
                 </div>
-                <div class="admin-brand-text">
+                <div class="auth-brand-text">
                     <p class="welcome">Admin Portal</p>
                     <h1 class="brand-name">
                         <span class="safe">Safe</span><span class="point">Point</span>
@@ -29,8 +29,8 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         </div>
 
         <!-- Right Form Section -->
-        <div class="admin-form-section">
-            <div class="admin-diagonal-overlay"></div>
+        <div class="auth-form-section">
+            <div class="auth-diagonal-overlay"></div>
             <div class="auth-form-container">
                 <!-- Alert Messages -->
                 <div th:if="${error}" class="alert alert-danger" role="alert">

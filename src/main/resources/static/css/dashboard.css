@@ -6,10 +6,10 @@
 
 /* Dashboard Styles */
 .dash-container {
-    border: 1px solid #dee2e6;
-    border-radius: 0.375rem;
+    border: 1px solid var(--sp-border-medium);
+    border-radius: var(--sp-radius-sm);
     min-height: 200px;
-    background-color: #f8f9fa; /* light gray */
+    background-color: var(--sp-bg-light);
 }
 
 .dash-list {
@@ -21,11 +21,11 @@
 .dash-item {
     display: flex;
     align-items: center;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    background-color: white;
-    border-radius: 0.375rem;
-    border: 1px solid #e9ecef;
+    padding: var(--sp-spacing-md);
+    margin-bottom: var(--sp-spacing-sm);
+    background-color: var(--sp-bg-white);
+    border-radius: var(--sp-radius-sm);
+    border: 1px solid var(--sp-border-light);
 }
 
 .dash-item:last-child {
@@ -40,7 +40,7 @@
 
 .report-id {
     font-size: 0.875rem;
-    color: #6c757d;
+    color: var(--sp-text-muted);
 }
 
 .tab-content {

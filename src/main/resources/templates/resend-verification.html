@@ -7,21 +7,55 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/common :: head(title='Request Email Verification')}"></head>
-<body class="d-flex justify-content-center align-items-center min-vh-100 p-3">
-    <div class="login-card">
-        <h1 class="text-center fw-bold mb-3">Request Email Verification</h1>
-        <p class="text-center text-muted mb-4">Haven't received your verification email? Enter your email address to request a new one.</p>
-        
-        <form th:action="@{/resend-verification}" th:object="${emailRequest}" method="post">
-            <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" name="email" th:field="*{email}" placeholder="Email" required>
-                <label for="email">Email</label>
+<head>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Left Branding Section -->
+        <div class="auth-branding">
+            <div class="auth-logo-container">
+                <img src="/img/safepoint.webp" alt="SafePoint Logo" class="auth-logo">
+                <div class="auth-brand-text">
+                    <p class="welcome">Email Verification</p>
+                    <h1 class="brand-name">
+                        <span class="safe">Safe</span><span class="point">Point</span>
+                    </h1>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary w-100 mb-3">Resend Verification Email</button>
-        </form>
-        
-        <div class="text-center">
-            <a href="/student-login">Back to Login</a>
+        </div>
+
+        <!-- Right Form Section -->
+        <div class="auth-form-section">
+            <div class="auth-diagonal-overlay"></div>
+            <div class="auth-form-container">
+                <!-- Alert Messages -->
+                <div th:if="${success}" class="alert alert-success" role="alert">
+                    <span th:text="${success}"></span>
+                </div>
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <span th:text="${error}"></span>
+                </div>
+
+                <!-- Resend Verification Form -->
+                <form th:action="@{/resend-verification}" th:object="${emailRequest}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    
+                    <div class="auth-form-floating">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" th:field="*{email}" placeholder="Enter your email address" required>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">Resend Verification Email</button>
+                </form>
+
+                <!-- Additional Links -->
+                <div class="auth-additional-links">
+                    <p>Already have the code?</p>
+                    <a href="/email-verification">Enter verification code</a>
+                    <a href="/student-login">Back to Login</a>
+                </div>
+            </div>
         </div>
     </div>
 </body>

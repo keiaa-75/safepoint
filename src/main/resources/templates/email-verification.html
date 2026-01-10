@@ -6,29 +6,54 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head(title='Email Verification')}"></head>
 <head>
-    <meta charset="UTF-8">
-    <title>Email Verification Result</title>
+    <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card mt-5">
-                    <div class="card-body text-center">
-                        <h3 class="card-title" th:text="${title}">Verification Result</h3>
-                        <p th:text="${message}">Verification message</p>
-                        
-                        <div th:if="${success}" class="alert alert-success" role="alert">
-                            Your email has been successfully verified! You can now log in to your account.
-                        </div>
-                        
-                        <div th:unless="${success}" class="alert alert-danger" role="alert">
-                            <p th:text="${errorMessage}">Error message</p>
-                        </div>
-                        
-                        <a href="/student-login" class="btn btn-primary">Go to Login</a>
+    <div class="auth-container">
+        <!-- Left Branding Section -->
+        <div class="auth-branding">
+            <div class="auth-logo-container">
+                <img src="/img/safepoint.webp" alt="SafePoint Logo" class="auth-logo">
+                <div class="auth-brand-text">
+                    <p class="welcome">Email Verification</p>
+                    <h1 class="brand-name">
+                        <span class="safe">Safe</span><span class="point">Point</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Form Section -->
+        <div class="auth-form-section">
+            <div class="auth-diagonal-overlay"></div>
+            <div class="auth-form-container">
+                <!-- Alert Messages -->
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <span th:text="${error}"></span>
+                </div>
+                <div th:if="${success}" class="alert alert-success" role="alert">
+                    <span th:text="${success}"></span>
+                </div>
+
+                <!-- Verification Form -->
+                <form th:action="@{/verify-email}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    
+                    <div class="auth-form-floating">
+                        <label for="code">Verification Code</label>
+                        <input type="text" class="form-control" id="code" name="code" placeholder="Enter the 6-digit code" required maxlength="6" pattern="[0-9]{6}">
                     </div>
+                    
+                    <button type="submit" class="auth-btn">Verify Email</button>
+                </form>
+
+                <!-- Additional Links -->
+                <div class="auth-additional-links">
+                    <p>Didn't receive the code?</p>
+                    <a href="/resend-verification">Request a new one</a>
+                    <a href="/student-login">Back to Login</a>
                 </div>
             </div>
         </div>

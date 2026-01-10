@@ -4,16 +4,77 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
+/* CSS Custom Properties - Design Tokens */
+:root {
+    /* Primary Colors */
+    --sp-primary: #0D6EFD;
+    --sp-primary-dark: #0b5ed7;
+    --sp-primary-teal: #22a7c0;
+    --sp-primary-teal-dark: #1a8fa5;
+    
+    /* Background Colors */
+    --sp-bg-light: #f8f9fa;
+    --sp-bg-white: #ffffff;
+    
+    /* Text Colors */
+    --sp-text-primary: #1f2937;
+    --sp-text-secondary: #6b7280;
+    --sp-text-muted: #6c757d;
+    
+    /* Border Colors */
+    --sp-border-light: #e9ecef;
+    --sp-border-medium: #dee2e6;
+    --sp-border-dark: #ced4da;
+    
+    /* Status Colors */
+    --sp-status-pending: #FFE5B4;
+    --sp-status-under-review: #B6D7FF;
+    --sp-status-resolved: #C5EAC5;
+    --sp-status-rejected: #FFC0CB;
+    
+    /* Status Text Colors */
+    --sp-status-pending-text: #8B6914;
+    --sp-status-under-review-text: #1E3A8A;
+    --sp-status-resolved-text: #166534;
+    --sp-status-rejected-text: #BE185D;
+    
+    /* Shadow Colors */
+    --sp-shadow-sm: rgba(0, 0, 0, 0.05);
+    --sp-shadow-md: rgba(0, 0, 0, 0.08);
+    --sp-shadow-lg: rgba(0, 0, 0, 0.1);
+    
+    /* Box Shadows */
+    --sp-shadow-box-sm: 0 2px 8px var(--sp-shadow-sm);
+    --sp-shadow-box-md: 0 4px 12px var(--sp-shadow-md);
+    --sp-shadow-box-lg: 0 8px 32px var(--sp-shadow-lg);
+    
+    /* Border Radius */
+    --sp-radius-sm: 0.375rem;
+    --sp-radius-md: 0.5rem;
+    --sp-radius-lg: 0.75rem;
+    --sp-radius-xl: 1rem;
+    --sp-radius-2xl: 1.5rem;
+    --sp-radius-full: 9999px;
+    
+    /* Spacing */
+    --sp-spacing-xs: 0.25rem;
+    --sp-spacing-sm: 0.5rem;
+    --sp-spacing-md: 1rem;
+    --sp-spacing-lg: 1.5rem;
+    --sp-spacing-xl: 2rem;
+    --sp-spacing-2xl: 2.5rem;
+}
+
 /* General Body & Layout */
 body {
     font-family: 'Inter', sans-serif;
     padding-bottom: 80px;
     text-align: left;
-    background-color: #f8f9fa; /* light gray */
+    background-color: var(--sp-bg-light);
 }
 
 body.admin-body {
-    background-color: #f8f9fa; /* light gray */
+    background-color: var(--sp-bg-light);
 }
 
 .content-container {
@@ -27,11 +88,11 @@ body.admin-body {
 }
 
 .content-card {
-    background-color: #fff; /* white */
-    border-radius: 1rem;
-    padding: 2.5rem;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-    border: 1px solid #e9ecef;
+    background-color: var(--sp-bg-white);
+    border-radius: var(--sp-radius-xl);
+    padding: var(--sp-spacing-2xl);
+    box-shadow: var(--sp-shadow-box-lg);
+    border: 1px solid var(--sp-border-light);
     min-height: 10vh;
     max-height: 120vh;
     display: flex;
@@ -41,10 +102,10 @@ body.admin-body {
 .login-card {
     max-width: 450px;
     width: 100%;
-    background: #fff; /* white */
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: var(--sp-bg-white);
+    padding: var(--sp-spacing-xl);
+    border-radius: var(--sp-radius-xl);
+    box-shadow: var(--sp-shadow-box-md);
 }
 
 /* Overlays & Alerts */
@@ -71,9 +132,9 @@ body.admin-body {
     top: 0;
     left: 0;
     right: 0;
-    background-color: #dc3545; /* danger */
+    background-color: var(--bs-danger);
     color: white;
-    padding: 0.75rem 1rem;
+    padding: var(--sp-spacing-md) var(--sp-spacing-xl);
     text-align: center;
     font-weight: 500;
     z-index: 9999;
@@ -95,8 +156,8 @@ body.admin-body {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #fff; /* white */
-    border-top: 1px solid #e9ecef;
+    background-color: var(--sp-bg-white);
+    border-top: 1px solid var(--sp-border-light);
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
@@ -108,7 +169,7 @@ body.admin-body {
     flex-direction: column;
     align-items: center;
     text-decoration: none;
-    color: #6c757d;
+    color: var(--sp-text-muted);
     font-size: 0.75rem;
     transition: color 0.2s;
 }
@@ -120,5 +181,35 @@ body.admin-body {
 
 .bottom-nav a.active,
 .bottom-nav a:hover {
-    color: #0D6EFD; /* primary */
+    color: var(--sp-primary);
+}
+
+/* Utility Classes */
+/* Box Shadows */
+.shadow-sp-sm { box-shadow: var(--sp-shadow-box-sm); }
+.shadow-sp-md { box-shadow: var(--sp-shadow-box-md); }
+.shadow-sp-lg { box-shadow: var(--sp-shadow-box-lg); }
+
+/* Border Radius */
+.rounded-sp-sm { border-radius: var(--sp-radius-sm); }
+.rounded-sp-md { border-radius: var(--sp-radius-md); }
+.rounded-sp-lg { border-radius: var(--sp-radius-lg); }
+.rounded-sp-xl { border-radius: var(--sp-radius-xl); }
+.rounded-sp-2xl { border-radius: var(--sp-radius-2xl); }
+
+/* Soft Background Colors */
+.bg-primary-soft { background-color: rgba(var(--bs-primary-rgb), 0.1); }
+.bg-success-soft { background-color: rgba(var(--bs-success-rgb), 0.1); }
+.bg-danger-soft { background-color: rgba(var(--bs-danger-rgb), 0.1); }
+.bg-info-soft { background-color: rgba(var(--bs-info-rgb), 0.1); }
+.bg-warning-soft { background-color: rgba(var(--bs-warning-rgb), 0.1); }
+
+/* Hover Effects */
+.hover-lift {
+    transition: all 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }

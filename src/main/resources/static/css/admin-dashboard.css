@@ -1,32 +1,23 @@
 .admin-body {
-    background-color: #f8f9fa;
+    background-color: var(--sp-bg-light);
 }
 
 .stat-card {
     border: none;
-    border-radius: 0.75rem;
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+    border-radius: var(--sp-radius-lg);
+    box-shadow: 0 0.25rem 0.5rem var(--sp-shadow-sm);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .stat-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-}
-
-.hover-lift {
-    transition: all 0.2s ease-in-out;
-}
-
-.hover-lift:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 0.5rem 1rem var(--sp-shadow-lg);
 }
 
 .icon-wrapper {
     width: 50px;
     height: 50px;
-    border-radius: 0.75rem;
+    border-radius: var(--sp-radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,23 +27,7 @@
     font-size: 1.75rem;
 }
 
-.bg-danger-soft {
-    background-color: rgba(var(--bs-danger-rgb), 0.1);
-}
-
-.bg-success-soft {
-    background-color: rgba(var(--bs-success-rgb), 0.1);
-}
-
-.bg-primary-soft {
-    background-color: rgba(var(--bs-primary-rgb), 0.1);
-}
-
-.bg-info-soft {
-    background-color: rgba(var(--bs-info-rgb), 0.1);
-}
-
 .card-header {
-    background-color: var(--bs-white);
-    border-bottom: 1px solid #dee2e6;
+    background-color: var(--sp-bg-white);
+    border-bottom: 1px solid var(--sp-border-medium);
 }

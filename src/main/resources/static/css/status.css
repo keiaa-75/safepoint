@@ -4,13 +4,7 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-/* Status Colors */
-:root {
-    --status-pending: #FFE5B4;       /* pastel yellow */
-    --status-under-review: #B6D7FF;  /* pastel blue */
-    --status-resolved: #C5EAC5;      /* pastel green */
-    --status-rejected: #FFC0CB;      /* pastel pink */
-}
+/* Status Colors - Now using design tokens from styles.css */
 
 .status-pill {
     width: 16px;
@@ -24,22 +18,22 @@
 
 .status-pending-review,
 .status-pending {
-    background-color: var(--status-pending);
+    background-color: var(--sp-status-pending);
 }
 
 .status-under-review,
 .status-confirmed {
-    background-color: var(--status-under-review);
+    background-color: var(--sp-status-under-review);
 }
 
 .status-resolved,
 .status-completed {
-    background-color: var(--status-resolved);
+    background-color: var(--sp-status-resolved);
 }
 
 .status-rejected,
 .status-cancelled {
-    background-color: var(--status-rejected);
+    background-color: var(--sp-status-rejected);
 }
 
 /* Expanded Status Badges */
@@ -52,42 +46,26 @@
     letter-spacing: 0.5px;
 }
 
-.status-badge.status-pending {
-    background-color: var(--status-pending);
-    color: #8B6914;
-}
-
+.status-badge.status-pending,
 .status-badge.status-pending-review {
-    background-color: var(--status-pending);
-    color: #8B6914;
+    background-color: var(--sp-status-pending);
+    color: var(--sp-status-pending-text);
 }
 
-.status-badge.status-confirmed {
-    background-color: var(--status-under-review);
-    color: #1E3A8A;
-}
-
+.status-badge.status-confirmed,
 .status-badge.status-under-review {
-    background-color: var(--status-under-review);
-    color: #1E3A8A;
+    background-color: var(--sp-status-under-review);
+    color: var(--sp-status-under-review-text);
 }
 
-.status-badge.status-completed {
-    background-color: var(--status-resolved);
-    color: #166534;
-}
-
+.status-badge.status-completed,
 .status-badge.status-resolved {
-    background-color: var(--status-resolved);
-    color: #166534;
+    background-color: var(--sp-status-resolved);
+    color: var(--sp-status-resolved-text);
 }
 
-.status-badge.status-cancelled {
-    background-color: var(--status-rejected);
-    color: #BE185D;
-}
-
+.status-badge.status-cancelled,
 .status-badge.status-rejected {
-    background-color: var(--status-rejected);
-    color: #BE185D;
+    background-color: var(--sp-status-rejected);
+    color: var(--sp-status-rejected-text);
 }
