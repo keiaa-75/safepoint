@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,6 +30,10 @@ import com.keiaa.safepoint.model.Admin;
 import com.keiaa.safepoint.model.Appointment;
 import com.keiaa.safepoint.model.Report;
 import com.keiaa.safepoint.model.ReportHistory;
+import com.keiaa.safepoint.model.dto.AppointmentSummary;
+import com.keiaa.safepoint.model.dto.AvailableMonth;
+import com.keiaa.safepoint.model.dto.MonthlyReportData;
+import com.keiaa.safepoint.model.dto.ReportSummary;
 import com.keiaa.safepoint.model.enums.AppointmentStatus;
 import com.keiaa.safepoint.model.enums.ReportStatus;
 import com.keiaa.safepoint.repository.AdminRepository;
@@ -296,5 +301,108 @@ public class AdminService {
      */
     public boolean anyAdminExists() {
         return adminRepository.count() > 0;
+    }
+
+    /**
+     * Gets available months with data for report generation
+     * 
+     * @return List of available months
+     */
+    public List<AvailableMonth> getAvailableMonths() {
+        List<String> reportMonths = reportRepository.findAvailableYearMonths();
+        List<String> appointmentMonths = appointmentRepository.findAvailableYearMonths();
+        
+        // Combine and deduplicate months
+        reportMonths.addAll(appointmentMonths);
+        List<String> allMonths = reportMonths.stream()
+                .distinct()
+                .sorted((a, b) -> b.compareTo(a)) // Sort descending (most recent first)
+                .toList();
+        
+        return allMonths.stream()
+                .map(this::convertToAvailableMonth)
+                .toList();
+    }
+
+    /**
+     * Gets monthly report data for a specific month
+     * 
+     * @param yearMonth The year-month in "YYYY-MM" format
+     * @return Monthly report data
+     */
+    public MonthlyReportData getMonthlyReportData(String yearMonth) {
+        // Parse year and month
+        String[] parts = yearMonth.split("-");
+        int year = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+        
+        LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0);
+        LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusSeconds(1);
+        
+        // Get reports for the month
+        List<Report> reports = reportRepository.findByTimestampBetweenOrderByTimestamp(startOfMonth, endOfMonth);
+        List<ReportSummary> reportSummaries = reports.stream()
+                .map(report -> new ReportSummary(report.getReportId(), report.getCategory(), report.getStatus()))
+                .toList();
+        
+        // Get appointments for the month
+        List<Appointment> appointments = appointmentRepository.findByPreferredDateTimeBetweenOrderByPreferredDateTime(startOfMonth, endOfMonth);
+        List<AppointmentSummary> appointmentSummaries = appointments.stream()
+                .map(apt -> new AppointmentSummary(apt.getId(), apt.getStatus()))
+                .toList();
+        
+        // Calculate statistics with null-safe defaults
+        Map<String, Long> reportCategoryCounts = new HashMap<>();
+        reportSummaries.stream()
+                .collect(Collectors.groupingBy(ReportSummary::getCategory, Collectors.counting()))
+                .forEach(reportCategoryCounts::put);
+        
+        Map<ReportStatus, Long> reportStatusCounts = new EnumMap<>(ReportStatus.class);
+        // Initialize all possible statuses with 0
+        for (ReportStatus status : ReportStatus.values()) {
+            reportStatusCounts.put(status, 0L);
+        }
+        // Add actual counts
+        reportSummaries.stream()
+                .collect(Collectors.groupingBy(ReportSummary::getStatus, Collectors.counting()))
+                .forEach(reportStatusCounts::put);
+        
+        Map<AppointmentStatus, Long> appointmentStatusCounts = new EnumMap<>(AppointmentStatus.class);
+        // Initialize all possible statuses with 0
+        for (AppointmentStatus status : AppointmentStatus.values()) {
+            appointmentStatusCounts.put(status, 0L);
+        }
+        // Add actual counts
+        appointmentSummaries.stream()
+                .collect(Collectors.groupingBy(AppointmentSummary::getStatus, Collectors.counting()))
+                .forEach(appointmentStatusCounts::put);
+        
+        String monthYearDisplay = convertToAvailableMonth(yearMonth).getDisplay();
+        
+        return new MonthlyReportData(
+                yearMonth,
+                monthYearDisplay,
+                reportSummaries,
+                appointmentSummaries,
+                reportCategoryCounts,
+                reportStatusCounts,
+                appointmentStatusCounts,
+                reportSummaries.size(),
+                appointmentSummaries.size()
+        );
+    }
+
+    /**
+     * Converts year-month string to AvailableMonth object
+     */
+    private AvailableMonth convertToAvailableMonth(String yearMonth) {
+        String[] parts = yearMonth.split("-");
+        int year = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+        
+        String monthName = java.time.Month.of(month).toString();
+        String display = monthName.substring(0, 1).toUpperCase() + monthName.substring(1).toLowerCase() + " " + year;
+        
+        return new AvailableMonth(yearMonth, display);
     }
 }

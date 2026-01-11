@@ -22,7 +22,25 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     List<Appointment> findAllByOrderByPreferredDateTimeAsc();
 
+    List<Appointment> findByPreferredDateTimeBetweenOrderByPreferredDateTime(LocalDateTime start, LocalDateTime end);
+
     List<Appointment> findByEmailOrderByPreferredDateTimeDesc(String email);
 
     Page<Appointment> findAllByOrderByPreferredDateTimeAsc(Pageable pageable);
+
+    List<Appointment> findAllByPreferredDateTimeNotNull();
+    
+    default List<String> findAvailableYearMonths() {
+        return findAllByPreferredDateTimeNotNull().stream()
+                .map(apt -> {
+                    String year = String.valueOf(apt.getPreferredDateTime().getYear());
+                    String month = String.format("%02d", apt.getPreferredDateTime().getMonthValue() + 1);
+                    return year + "-" + month;
+                })
+                .distinct()
+                .sorted((a, b) -> b.compareTo(a))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    long countByPreferredDateTimeBetween(LocalDateTime start, LocalDateTime end);
 }

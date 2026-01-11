@@ -1,0 +1,336 @@
+<!--
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/admin-common :: head(title='Report Generation')}"></head>
+<head>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+    <link rel="stylesheet" href="/css/report-generation.css">
+    <script src="/webjars/chart.js/4.4.0/dist/chart.umd.js"></script>
+</head>
+
+<body class="admin-body">
+    <div th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.adminNav})}"></div>
+
+    <div class="main-content">
+        <div class="container-fluid px-4 py-4 no-print">
+            <div id="bento-container" class="mb-4">
+                <div class="hero-section">
+                    <div class="hero-text">
+                        <h1>Report Generation</h1>
+                        <p class="lead">Generate monthly reports with statistics and charts for SafePoint data.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Month Selection Form (show only when no report data) -->
+        <div class="container-fluid px-4 py-2 no-print" th:if="${reportData == null}">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Select Month</h5>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/admin/reports/generate}" method="post">
+                                <div class="mb-3">
+                                    <label for="yearMonth" class="form-label">Choose Month</label>
+                                    <select class="form-select" id="yearMonth" name="yearMonth" required>
+                                        <option value="">Select a month...</option>
+                                        <option th:each="month : ${availableMonths}" 
+                                                th:value="${month.value}" 
+                                                th:text="${month.display}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Content (show only when report data exists) -->
+        <div class="report-content" th:if="${reportData != null}">
+            <!-- Report Header -->
+            <div class="report-header">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h1 class="report-title">SafePoint Monthly Report</h1>
+                            <p class="report-period" th:text="${reportData.monthYearDisplay}">January 2024</p>
+                        </div>
+                        <div class="col-auto no-print">
+                            <button onclick="window.print()" class="btn btn-primary">
+                                <i class="bi bi-printer"></i> Print Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Statistics -->
+            <div class="summary-section">
+                <div class="container-fluid">
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="summary-card">
+                                <div class="summary-icon reports">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <div class="summary-content">
+                                    <div class="summary-number" th:text="${reportData.totalReports}">0</div>
+                                    <div class="summary-label">Total Reports</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="summary-card">
+                                <div class="summary-icon appointments">
+                                    <i class="bi bi-calendar-check"></i>
+                                </div>
+                                <div class="summary-content">
+                                    <div class="summary-number" th:text="${reportData.totalAppointments}">0</div>
+                                    <div class="summary-label">Total Appointments</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="summary-card">
+                                <div class="summary-icon pending">
+                                    <i class="bi bi-clock"></i>
+                                </div>
+                                <div class="summary-content">
+                                    <div class="summary-number" th:text="${(reportData.reportStatusCounts.get('PENDING_REVIEW') ?: 0) + (reportData.reportStatusCounts.get('UNDER_REVIEW') ?: 0)}">0</div>
+                                    <div class="summary-label">Pending Reports</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="summary-card">
+                                <div class="summary-icon resolved">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div class="summary-content">
+                                    <div class="summary-number" th:text="${reportData.reportStatusCounts.get('RESOLVED') ?: 0}">0</div>
+                                    <div class="summary-label">Resolved Reports</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="container-fluid">
+                    <div class="row g-4 mb-4">
+                        <!-- Report Categories Chart -->
+                        <div class="col-lg-6">
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h5>Reports by Category</h5>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="categoryChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Status Comparison Chart -->
+                        <div class="col-lg-6">
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h5>Status Comparison</h5>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="statusChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Tables -->
+            <div class="tables-section">
+                <div class="container-fluid">
+                    <div class="row g-4">
+                        <!-- Reports Table -->
+                        <div class="col-lg-6">
+                            <div class="table-card">
+                                <div class="table-header">
+                                    <h5>Reports</h5>
+                                </div>
+                                <div class="table-container">
+                                    <div th:if="${#lists.isEmpty(reportData.reports)}" class="no-data">
+                                        No reports for this month.
+                                    </div>
+                                    <table class="table table-striped" th:unless="${#lists.isEmpty(reportData.reports)}">
+                                        <thead>
+                                            <tr>
+                                                <th>Report ID</th>
+                                                <th>Category</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="report : ${reportData.reports}">
+                                                <td th:text="${report.reportId}">ID-001</td>
+                                                <td th:text="${report.category}">Physical</td>
+                                                <td>
+                                                    <span class="badge" 
+                                                          th:classappend="${report.status == 'RESOLVED' ? 'bg-success' : (report.status == 'PENDING_REVIEW' ? 'bg-warning' : 'bg-info')}"
+                                                          th:text="${#strings.replace(report.status, '_', ' ')}">
+                                                        Pending
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Appointments Table -->
+                        <div class="col-lg-6">
+                            <div class="table-card">
+                                <div class="table-header">
+                                    <h5>Appointments</h5>
+                                </div>
+                                <div class="table-container">
+                                    <div th:if="${#lists.isEmpty(reportData.appointments)}" class="no-data">
+                                        No appointments for this month.
+                                    </div>
+                                    <table class="table table-striped" th:unless="${#lists.isEmpty(reportData.appointments)}">
+                                        <thead>
+                                            <tr>
+                                                <th>Appointment ID</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="appointment : ${reportData.appointments}">
+                                                <td th:text="${'APT-' + appointment.id}">APT-001</td>
+                                                <td>
+                                                    <span class="badge" 
+                                                          th:classappend="${appointment.status == 'COMPLETED' ? 'bg-success' : (appointment.status == 'CANCELLED' ? 'bg-danger' : (appointment.status == 'CONFIRMED' ? 'bg-info' : 'bg-warning'))}"
+                                                          th:text="${appointment.status}">
+                                                        Pending
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Report Button -->
+            <div class="container-fluid no-print mt-4">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <a href="/admin/reports/generate" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Generate Another Report
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/admin-common :: scripts}"></div>
+    <script th:if="${reportData != null}">
+        // Chart data from Thymeleaf
+        const reportData = {
+            categories: /*[[${reportData.reportCategoryCounts}]]*/ {},
+            reportStatuses: /*[[${reportData.reportStatusCounts}]]*/ {},
+            appointmentStatuses: /*[[${reportData.appointmentStatusCounts}]]*/ {}
+        };
+
+        // Category Chart (Doughnut)
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(reportData.categories),
+                datasets: [{
+                    data: Object.values(reportData.categories),
+                    backgroundColor: [
+                        '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Status Chart (Bar)
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        new Chart(statusCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Pending', 'Under Review', 'Resolved', 'Pending Apt', 'Confirmed', 'Completed'],
+                datasets: [{
+                    label: 'Reports',
+                    data: [
+                        reportData.reportStatuses['PENDING_REVIEW'] || 0,
+                        reportData.reportStatuses['UNDER_REVIEW'] || 0,
+                        reportData.reportStatuses['RESOLVED'] || 0,
+                        0, 0, 0
+                    ],
+                    backgroundColor: '#45B7D1'
+                }, {
+                    label: 'Appointments',
+                    data: [0, 0, 0,
+                        reportData.appointmentStatuses['PENDING'] || 0,
+                        reportData.appointmentStatuses['CONFIRMED'] || 0,
+                        reportData.appointmentStatuses['COMPLETED'] || 0
+                    ],
+                    backgroundColor: '#4ECDC4'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

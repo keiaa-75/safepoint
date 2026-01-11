@@ -1,0 +1,275 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+ */
+
+/* Report Generation Styles */
+
+/* Report Header */
+.report-header {
+    background: linear-gradient(135deg, var(--sp-primary) 0%, var(--sp-info) 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: var(--sp-radius-lg);
+}
+
+.report-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.report-period {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* Summary Cards */
+.summary-section {
+    margin-bottom: 2rem;
+}
+
+.summary-card {
+    background: white;
+    border-radius: var(--sp-radius-lg);
+    padding: 1.5rem;
+    box-shadow: 0 0.25rem 0.5rem var(--sp-shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.2s ease-in-out;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+}
+
+.summary-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.summary-icon.reports {
+    background: linear-gradient(135deg, var(--sp-primary) 0%, var(--sp-info) 100%);
+}
+
+.summary-icon.appointments {
+    background: linear-gradient(135deg, var(--sp-success) 0%, var(--sp-teal) 100%);
+}
+
+.summary-icon.pending {
+    background: linear-gradient(135deg, var(--sp-warning) 0%, var(--sp-orange) 100%);
+}
+
+.summary-icon.resolved {
+    background: linear-gradient(135deg, var(--sp-success) 0%, var(--sp-green) 100%);
+}
+
+.summary-content {
+    flex: 1;
+}
+
+.summary-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--sp-dark);
+    line-height: 1;
+}
+
+.summary-label {
+    color: var(--sp-muted);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+}
+
+/* Chart Cards */
+.charts-section {
+    margin-bottom: 2rem;
+}
+
+.chart-card {
+    background: white;
+    border-radius: var(--sp-radius-lg);
+    padding: 1.5rem;
+    box-shadow: 0 0.25rem 0.5rem var(--sp-shadow-sm);
+    height: 100%;
+}
+
+.chart-header {
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--sp-light);
+    padding-bottom: 1rem;
+}
+
+.chart-header h5 {
+    color: var(--sp-dark);
+    font-weight: 600;
+    margin: 0;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+}
+
+/* Table Cards */
+.tables-section {
+    margin-bottom: 2rem;
+}
+
+.table-card {
+    background: white;
+    border-radius: var(--sp-radius-lg);
+    padding: 1.5rem;
+    box-shadow: 0 0.25rem 0.5rem var(--sp-shadow-sm);
+    height: 100%;
+}
+
+.table-header {
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--sp-light);
+    padding-bottom: 1rem;
+}
+
+.table-header h5 {
+    color: var(--sp-dark);
+    font-weight: 600;
+    margin: 0;
+}
+
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.no-data {
+    text-align: center;
+    color: var(--sp-muted);
+    padding: 2rem;
+    font-style: italic;
+}
+
+/* Report Content Layout */
+.report-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Print Styles */
+@media print {
+    /* Hide navigation and other UI elements */
+    .no-print {
+        display: none !important;
+    }
+    
+    /* Remove shadows and backgrounds for cleaner print */
+    .summary-card,
+    .chart-card,
+    .table-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    /* Adjust report header for print */
+    .report-header {
+        background: none !important;
+        color: black !important;
+        border-bottom: 2px solid #000;
+        padding: 1rem 0;
+    }
+    
+    .report-title {
+        font-size: 1.8rem;
+    }
+    
+    .report-period {
+        font-size: 1rem;
+    }
+    
+    /* Ensure charts print properly */
+    .chart-container {
+        height: 250px !important;
+        page-break-inside: avoid;
+    }
+    
+    /* Table print optimizations */
+    .table-container {
+        max-height: none;
+        overflow-y: visible;
+    }
+    
+    .table {
+        font-size: 0.875rem;
+    }
+    
+    /* Summary cards print layout */
+    .summary-card {
+        break-inside: avoid;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Page layout for print */
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    .main-content {
+        padding: 0;
+        max-width: 100%;
+    }
+    
+    /* Ensure section headers don't break */
+    .chart-header,
+    .table-header {
+        break-after: avoid;
+    }
+    
+    /* Badge colors for print (convert to grayscale) */
+    .badge {
+        border: 1px solid #000 !important;
+        background: #f0f0f0 !important;
+        color: #000 !important;
+        font-weight: normal;
+    }
+    
+    /* Summary icons for print */
+    .summary-icon {
+        background: none !important;
+        border: 2px solid #000 !important;
+        color: #000 !important;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .report-title {
+        font-size: 2rem;
+    }
+    
+    .summary-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+    
+    .table-container {
+        font-size: 0.875rem;
+    }
+}

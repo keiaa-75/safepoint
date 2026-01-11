@@ -7,6 +7,7 @@
 package com.keiaa.safepoint.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +18,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.keiaa.safepoint.model.dto.AvailableMonth;
+import com.keiaa.safepoint.model.dto.MonthlyReportData;
 import com.keiaa.safepoint.model.enums.ReportStatus;
 import com.keiaa.safepoint.service.AdminService;
 import com.keiaa.safepoint.service.utility.InputSanitizer;
@@ -247,5 +251,43 @@ public class AdminController {
         }
 
         return "redirect:/admin/about";
+    }
+
+    /**
+     * API endpoint to get available months for report generation.
+     *
+     * @return list of available months with data
+     */
+    @GetMapping("/admin/reports/months/available")
+    @ResponseBody
+    public List<AvailableMonth> getAvailableMonths() {
+        return adminService.getAvailableMonths();
+    }
+
+    /**
+     * Displays report generation page with available months.
+     *
+     * @param model model to add available months to
+     * @return name of view template to render
+     */
+    @GetMapping("/admin/reports/generate")
+    public String showReportGeneration(Model model) {
+        model.addAttribute("availableMonths", adminService.getAvailableMonths());
+        return "report-generation";
+    }
+
+    /**
+     * Generates a monthly report.
+     *
+     * @param yearMonth the selected year-month in "YYYY-MM" format
+     * @param model the model to add report data to
+     * @return the name of the view template to render
+     */
+    @PostMapping("/admin/reports/generate")
+    public String generateMonthlyReport(@RequestParam("yearMonth") String yearMonth, Model model) {
+        String sanitizedYearMonth = inputSanitizer.sanitize(yearMonth);
+        MonthlyReportData reportData = adminService.getMonthlyReportData(sanitizedYearMonth);
+        model.addAttribute("reportData", reportData);
+        return "report-generation";
     }
 }

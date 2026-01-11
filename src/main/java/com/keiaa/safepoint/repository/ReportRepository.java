@@ -38,4 +38,20 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findByEmailOrderByTimestampDesc(String email);
 
     Page<Report> findAllByOrderByTimestampDesc(Pageable pageable);
+
+    List<Report> findAllByTimestampNotNull();
+    
+    default List<String> findAvailableYearMonths() {
+        return findAllByTimestampNotNull().stream()
+                .map(report -> {
+                    String year = String.valueOf(report.getTimestamp().getYear());
+                    String month = String.format("%02d", report.getTimestamp().getMonthValue() + 1);
+                    return year + "-" + month;
+                })
+                .distinct()
+                .sorted((a, b) -> b.compareTo(a))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    List<Report> findByTimestampBetweenOrderByTimestamp(LocalDateTime start, LocalDateTime end);
 }
