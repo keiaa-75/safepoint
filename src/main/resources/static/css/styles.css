@@ -63,6 +63,16 @@
     --sp-spacing-lg: 1.5rem;
     --sp-spacing-xl: 2rem;
     --sp-spacing-2xl: 2.5rem;
+    
+    /* Additional Colors */
+    --sp-info: #17a2b8;
+    --sp-teal: #20c997;
+    --sp-orange: #fd7e14;
+    --sp-green: #28a745;
+    --sp-success: #28a745;
+    --sp-warning: #ffc107;
+    --sp-dark: #343a40;
+    --sp-light: #f8f9fa;
 }
 
 /* General Body & Layout */

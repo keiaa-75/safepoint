@@ -34,7 +34,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
         return findAllByPreferredDateTimeNotNull().stream()
                 .map(apt -> {
                     String year = String.valueOf(apt.getPreferredDateTime().getYear());
-                    String month = String.format("%02d", apt.getPreferredDateTime().getMonthValue() + 1);
+                    String month = String.format("%02d", apt.getPreferredDateTime().getMonthValue());
                     return year + "-" + month;
                 })
                 .distinct()

@@ -12,7 +12,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/admin-dashboard.css">
     <link rel="stylesheet" href="/css/report-generation.css">
-    <script src="/webjars/chart.js/4.4.0/dist/chart.umd.js"></script>
+
 </head>
 
 <body class="admin-body">
@@ -46,12 +46,13 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                         <option value="">Select a month...</option>
                                         <option th:each="month : ${availableMonths}" 
                                                 th:value="${month.value}" 
-                                                th:text="${month.display}">
+                                                th:text="${month.display}"
+                                                th:attr="data-max-date=${#temporals.format(#temporals.createNow(), 'yyyy-MM')}">
                                         </option>
                                     </select>
                                 </div>
                                 <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                                    <button type="submit" class="btn btn-primary" onclick="return validateMonthSelection(this.form)">Generate Report</button>
                                 </div>
                             </form>
                         </div>
@@ -82,9 +83,9 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
             <!-- Summary Statistics -->
             <div class="summary-section">
                 <div class="container-fluid">
-                    <div class="row g-4 mb-4">
+                    <div class="row g-4 mb-5">
                         <div class="col-md-6 col-lg-3">
-                            <div class="summary-card">
+                            <div class="summary-card h-100">
                                 <div class="summary-icon reports">
                                     <i class="bi bi-file-earmark-text"></i>
                                 </div>
@@ -95,7 +96,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-3">
-                            <div class="summary-card">
+                            <div class="summary-card h-100">
                                 <div class="summary-icon appointments">
                                     <i class="bi bi-calendar-check"></i>
                                 </div>
@@ -106,7 +107,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-3">
-                            <div class="summary-card">
+                            <div class="summary-card h-100">
                                 <div class="summary-icon pending">
                                     <i class="bi bi-clock"></i>
                                 </div>
@@ -117,7 +118,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-3">
-                            <div class="summary-card">
+                            <div class="summary-card h-100">
                                 <div class="summary-icon resolved">
                                     <i class="bi bi-check-circle"></i>
                                 </div>
@@ -131,30 +132,27 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="charts-section">
+            <!-- Category Summary -->
+            <div class="category-section">
                 <div class="container-fluid">
-                    <div class="row g-4 mb-4">
-                        <!-- Report Categories Chart -->
-                        <div class="col-lg-6">
-                            <div class="chart-card">
-                                <div class="chart-header">
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
                                     <h5>Reports by Category</h5>
                                 </div>
-                                <div class="chart-container">
-                                    <canvas id="categoryChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Status Comparison Chart -->
-                        <div class="col-lg-6">
-                            <div class="chart-card">
-                                <div class="chart-header">
-                                    <h5>Status Comparison</h5>
-                                </div>
-                                <div class="chart-container">
-                                    <canvas id="statusChart"></canvas>
+                                <div class="card-body">
+                                    <div th:if="${#maps.isEmpty(reportData.reportCategoryCounts)}" class="no-data">
+                                        No category data available for this month.
+                                    </div>
+                                    <div class="row" th:unless="${#maps.isEmpty(reportData.reportCategoryCounts)}">
+                                        <div th:each="category : ${reportData.reportCategoryCounts}" class="col-md-3 col-sm-6 mb-3">
+                                            <div class="category-item">
+                                                <div class="category-name" th:text="${category.key}">Category</div>
+                                                <div class="category-count" th:text="${category.value}">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -162,76 +160,119 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 </div>
             </div>
 
-            <!-- Data Tables -->
-            <div class="tables-section">
+            <!-- Status Summary -->
+            <div class="status-section">
                 <div class="container-fluid">
-                    <div class="row g-4">
-                        <!-- Reports Table -->
-                        <div class="col-lg-6">
-                            <div class="table-card">
-                                <div class="table-header">
-                                    <h5>Reports</h5>
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Status Overview</h5>
                                 </div>
-                                <div class="table-container">
-                                    <div th:if="${#lists.isEmpty(reportData.reports)}" class="no-data">
-                                        No reports for this month.
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Report Status</h6>
+                                            <div th:each="status : ${reportData.reportStatusCounts}" class="status-item mb-2">
+                                                <span class="status-label" th:text="${#strings.replace(status.key, '_', ' ')}">Status</span>
+                                                <span class="status-count badge" 
+                                                      th:classappend="${status.key == 'RESOLVED' ? 'bg-success' : (status.key == 'PENDING_REVIEW' ? 'bg-warning' : 'bg-info')}"
+                                                      th:text="${status.value}">0</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Appointment Status</h6>
+                                            <div th:each="status : ${reportData.appointmentStatusCounts}" class="status-item mb-2">
+                                                <span class="status-label" th:text="${status.key}">Status</span>
+                                                <span class="status-count badge" 
+                                                      th:classappend="${status.key == 'COMPLETED' ? 'bg-success' : (status.key == 'CANCELLED' ? 'bg-danger' : (status.key == 'CONFIRMED' ? 'bg-info' : 'bg-warning'))}"
+                                                      th:text="${status.value}">0</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <table class="table table-striped" th:unless="${#lists.isEmpty(reportData.reports)}">
-                                        <thead>
-                                            <tr>
-                                                <th>Report ID</th>
-                                                <th>Category</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="report : ${reportData.reports}">
-                                                <td th:text="${report.reportId}">ID-001</td>
-                                                <td th:text="${report.category}">Physical</td>
-                                                <td>
-                                                    <span class="badge" 
-                                                          th:classappend="${report.status == 'RESOLVED' ? 'bg-success' : (report.status == 'PENDING_REVIEW' ? 'bg-warning' : 'bg-info')}"
-                                                          th:text="${#strings.replace(report.status, '_', ' ')}">
-                                                        Pending
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Detailed Data Tables -->
+            <div class="tables-section">
+                <div class="container-fluid">
+                    <div class="row mb-5">
+                        <!-- Reports Table -->
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Reports</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div th:if="${#lists.isEmpty(reportData.reports)}" class="no-data">
+                                        No reports for this month.
+                                    </div>
+                                    <div class="table-responsive" th:unless="${#lists.isEmpty(reportData.reports)}">
+                                        <table class="table table-striped table-hover">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Report ID</th>
+                                                    <th>Category</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="report : ${reportData.reports}">
+                                                    <td th:text="${report.reportId}">ID-001</td>
+                                                    <td th:text="${report.category}">Physical</td>
+                                                    <td>
+                                                        <span class="badge" 
+                                                              th:classappend="${report.status == 'RESOLVED' ? 'bg-success' : (report.status == 'PENDING_REVIEW' ? 'bg-warning' : 'bg-info')}"
+                                                              th:text="${#strings.replace(report.status, '_', ' ')}">
+                                                            Pending
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-5">
                         <!-- Appointments Table -->
-                        <div class="col-lg-6">
-                            <div class="table-card">
-                                <div class="table-header">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
                                     <h5>Appointments</h5>
                                 </div>
-                                <div class="table-container">
+                                <div class="card-body">
                                     <div th:if="${#lists.isEmpty(reportData.appointments)}" class="no-data">
                                         No appointments for this month.
                                     </div>
-                                    <table class="table table-striped" th:unless="${#lists.isEmpty(reportData.appointments)}">
-                                        <thead>
-                                            <tr>
-                                                <th>Appointment ID</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="appointment : ${reportData.appointments}">
-                                                <td th:text="${'APT-' + appointment.id}">APT-001</td>
-                                                <td>
-                                                    <span class="badge" 
-                                                          th:classappend="${appointment.status == 'COMPLETED' ? 'bg-success' : (appointment.status == 'CANCELLED' ? 'bg-danger' : (appointment.status == 'CONFIRMED' ? 'bg-info' : 'bg-warning'))}"
-                                                          th:text="${appointment.status}">
-                                                        Pending
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive" th:unless="${#lists.isEmpty(reportData.appointments)}">
+                                        <table class="table table-striped table-hover">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Appointment ID</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="appointment : ${reportData.appointments}">
+                                                    <td th:text="${'APT-' + appointment.id}">APT-001</td>
+                                                    <td>
+                                                        <span class="badge" 
+                                                              th:classappend="${appointment.status == 'COMPLETED' ? 'bg-success' : (appointment.status == 'CANCELLED' ? 'bg-danger' : (appointment.status == 'CONFIRMED' ? 'bg-info' : 'bg-warning'))}"
+                                                              th:text="${appointment.status}">
+                                                            Pending
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -253,83 +294,25 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     </div>
 
     <div th:replace="~{fragments/admin-common :: scripts}"></div>
-    <script th:if="${reportData != null}">
-        // Chart data from Thymeleaf
-        const reportData = {
-            categories: /*[[${reportData.reportCategoryCounts}]]*/ {},
-            reportStatuses: /*[[${reportData.reportStatusCounts}]]*/ {},
-            appointmentStatuses: /*[[${reportData.appointmentStatusCounts}]]*/ {}
-        };
-
-        // Category Chart (Doughnut)
-        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-        new Chart(categoryCtx, {
-            type: 'doughnut',
-            data: {
-                labels: Object.keys(reportData.categories),
-                datasets: [{
-                    data: Object.values(reportData.categories),
-                    backgroundColor: [
-                        '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'
-                    ],
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
+    <script>
+        function validateMonthSelection(form) {
+            const selectedMonth = form.yearMonth.value;
+            if (!selectedMonth) {
+                alert('Please select a month to generate a report.');
+                return false;
             }
-        });
-
-        // Status Chart (Bar)
-        const statusCtx = document.getElementById('statusChart').getContext('2d');
-        new Chart(statusCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Pending', 'Under Review', 'Resolved', 'Pending Apt', 'Confirmed', 'Completed'],
-                datasets: [{
-                    label: 'Reports',
-                    data: [
-                        reportData.reportStatuses['PENDING_REVIEW'] || 0,
-                        reportData.reportStatuses['UNDER_REVIEW'] || 0,
-                        reportData.reportStatuses['RESOLVED'] || 0,
-                        0, 0, 0
-                    ],
-                    backgroundColor: '#45B7D1'
-                }, {
-                    label: 'Appointments',
-                    data: [0, 0, 0,
-                        reportData.appointmentStatuses['PENDING'] || 0,
-                        reportData.appointmentStatuses['CONFIRMED'] || 0,
-                        reportData.appointmentStatuses['COMPLETED'] || 0
-                    ],
-                    backgroundColor: '#4ECDC4'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
+            
+            const currentDate = new Date();
+            const currentYearMonth = currentDate.getFullYear() + '-' + 
+                String(currentDate.getMonth() + 1).padStart(2, '0');
+            
+            if (selectedMonth > currentYearMonth) {
+                alert('Cannot generate reports for future months. Please select a current or past month.');
+                return false;
             }
-        });
+            
+            return true;
+        }
     </script>
 </body>
 

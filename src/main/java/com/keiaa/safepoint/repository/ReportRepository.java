@@ -45,7 +45,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
         return findAllByTimestampNotNull().stream()
                 .map(report -> {
                     String year = String.valueOf(report.getTimestamp().getYear());
-                    String month = String.format("%02d", report.getTimestamp().getMonthValue() + 1);
+                    String month = String.format("%02d", report.getTimestamp().getMonthValue());
                     return year + "-" + month;
                 })
                 .distinct()
