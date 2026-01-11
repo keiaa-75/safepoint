@@ -10,7 +10,7 @@
 .report-header {
     background: linear-gradient(135deg, var(--sp-primary) 0%, var(--sp-info) 100%);
     color: white;
-    padding: 2rem 0;
+    padding: 2rem;
     margin-bottom: 2rem;
     border-radius: var(--sp-radius-lg);
 }
@@ -19,12 +19,16 @@
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
 }
 
 .report-period {
     font-size: 1.25rem;
     opacity: 0.9;
     margin: 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
 }
 
 /* Summary Cards */
@@ -140,6 +144,27 @@
     color: var(--sp-muted);
     padding: 2rem;
     font-style: italic;
+}
+
+/* Print Button */
+.btn-print-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--sp-border-medium);
+    background: var(--sp-bg-white);
+    color: var(--sp-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.btn-print-circle:hover {
+    background: var(--sp-primary);
+    color: var(--sp-bg-white);
+    transform: scale(1.05);
 }
 
 /* Report Content Layout */

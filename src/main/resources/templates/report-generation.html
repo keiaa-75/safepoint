@@ -19,22 +19,11 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.adminNav})}"></div>
 
     <div class="main-content">
-        <div class="container-fluid px-4 py-4 no-print">
-            <div id="bento-container" class="mb-4">
-                <div class="hero-section">
-                    <div class="hero-text">
-                        <h1>Report Generation</h1>
-                        <p class="lead">Generate monthly reports with statistics and charts for SafePoint data.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Month Selection Form (show only when no report data) -->
-        <div class="container-fluid px-4 py-2 no-print" th:if="${reportData == null}">
+        <div class="container py-4 py-md-5" th:if="${reportData == null}" style="max-width: 1200px;">
             <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Select Month</h5>
                         </div>
@@ -64,7 +53,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
         <!-- Report Content (show only when report data exists) -->
         <div class="report-content" th:if="${reportData != null}">
             <!-- Report Header -->
-            <div class="report-header">
+            <div class="report-header mt-5">
                 <div class="container-fluid">
                     <div class="row align-items-center">
                         <div class="col">
@@ -72,8 +61,8 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                             <p class="report-period" th:text="${reportData.monthYearDisplay}">January 2024</p>
                         </div>
                         <div class="col-auto no-print">
-                            <button onclick="window.print()" class="btn btn-primary">
-                                <i class="bi bi-printer"></i> Print Report
+                            <button onclick="window.print()" class="btn-print-circle me-3" title="Print Report">
+                                <i class="bi bi-printer"></i>
                             </button>
                         </div>
                     </div>
@@ -176,7 +165,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                             <div th:each="status : ${reportData.reportStatusCounts}" class="status-item mb-2">
                                                 <span class="status-label" th:text="${#strings.replace(status.key, '_', ' ')}">Status</span>
                                                 <span class="status-count badge" 
-                                                      th:classappend="${status.key == 'RESOLVED' ? 'bg-success' : (status.key == 'PENDING_REVIEW' ? 'bg-warning' : 'bg-info')}"
+                                                      th:class="'status-badge status-' + ${#strings.toLowerCase(#strings.replace(status.key, '_', '-'))}"
                                                       th:text="${status.value}">0</span>
                                             </div>
                                         </div>
@@ -185,7 +174,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                             <div th:each="status : ${reportData.appointmentStatusCounts}" class="status-item mb-2">
                                                 <span class="status-label" th:text="${status.key}">Status</span>
                                                 <span class="status-count badge" 
-                                                      th:classappend="${status.key == 'COMPLETED' ? 'bg-success' : (status.key == 'CANCELLED' ? 'bg-danger' : (status.key == 'CONFIRMED' ? 'bg-info' : 'bg-warning'))}"
+                                                      th:class="'status-badge status-' + ${#strings.toLowerCase(status.key)}"
                                                       th:text="${status.value}">0</span>
                                             </div>
                                         </div>
@@ -221,17 +210,17 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="report : ${reportData.reports}">
-                                                    <td th:text="${report.reportId}">ID-001</td>
-                                                    <td th:text="${report.category}">Physical</td>
-                                                    <td>
-                                                        <span class="badge" 
-                                                              th:classappend="${report.status == 'RESOLVED' ? 'bg-success' : (report.status == 'PENDING_REVIEW' ? 'bg-warning' : 'bg-info')}"
-                                                              th:text="${#strings.replace(report.status, '_', ' ')}">
-                                                            Pending
-                                                        </span>
-                                                    </td>
-                                                </tr>
+                                            <tr th:each="report : ${reportData.reports}">
+                                                <td th:text="${report.reportId}">ID-001</td>
+                                                <td th:text="${report.category}">Physical</td>
+                                                <td>
+                                                    <span class="status-badge" 
+                                                          th:class="'status-badge status-' + ${#strings.toLowerCase(#strings.replace(report.status, '_', '-'))}"
+                                                          th:text="${#strings.replace(report.status, '_', ' ')}">
+                                                        Pending
+                                                    </span>
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -260,16 +249,16 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="appointment : ${reportData.appointments}">
-                                                    <td th:text="${'APT-' + appointment.id}">APT-001</td>
-                                                    <td>
-                                                        <span class="badge" 
-                                                              th:classappend="${appointment.status == 'COMPLETED' ? 'bg-success' : (appointment.status == 'CANCELLED' ? 'bg-danger' : (appointment.status == 'CONFIRMED' ? 'bg-info' : 'bg-warning'))}"
-                                                              th:text="${appointment.status}">
-                                                            Pending
-                                                        </span>
-                                                    </td>
-                                                </tr>
+                                            <tr th:each="appointment : ${reportData.appointments}">
+                                                <td th:text="${'APT-' + appointment.id}">APT-001</td>
+                                                <td>
+                                                    <span class="status-badge" 
+                                                          th:class="'status-badge status-' + ${#strings.toLowerCase(appointment.status)}"
+                                                          th:text="${appointment.status}">
+                                                        Pending
+                                                    </span>
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
