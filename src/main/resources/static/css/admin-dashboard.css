@@ -31,3 +31,9 @@
     background-color: var(--sp-bg-white);
     border-bottom: 1px solid var(--sp-border-medium);
 }
+
+@media (max-width: 768px) {
+    .admin-body .row:last-of-type {
+        margin-bottom: 80px;
+    }
+}

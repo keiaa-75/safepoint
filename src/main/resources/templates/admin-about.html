@@ -7,7 +7,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/admin-common :: head('About SafePoint')}"></head>
-<body>
+<head>
+    <link rel="stylesheet" href="/css/admin-about.css">
+</head>
+<body class="admin-body">
     <div th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.adminNav})}"></div>
     <div class="main-content">
         <div class="container content-container">
