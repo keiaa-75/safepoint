@@ -17,26 +17,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.keiaa.safepoint.model.Admin;
 import com.keiaa.safepoint.model.Student;
-import com.keiaa.safepoint.repository.AdminRepository;
 import com.keiaa.safepoint.repository.StudentRepository;
 
-@Service
-public class UnifiedUserDetailsService implements UserDetailsService {
+/**
+ * Service for loading student-specific user details for authentication.
+ * This service only handles student user authentication and assigns STUDENT role.
+ */
+@Service("studentDetailsService")
+public class StudentDetailsService implements UserDetailsService {
 
     private final StudentRepository studentRepository;
-    private final AdminRepository adminRepository;
 
-    public UnifiedUserDetailsService(StudentRepository studentRepository, AdminRepository adminRepository) {
+    public StudentDetailsService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
-        this.adminRepository = adminRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Try student first (by email)
-        Optional<Student> student = studentRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Student> student = studentRepository.findByEmail(email);
         if (student.isPresent()) {
             if (!student.get().isEmailVerified()) {
                 throw new LockedException("Email not verified. Please verify your email before logging in.");
@@ -48,16 +47,6 @@ public class UnifiedUserDetailsService implements UserDetailsService {
             );
         }
 
-        // Try admin (by username)
-        Optional<Admin> admin = adminRepository.findByUsername(username);
-        if (admin.isPresent()) {
-            return new User(
-                admin.get().getUsername(), 
-                admin.get().getPassword(), 
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))
-            );
-        }
-
-        throw new UsernameNotFoundException("User not found: " + username);
+        throw new UsernameNotFoundException("Student not found: " + email);
     }
 }

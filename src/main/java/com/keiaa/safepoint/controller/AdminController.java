@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin/about")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showAdminAbout() {
         return "admin-about";
     }
@@ -53,6 +55,7 @@ public class AdminController {
      * @return the name of the view template to render
      */
     @GetMapping("/admin/dashboard")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showAdminDashboard(Model model) {
         model.addAllAttributes(adminService.getDashboardStatistics());
         return "admin-dashboard";
@@ -66,6 +69,7 @@ public class AdminController {
      * @return the name of the view template to render
      */
     @GetMapping("/admin/report")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showAdminReports(Model model, @PageableDefault(size = 12, sort = "timestamp") Pageable pageable) {
         model.addAttribute("reportsPage", adminService.getAllReportsWithHistory(pageable));
         return "admin-reports";
@@ -79,6 +83,7 @@ public class AdminController {
      * @return the name of the view template to render
      */
     @GetMapping("/admin/appointment")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showAdminAppointments(Model model, @PageableDefault(size = 12, sort = "preferredDateTime") Pageable pageable) {
         model.addAttribute("appointmentsPage", adminService.getAllAppointmentsPaginated(pageable));
         return "admin-appointments";
@@ -92,6 +97,7 @@ public class AdminController {
      * @return the name of the view template to render or redirect to dashboard if report not found
      */
     @GetMapping("/admin/report/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String reportDetails(@PathVariable("id") String reportId, Model model) {
         String sanitizedReportId = inputSanitizer.sanitize(reportId);
         return adminService.findReportWithHistoryByReportId(sanitizedReportId)
@@ -112,6 +118,7 @@ public class AdminController {
      * @return the name of the view template to render or redirect to appointments if not found
      */
     @GetMapping("/admin/appointment/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String appointmentDetails(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
         return adminService.findAppointmentById(id)
                 .map(appointment -> {
@@ -130,6 +137,7 @@ public class AdminController {
      * @return redirect to report details page or back to login if not authenticated
      */
     @PostMapping("/admin/report/update-status")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updateReportStatus(@RequestParam("reportId") String reportId,
                                      @RequestParam("status") ReportStatus status,
                                      RedirectAttributes redirectAttributes) {
@@ -152,6 +160,7 @@ public class AdminController {
      * @return redirect to report details page or to dashboard if not authenticated
      */
     @PostMapping("/admin/report/update-status-with-description")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updateReportStatusWithDescription(@RequestParam("reportId") String reportId,
                                                     @RequestParam("status") ReportStatus status,
                                                     @RequestParam("description") String description,
@@ -177,6 +186,7 @@ public class AdminController {
      * @return redirect to appointment details page or back to login if not authenticated
      */
     @PostMapping("/admin/appointment/confirm/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String confirmAppointment(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         boolean success = adminService.confirmAppointment(id);
         if (!success) {
@@ -196,6 +206,7 @@ public class AdminController {
      * @return redirect to appointment details page or back to login if not authenticated
      */
     @PostMapping("/admin/appointment/reschedule/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String rescheduleAppointment(@PathVariable("id") Long id,
                                         @RequestParam("newDate") String newDate,
                                         @RequestParam("newTime") String newTime,
@@ -219,6 +230,7 @@ public class AdminController {
      * @return redirect to appointment details page or back to login if not authenticated
      */
     @PostMapping("/admin/appointment/complete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String completeAppointment(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         boolean success = adminService.completeAppointment(id);
         if (!success) {
@@ -237,6 +249,7 @@ public class AdminController {
      * @return redirect to admin about page
      */
     @PostMapping("/admin/create-admin")
+    @PreAuthorize("hasRole('ADMIN')")
     public String createAdmin(@RequestParam("username") String username,
                               @RequestParam("password") String password,
                               RedirectAttributes redirectAttributes) {
@@ -260,6 +273,7 @@ public class AdminController {
      */
     @GetMapping("/admin/reports/months/available")
     @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AvailableMonth> getAvailableMonths() {
         return adminService.getAvailableMonths();
     }
@@ -271,6 +285,7 @@ public class AdminController {
      * @return name of view template to render
      */
     @GetMapping("/admin/reports/generate")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showReportGeneration(Model model) {
         model.addAttribute("availableMonths", adminService.getAvailableMonths());
         return "report-generation";
@@ -284,6 +299,7 @@ public class AdminController {
      * @return the name of the view template to render
      */
     @PostMapping("/admin/reports/generate")
+    @PreAuthorize("hasRole('ADMIN')")
     public String generateMonthlyReport(@RequestParam("yearMonth") String yearMonth, Model model) {
         String sanitizedYearMonth = inputSanitizer.sanitize(yearMonth);
         MonthlyReportData reportData = adminService.getMonthlyReportData(sanitizedYearMonth);

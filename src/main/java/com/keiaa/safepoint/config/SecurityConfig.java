@@ -11,24 +11,40 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.keiaa.safepoint.service.impl.UnifiedUserDetailsService;
+import com.keiaa.safepoint.service.impl.AdminDetailsService;
+import com.keiaa.safepoint.service.impl.StudentDetailsService;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
-    private UnifiedUserDetailsService userDetailsService;
+    private AdminDetailsService adminDetailsService;
+
+    @Autowired
+    private StudentDetailsService studentDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public org.springframework.security.core.session.SessionRegistry sessionRegistry() {
+        return new org.springframework.security.core.session.SessionRegistryImpl();
+    }
+
+    @Bean
+    public org.springframework.security.web.session.HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new org.springframework.security.web.session.HttpSessionEventPublisher();
     }
 
     @Bean
@@ -38,7 +54,7 @@ public class SecurityConfig {
             .securityMatcher("/admin/**", "/admin-login")
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/admin-login").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().hasRole("ADMIN")
             )
             .formLogin(formLogin -> formLogin
                 .loginPage("/admin-login")
@@ -52,7 +68,11 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
                 .permitAll()
             )
-            .userDetailsService(userDetailsService);
+            .userDetailsService(adminDetailsService)
+            .sessionManagement(session -> session
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
+            );
 
         return http.build();
     }
@@ -66,8 +86,8 @@ public class SecurityConfig {
                     "/manifest.json", "/service-worker.js", "/about", "/student-signup", "/student-login", "/admin-login",
                     "/verify-email", "/resend-verification", "/forgot-password", "/reset-password").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/dashboard", "/report", "/submit-report", "/schedule").authenticated()
-                .anyRequest().authenticated()
+                .requestMatchers("/dashboard", "/report", "/submit-report", "/schedule").hasRole("STUDENT")
+                .anyRequest().denyAll()
             )
             .formLogin(formLogin -> formLogin
                 .loginPage("/student-login")
@@ -87,7 +107,11 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
                 .permitAll()
             )
-            .userDetailsService(userDetailsService)
+            .userDetailsService(studentDetailsService)
+            .sessionManagement(session -> session
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
+            )
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/h2-console/**")
             )
