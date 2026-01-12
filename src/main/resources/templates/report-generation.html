@@ -60,10 +60,27 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                             <h1 class="report-title">SafePoint Monthly Report</h1>
                             <p class="report-period" th:text="${reportData.monthYearDisplay}">January 2024</p>
                         </div>
-                        <div class="col-auto no-print">
-                            <button onclick="window.print()" class="btn-print-circle me-3" title="Print Report">
-                                <i class="bi bi-printer"></i>
-                            </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Actions Card -->
+            <div class="report-actions-card no-print">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                        <button onclick="window.print()" class="btn btn-primary btn-lg">
+                                            <i class="bi bi-printer me-2"></i> Print Report
+                                        </button>
+                                        <a href="/admin/reports/generate" class="btn btn-outline-secondary btn-lg">
+                                            <i class="bi bi-arrow-left me-2"></i> Generate New Report
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -269,16 +286,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 </div>
             </div>
 
-            <!-- New Report Button -->
-            <div class="container-fluid no-print mt-4">
-                <div class="row justify-content-center">
-                    <div class="col-auto">
-                        <a href="/admin/reports/generate" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left"></i> Generate Another Report
-                        </a>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 

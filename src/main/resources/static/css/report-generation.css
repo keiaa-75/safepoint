@@ -167,6 +167,24 @@
     transform: scale(1.05);
 }
 
+/* Report Actions Card */
+.report-actions-card {
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+}
+
+.report-actions-card .card {
+    border: 1px solid var(--sp-border-light);
+    border-radius: var(--sp-radius-lg);
+    background: var(--sp-bg-white);
+}
+
+.report-actions-card .btn-lg {
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+    min-width: 200px;
+}
+
 /* Report Content Layout */
 .report-content {
     max-width: 1200px;
@@ -240,7 +258,8 @@
 @media print {
     /* Hide navigation and other UI elements */
     .no-print,
-    .bottom-nav {
+    .bottom-nav,
+    .report-actions-card {
         display: none !important;
     }
     
@@ -363,6 +382,11 @@
 @media (max-width: 768px) {
     .report-title {
         font-size: 2rem;
+    }
+    
+    .report-actions-card .btn-lg {
+        min-width: 100%;
+        padding: 1rem;
     }
     
     .summary-card {
