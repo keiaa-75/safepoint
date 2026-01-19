@@ -1,8 +1,8 @@
 /* Authentication Theme Variables */
 :root {
     /* Default Student Theme */
-    --auth-bg-primary: var(--sp-primary-teal);
-    --auth-bg-primary-dark: var(--sp-primary-teal-dark);
+    --auth-bg-primary: #3FB6DC;
+    --auth-bg-primary-dark: #3FA5DC;
     --auth-brand-color: var(--sp-text-secondary);
     --auth-brand-dark: var(--sp-text-primary);
     --auth-badge-color: var(--sp-primary);
@@ -11,8 +11,8 @@
 
 /* Admin Theme Override */
 .admin-theme {
-    --auth-bg-primary: var(--sp-primary-teal);
-    --auth-bg-primary-dark: var(--sp-primary-teal-dark);
+    --auth-bg-primary: #3FB6DC;
+    --auth-bg-primary-dark: #3FA5DC;
     --auth-brand-color: var(--sp-text-secondary);
     --auth-brand-dark: var(--sp-text-primary);
     --auth-badge-color: #3498db;
@@ -116,12 +116,7 @@ body {
 
 .auth-diagonal-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--auth-bg-primary-dark);
-    clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
+    background-color: var(--auth-bg-primary);
 }
 
 .auth-form-container {
@@ -188,7 +183,7 @@ body {
 
 .auth-form-floating .form-control:focus {
     border-color: var(--auth-bg-primary-dark);
-    box-shadow: 0 0 0 2px rgba(26, 143, 165, 0.2);
+    box-shadow: 0 0 0 2px rgba(63, 165, 220, 0.2);
 }
 
 .auth-form-floating label {
@@ -402,7 +397,7 @@ body {
 .status-action {
     display: inline-block;
     padding: var(--sp-spacing-md) var(--sp-spacing-lg);
-    background-color: var(--sp-primary-teal);
+    background-color: #3FB6DC;
     color: var(--sp-bg-white);
     border-radius: var(--sp-radius-sm);
     text-decoration: none;
@@ -412,7 +407,7 @@ body {
 }
 
 .status-action:hover {
-    background-color: var(--sp-primary-teal-dark);
+    background-color: #3FA5DC;
 }
 
 .status-action.me-2 {
