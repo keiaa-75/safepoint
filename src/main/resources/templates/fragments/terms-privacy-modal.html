@@ -1,0 +1,91 @@
+<!--
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+-->
+
+<div class="modal fade" id="termsPrivacyModal" tabindex="-1" aria-labelledby="termsPrivacyModalLabel" aria-hidden="true" th:fragment="terms-privacy-modal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsPrivacyModalLabel">Terms & Privacy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="terms-content">
+                    <h6>Data We Collect</h6>
+                    <ul>
+                        <li>Personal Information: Name, email, LRN for account verification</li>
+                        <li>Academic Data: Enrollment status and grade level for counseling coordination</li>
+                        <li>Safety Records: Bullying reports and counseling appointments</li>
+                    </ul>
+
+                    <h6>How We Use Your Data</h6>
+                    <ul>
+                        <li>Process bullying reports and coordinate counseling services</li>
+                        <li>Monitor school safety trends and incident patterns</li>
+                        <li>Comply with educational reporting requirements</li>
+                        <li>Improve platform security and user experience</li>
+                    </ul>
+
+                    <h6>Data Retention Period</h6>
+                    <ul>
+                        <li>Personal Info: 5 years after your last activity</li>
+                        <li>Reports & Cases: 5 years after case resolution</li>
+                        <li>Counseling Records: 5 years from service date</li>
+                    </ul>
+
+                    <h6>Your Privacy Rights</h6>
+                    <ul>
+                        <li>Access: View all your personal data on request</li>
+                        <li>Correct: Fix inaccurate information in your records</li>
+                        <li>Delete: Remove data after retention period ends</li>
+                        <li>Complain: Report privacy issues to National Privacy Commission</li>
+                        <li>Consent: Withdraw permission for future data processing</li>
+                    </ul>
+                </div>
+
+                <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" id="agreeTerms">
+                    <label class="form-check-label" for="agreeTerms">
+                        I have read and agree to the terms and privacy policy
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="proceedSignup" disabled>Proceed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.terms-content h6 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.terms-content h6:first-child {
+    margin-top: 0;
+}
+
+.terms-content ul {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+.terms-content li {
+    margin-bottom: 0.25rem;
+}
+
+#termsPrivacyModal .modal-dialog {
+    max-width: 500px;
+    aspect-ratio: 1;
+}
+
+#termsPrivacyModal .modal-content {
+    height: 100%;
+}
+</style>
