@@ -42,5 +42,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    default List<String> findAvailableYears() {
+        return findAllByPreferredDateTimeNotNull().stream()
+                .map(apt -> String.valueOf(apt.getPreferredDateTime().getYear()))
+                .distinct()
+                .sorted((a, b) -> b.compareTo(a))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
     long countByPreferredDateTimeBetween(LocalDateTime start, LocalDateTime end);
 }

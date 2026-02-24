@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.keiaa.safepoint.model.dto.AvailableMonth;
-import com.keiaa.safepoint.model.dto.MonthlyReportData;
+import com.keiaa.safepoint.model.dto.AvailableYear;
+import com.keiaa.safepoint.model.dto.YearlyReportData;
 import com.keiaa.safepoint.model.enums.ReportStatus;
 import com.keiaa.safepoint.service.AdminService;
 import com.keiaa.safepoint.service.utility.InputSanitizer;
@@ -267,42 +267,42 @@ public class AdminController {
     }
 
     /**
-     * API endpoint to get available months for report generation.
+     * API endpoint to get available years for report generation.
      *
-     * @return list of available months with data
+     * @return list of available years with data
      */
-    @GetMapping("/admin/reports/months/available")
+    @GetMapping("/admin/reports/years/available")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public List<AvailableMonth> getAvailableMonths() {
-        return adminService.getAvailableMonths();
+    public List<AvailableYear> getAvailableYears() {
+        return adminService.getAvailableYears();
     }
 
     /**
-     * Displays report generation page with available months.
+     * Displays report generation page with available years.
      *
-     * @param model model to add available months to
+     * @param model model to add available years to
      * @return name of view template to render
      */
     @GetMapping("/admin/reports/generate")
     @PreAuthorize("hasRole('ADMIN')")
     public String showReportGeneration(Model model) {
-        model.addAttribute("availableMonths", adminService.getAvailableMonths());
+        model.addAttribute("availableYears", adminService.getAvailableYears());
         return "report-generation";
     }
 
     /**
-     * Generates a monthly report.
+     * Generates a yearly report.
      *
-     * @param yearMonth the selected year-month in "YYYY-MM" format
+     * @param year the selected year in "YYYY" format
      * @param model the model to add report data to
      * @return the name of the view template to render
      */
     @PostMapping("/admin/reports/generate")
     @PreAuthorize("hasRole('ADMIN')")
-    public String generateMonthlyReport(@RequestParam("yearMonth") String yearMonth, Model model) {
-        String sanitizedYearMonth = inputSanitizer.sanitize(yearMonth);
-        MonthlyReportData reportData = adminService.getMonthlyReportData(sanitizedYearMonth);
+    public String generateYearlyReport(@RequestParam("year") String year, Model model) {
+        String sanitizedYear = inputSanitizer.sanitize(year);
+        YearlyReportData reportData = adminService.getYearlyReportData(sanitizedYear);
         model.addAttribute("reportData", reportData);
         return "report-generation";
     }

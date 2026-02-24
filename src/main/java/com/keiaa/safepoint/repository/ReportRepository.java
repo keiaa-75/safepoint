@@ -53,5 +53,13 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    default List<String> findAvailableYears() {
+        return findAllByTimestampNotNull().stream()
+                .map(report -> String.valueOf(report.getTimestamp().getYear()))
+                .distinct()
+                .sorted((a, b) -> b.compareTo(a))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
     List<Report> findByTimestampBetweenOrderByTimestamp(LocalDateTime start, LocalDateTime end);
 }
