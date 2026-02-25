@@ -63,28 +63,6 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 </div>
             </div>
 
-            <!-- Report Actions Card -->
-            <div class="report-actions-card no-print">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card shadow-sm">
-                                <div class="card-body">
-                                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                                        <button onclick="window.print()" class="btn btn-primary btn-lg">
-                                            <i class="bi bi-printer me-2"></i> Print Report
-                                        </button>
-                                        <a href="/admin/reports/generate" class="btn btn-outline-secondary btn-lg">
-                                            <i class="bi bi-arrow-left me-2"></i> Generate New Report
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Summary Statistics -->
             <div class="summary-section">
                 <div class="container-fluid">
@@ -194,89 +172,6 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                                                       th:text="${status.value}">0</span>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Detailed Data Tables -->
-            <div class="tables-section">
-                <div class="container-fluid">
-                    <div class="row mb-5">
-                        <!-- Reports Table -->
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Reports</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div th:if="${#lists.isEmpty(reportData.reports)}" class="no-data">
-                                        No reports for this month.
-                                    </div>
-                                    <div class="table-responsive" th:unless="${#lists.isEmpty(reportData.reports)}">
-                                        <table class="table table-striped table-hover">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th>Report ID</th>
-                                                    <th>Category</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr th:each="report : ${reportData.reports}">
-                                                <td th:text="${report.reportId}">ID-001</td>
-                                                <td th:text="${report.category}">Physical</td>
-                                                <td>
-                                                    <span class="status-badge" 
-                                                          th:class="'status-badge status-' + ${#strings.toLowerCase(#strings.replace(report.status, '_', '-'))}"
-                                                          th:text="${#strings.replace(report.status, '_', ' ')}">
-                                                        Pending
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row mb-5">
-                        <!-- Appointments Table -->
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Appointments</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div th:if="${#lists.isEmpty(reportData.appointments)}" class="no-data">
-                                        No appointments for this month.
-                                    </div>
-                                    <div class="table-responsive" th:unless="${#lists.isEmpty(reportData.appointments)}">
-                                        <table class="table table-striped table-hover">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th>Appointment ID</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr th:each="appointment : ${reportData.appointments}">
-                                                <td th:text="${'APT-' + appointment.id}">APT-001</td>
-                                                <td>
-                                                    <span class="status-badge" 
-                                                          th:class="'status-badge status-' + ${#strings.toLowerCase(appointment.status)}"
-                                                          th:text="${appointment.status}">
-                                                        Pending
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>
