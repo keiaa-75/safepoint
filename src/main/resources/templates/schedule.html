@@ -4,99 +4,181 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/common :: head(title='Schedule an Appointment')}"></head>
-<head>
-    <link rel="stylesheet" href="/css/multi-step-form.css">
-</head>
-<body>
-    <div th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.studentNav})}"></div>
-    <div class="main-content">
-        <div class="container content-container">
-            <div class="content-card">
-                <div class="text-center mb-3">
-                    <h1 class="fw-bold">Schedule a Session</h1>
-                    <p class="text-muted">Choose a time that feels right. We are here to support you.</p>
+    <head
+        th:replace="~{fragments/common :: head(title='Schedule an Appointment')}"
+    ></head>
+    <head>
+        <link rel="stylesheet" href="/css/multi-step-form.css" />
+    </head>
+    <body>
+        <div
+            th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.studentNav})}"
+        ></div>
+        <div class="main-content">
+            <div class="container content-container">
+                <div class="content-card">
+                    <div class="text-center mb-3">
+                        <h1 class="fw-bold">Schedule a Session</h1>
+                        <p class="text-muted">
+                            Choose a time that feels right. We are here to
+                            support you.
+                        </p>
+                    </div>
+
+                    <div
+                        id="validation-alert"
+                        class="alert alert-danger d-none mb-4"
+                        role="alert"
+                    ></div>
+                    <form
+                        id="appointmentForm"
+                        th:action="@{/schedule}"
+                        th:object="${appointment}"
+                        method="post"
+                        novalidate
+                    >
+                        <div
+                            th:replace="~{fragments/form-components :: form-progress-bar(totalSteps=3, stepLabels=${ {'Info', 'Details', 'Review'} } )}"
+                        ></div>
+
+                        <div
+                            th:replace="~{fragments/form-components :: form-step-info}"
+                        ></div>
+
+                        <div
+                            class="form-step"
+                            id="step-2"
+                            style="display: none"
+                        >
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="preferredDate"
+                                            placeholder="Select a date"
+                                            required
+                                        />
+                                        <label for="preferredDate"
+                                            >Preferred Date</label
+                                        >
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select
+                                            class="form-select"
+                                            id="preferredTime"
+                                            required
+                                        >
+                                            <option value="" disabled selected>
+                                                Select a time
+                                            </option>
+                                            <option value="09:00">
+                                                9:00 AM
+                                            </option>
+                                            <option value="10:00">
+                                                10:00 AM
+                                            </option>
+                                            <option value="13:00">
+                                                1:00 PM
+                                            </option>
+                                            <option value="14:00">
+                                                2:00 PM
+                                            </option>
+                                            <option value="15:00">
+                                                3:00 PM
+                                            </option>
+                                            <option value="16:00">
+                                                4:00 PM
+                                            </option>
+                                        </select>
+                                        <label for="preferredTime"
+                                            >Preferred Time</label
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <input
+                                type="hidden"
+                                id="preferredDateTime"
+                                th:field="*{preferredDateTime}"
+                            />
+                            <div class="form-floating mb-4">
+                                <textarea
+                                    class="form-control"
+                                    id="reason"
+                                    th:field="*{reason}"
+                                    placeholder="Brief Reason for Session"
+                                    rows="5"
+                                    required
+                                    style="height: 120px"
+                                ></textarea>
+                                <label for="reason"
+                                    >Brief Reason for Session</label
+                                >
+                            </div>
+                        </div>
+
+                        <div
+                            class="form-step"
+                            id="step-3"
+                            style="display: none"
+                        >
+                            <div class="mb-3">
+                                <p class="text-muted mb-0">Name</p>
+                                <p id="review-name"></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted mb-0">Email</p>
+                                <p id="review-email"></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted mb-0">
+                                    Preferred Date/Time
+                                </p>
+                                <p id="review-datetime"></p>
+                            </div>
+                            <div class="mb-4">
+                                <p class="text-muted mb-1">Reason:</p>
+                                <div class="p-3 bg-light rounded">
+                                    <p id="review-reason" class="mb-0"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            th:replace="~{fragments/form-components :: form-navigation(submitText='Request Session')}"
+                        ></div>
+                    </form>
                 </div>
-
-                <div id="validation-alert" class="alert alert-danger d-none mb-4" role="alert"></div>
-                <form id="appointmentForm" th:action="@{/schedule}" th:object="${appointment}" method="post" novalidate>
-                    
-                    <div th:replace="~{fragments/form-components :: form-progress-bar(totalSteps=3, stepLabels=${ {'Info', 'Details', 'Review'} } )}"></div>
-
-                    <div th:replace="~{fragments/form-components :: form-step-info}"></div>
-
-                    <div class="form-step" id="step-2" style="display: none;">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="preferredDate" placeholder="Select a date" required>
-                                    <label for="preferredDate">Preferred Date</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <select class="form-select" id="preferredTime" required>
-                                        <option value="" disabled selected>Select a time</option>
-                                        <option value="09:00">9:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="13:00">1:00 PM</option>
-                                        <option value="14:00">2:00 PM</option>
-                                        <option value="15:00">3:00 PM</option>
-                                        <option value="16:00">4:00 PM</option>
-                                    </select>
-                                    <label for="preferredTime">Preferred Time</label>
-                                </div>
-                            </div>
-                        </div>
-                        <input type="hidden" id="preferredDateTime" th:field="*{preferredDateTime}">
-                        <div class="form-floating mb-4">
-                            <textarea class="form-control" id="reason" th:field="*{reason}" placeholder="Brief Reason for Session" rows="5" required style="height: 120px;"></textarea>
-                            <label for="reason">Brief Reason for Session</label>
-                        </div>
-                    </div>
-
-                    <div class="form-step" id="step-3" style="display: none;">
-                        <div class="mb-3">
-                            <p class="text-muted mb-0">Name</p>
-                            <p id="review-name"></p>
-                        </div>
-                        <div class="mb-3">
-                            <p class="text-muted mb-0">Email</p>
-                            <p id="review-email"></p>
-                        </div>
-                        <div class="mb-3">
-                            <p class="text-muted mb-0">Preferred Date/Time</p>
-                            <p id="review-datetime"></p>
-                        </div>
-                        <div class="mb-4">
-                            <p class="text-muted mb-1">Reason:</p>
-                            <div class="p-3 bg-light rounded">
-                                <p id="review-reason" class="mb-0"></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div th:replace="~{fragments/form-components :: form-navigation(submitText='Request Session')}"></div>
-                </form>
             </div>
         </div>
-    </div>
 
-    <div th:if="${message}" th:replace="~{fragments/success-modal :: success-modal(title='Request Submitted!', text='Your counseling session request has been submitted successfully!', referenceId=null, referenceIdLabel=null)}"></div>
+        <div
+            th:if="${message}"
+            th:replace="~{fragments/success-modal :: success-modal(title='Request Submitted!', text='Your counseling session request has been submitted successfully!', referenceId=null, referenceIdLabel=null)}"
+        ></div>
 
-    <div th:replace="~{fragments/common :: scripts}"></div>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="/js/flatpickr-config.js"></script>
-    <script src="/js/multi-step-form.js"></script>
-    <script src="/js/schedule-form.js"></script>
+        <div th:replace="~{fragments/common :: scripts}"></div>
+        <div th:replace="~{fragments/feedback-widget :: feedback-widget}"></div>
 
-    <script th:if="${message}">
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-            successModal.show();
-        });
-    </script>
-</body>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="/js/flatpickr-config.js"></script>
+        <script src="/js/multi-step-form.js"></script>
+        <script src="/js/schedule-form.js"></script>
+        <script src="/js/feedback-widget.js"></script>
+
+        <script th:if="${message}">
+            document.addEventListener("DOMContentLoaded", (event) => {
+                const successModal = new bootstrap.Modal(
+                    document.getElementById("successModal"),
+                );
+                successModal.show();
+            });
+        </script>
+    </body>
 </html>

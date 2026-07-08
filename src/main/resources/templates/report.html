@@ -4,125 +4,248 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
 -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/common :: head(title='File a Report')}"></head>
-<head>
-    <link rel="stylesheet" href="/css/multi-step-form.css">
-</head>
-<body>
-    <div th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.studentNav})}"></div>
-    <div class="main-content">
-        <div class="container content-container">
-            <div class="content-card">
-                <div th:if="${error}" class="alert alert-danger" role="alert">
-                    <span th:text="${error}"></span>
-                </div>
-                <div class="text-center mb-3">
-                    <h1 class="fw-bold">Submit a Report</h1>
-                    <p class="text-muted">Submit a confidential report about bullying.</p>
-                </div>
-
-                <div id="validation-alert" class="alert alert-danger d-none mb-4" role="alert"></div>
-                <form id="reportForm" th:action="@{/submit-report}" th:object="${report}" method="post" enctype="multipart/form-data" novalidate>
-                    
-                    <div th:replace="~{fragments/form-components :: form-progress-bar(totalSteps=4, stepLabels=${ {'Info', 'Details', 'Proof', 'Review'} } )}"></div>
-
-                    <div th:replace="~{fragments/form-components :: form-step-info}"></div>
-
-                    <div class="form-step" id="step-2" style="display: none;">
-                        <div class="form-floating mb-3">
-                            <select class="form-select" id="category" name="category" required>
-                                <option value="" selected disabled>Select a category</option>
-                                <option value="Physical">Physical</option>
-                                <option value="Verbal">Verbal</option>
-                                <option value="Cyber">Cyber</option>
-                                <option value="Social">Social</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <label for="category">Bullying Category</label>
-                        </div>
-                        <div class="form-floating mb-4">
-                            <textarea class="form-control" id="description" th:field="*{description}" placeholder="Description of the Incident" rows="5" required style="height: 120px"></textarea>
-                            <label for="description">Description of the Incident</label>
-                        </div>
+    <head
+        th:replace="~{fragments/common :: head(title='File a Report')}"
+    ></head>
+    <head>
+        <link rel="stylesheet" href="/css/multi-step-form.css" />
+    </head>
+    <body>
+        <div
+            th:replace="~{fragments/modular-nav :: nav(${@navigationConfig.studentNav})}"
+        ></div>
+        <div class="main-content">
+            <div class="container content-container">
+                <div class="content-card">
+                    <div
+                        th:if="${error}"
+                        class="alert alert-danger"
+                        role="alert"
+                    >
+                        <span th:text="${error}"></span>
+                    </div>
+                    <div class="text-center mb-3">
+                        <h1 class="fw-bold">Submit a Report</h1>
+                        <p class="text-muted">
+                            Submit a confidential report about bullying.
+                        </p>
                     </div>
 
-                    <div class="form-step" id="step-3" style="display: none;">
-                        <div class="mb-3">
-                            <label for="files" class="form-label">Select files to upload:</label>
-                            <input class="form-control" type="file" id="files" name="files" multiple>
-                            <div id="file-error" class="text-danger mt-2"></div>
-                            <div class="form-text mt-2">Your evidence will be kept strictly confidential. Max file size: 10MB.</div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="externalLink" class="form-label">External link:</label>
-                            <input type="url" class="form-control" id="externalLink" name="externalLink" placeholder="https://example.com/evidence">
-                            <div class="form-text mt-2">If your evidence is hosted on a cloud service, you can provide the link here.</div>
-                        </div>
-                    </div>
+                    <div
+                        id="validation-alert"
+                        class="alert alert-danger d-none mb-4"
+                        role="alert"
+                    ></div>
+                    <form
+                        id="reportForm"
+                        th:action="@{/submit-report}"
+                        th:object="${report}"
+                        method="post"
+                        enctype="multipart/form-data"
+                        novalidate
+                    >
+                        <div
+                            th:replace="~{fragments/form-components :: form-progress-bar(totalSteps=4, stepLabels=${ {'Info', 'Details', 'Proof', 'Review'} } )}"
+                        ></div>
 
-                    <div class="form-step" id="step-4" style="display: none;">
-                        <div class="mb-3">
-                            <p class="text-muted mb-0">Name</p>
-                            <p id="review-name"></p>
-                        </div>
-                        <div class="mb-3">
-                            <p class="text-muted mb-0">Email</p>
-                            <p id="review-email"></p>
-                        </div>
-                        <div class="mb-3">
-                            <p class="text-muted mb-0">Category</p>
-                            <p id="review-category"></p>
-                        </div>
-                        <div class="mb-4">
-                            <p class="text-muted mb-1">Description:</p>
-                            <div class="p-3 bg-light rounded">
-                                <p id="review-description" class="mb-0"></p>
+                        <div
+                            th:replace="~{fragments/form-components :: form-step-info}"
+                        ></div>
+
+                        <div
+                            class="form-step"
+                            id="step-2"
+                            style="display: none"
+                        >
+                            <div class="form-floating mb-3">
+                                <select
+                                    class="form-select"
+                                    id="category"
+                                    name="category"
+                                    required
+                                >
+                                    <option value="" selected disabled>
+                                        Select a category
+                                    </option>
+                                    <option value="Physical">Physical</option>
+                                    <option value="Verbal">Verbal</option>
+                                    <option value="Cyber">Cyber</option>
+                                    <option value="Social">Social</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <label for="category">Bullying Category</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <textarea
+                                    class="form-control"
+                                    id="description"
+                                    th:field="*{description}"
+                                    placeholder="Description of the Incident"
+                                    rows="5"
+                                    required
+                                    style="height: 120px"
+                                ></textarea>
+                                <label for="description"
+                                    >Description of the Incident</label
+                                >
                             </div>
                         </div>
-                        <div class="accordion mb-4" id="evidence-accordion">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="evidence-heading">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-evidence" aria-expanded="false" aria-controls="collapse-evidence">
-                                        Review Evidence
-                                    </button>
-                                </h2>
-                                <div id="collapse-evidence" class="accordion-collapse collapse" aria-labelledby="evidence-heading" data-bs-parent="#evidence-accordion">
-                                    <div class="accordion-body">
-                                        <p class="text-muted mb-2">Uploaded Files:</p>
-                                        <ul id="review-files" class="list-group mb-3"></ul>
-                                        <p class="text-muted mb-0">External Link:</p>
-                                        <p id="review-externalLink" style="word-wrap: break-word;"></p>
-                                    </div>
+
+                        <div
+                            class="form-step"
+                            id="step-3"
+                            style="display: none"
+                        >
+                            <div class="mb-3">
+                                <label for="files" class="form-label"
+                                    >Select files to upload:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    type="file"
+                                    id="files"
+                                    name="files"
+                                    multiple
+                                />
+                                <div
+                                    id="file-error"
+                                    class="text-danger mt-2"
+                                ></div>
+                                <div class="form-text mt-2">
+                                    Your evidence will be kept strictly
+                                    confidential. Max file size: 10MB.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="externalLink" class="form-label"
+                                    >External link:</label
+                                >
+                                <input
+                                    type="url"
+                                    class="form-control"
+                                    id="externalLink"
+                                    name="externalLink"
+                                    placeholder="https://example.com/evidence"
+                                />
+                                <div class="form-text mt-2">
+                                    If your evidence is hosted on a cloud
+                                    service, you can provide the link here.
                                 </div>
                             </div>
                         </div>
-                        <div class="form-check mb-4">
-                            <input class="form-check-input" type="checkbox" value="" id="confirmation" required>
-                            <label class="form-check-label text-muted small" for="confirmation">
-                                I verify that this report is true and accurate to the best of my knowledge.
-                            </label>
-                        </div>
-                    </div>
 
-                    <div th:replace="~{fragments/form-components :: form-navigation(submitText='Submit Report')}"></div>
-                </form>
+                        <div
+                            class="form-step"
+                            id="step-4"
+                            style="display: none"
+                        >
+                            <div class="mb-3">
+                                <p class="text-muted mb-0">Name</p>
+                                <p id="review-name"></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted mb-0">Email</p>
+                                <p id="review-email"></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted mb-0">Category</p>
+                                <p id="review-category"></p>
+                            </div>
+                            <div class="mb-4">
+                                <p class="text-muted mb-1">Description:</p>
+                                <div class="p-3 bg-light rounded">
+                                    <p id="review-description" class="mb-0"></p>
+                                </div>
+                            </div>
+                            <div class="accordion mb-4" id="evidence-accordion">
+                                <div class="accordion-item">
+                                    <h2
+                                        class="accordion-header"
+                                        id="evidence-heading"
+                                    >
+                                        <button
+                                            class="accordion-button collapsed"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapse-evidence"
+                                            aria-expanded="false"
+                                            aria-controls="collapse-evidence"
+                                        >
+                                            Review Evidence
+                                        </button>
+                                    </h2>
+                                    <div
+                                        id="collapse-evidence"
+                                        class="accordion-collapse collapse"
+                                        aria-labelledby="evidence-heading"
+                                        data-bs-parent="#evidence-accordion"
+                                    >
+                                        <div class="accordion-body">
+                                            <p class="text-muted mb-2">
+                                                Uploaded Files:
+                                            </p>
+                                            <ul
+                                                id="review-files"
+                                                class="list-group mb-3"
+                                            ></ul>
+                                            <p class="text-muted mb-0">
+                                                External Link:
+                                            </p>
+                                            <p
+                                                id="review-externalLink"
+                                                style="word-wrap: break-word"
+                                            ></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-check mb-4">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    value=""
+                                    id="confirmation"
+                                    required
+                                />
+                                <label
+                                    class="form-check-label text-muted small"
+                                    for="confirmation"
+                                >
+                                    I verify that this report is true and
+                                    accurate to the best of my knowledge.
+                                </label>
+                            </div>
+                        </div>
+
+                        <div
+                            th:replace="~{fragments/form-components :: form-navigation(submitText='Submit Report')}"
+                        ></div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div th:if="${message}" th:replace="~{fragments/success-modal :: success-modal(title='Report Received', text='Your report has been submitted. If you feel unsafe, please contact campus security immediately.', referenceId=${reportId}, referenceIdLabel='Your unique reference ID is:')}"></div>
-    
-    <div th:replace="~{fragments/common :: scripts}"></div>
-    <script src="/js/multi-step-form.js"></script>
-    <script src="/js/report-form.js"></script>
 
-    <script th:if="${message}">
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-            successModal.show();
-        });
-    </script>
-</body>
+        <div
+            th:if="${message}"
+            th:replace="~{fragments/success-modal :: success-modal(title='Report Received', text='Your report has been submitted. If you feel unsafe, please contact campus security immediately.', referenceId=${reportId}, referenceIdLabel='Your unique reference ID is:')}"
+        ></div>
+
+        <div th:replace="~{fragments/feedback-widget :: feedback-widget}"></div>
+
+        <div th:replace="~{fragments/common :: scripts}"></div>
+        <script src="/js/multi-step-form.js"></script>
+        <script src="/js/report-form.js"></script>
+        <script src="/js/feedback-widget.js"></script>
+
+        <script th:if="${message}">
+            document.addEventListener("DOMContentLoaded", (event) => {
+                const successModal = new bootstrap.Modal(
+                    document.getElementById("successModal"),
+                );
+                successModal.show();
+            });
+        </script>
+    </body>
 </html>

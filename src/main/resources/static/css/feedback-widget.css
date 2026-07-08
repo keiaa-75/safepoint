@@ -1,0 +1,50 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+ */
+
+.feedback-rating-options {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--sp-spacing-sm);
+}
+
+.feedback-rating-option {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-spacing-xs);
+    padding: var(--sp-spacing-sm) var(--sp-spacing-xs);
+    background-color: var(--sp-bg-white);
+    border: 1px solid var(--sp-border-light);
+    border-radius: var(--sp-radius-md);
+    color: var(--sp-text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.1;
+    cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.feedback-rating-option i {
+    font-size: 1.5rem;
+}
+
+.feedback-rating-option:hover {
+    border-color: var(--sp-primary);
+    color: var(--sp-primary-dark);
+}
+
+.feedback-rating-option.is-selected {
+    background-color: var(--sp-primary);
+    border-color: var(--sp-primary);
+    color: var(--sp-bg-white);
+}
+
+.feedback-pane textarea {
+    resize: none;
+}
