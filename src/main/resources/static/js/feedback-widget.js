@@ -83,6 +83,18 @@ document.addEventListener("DOMContentLoaded", () => {
       thanksName.textContent = data.studentFirstName;
       ratingPane.classList.add("d-none");
       thanksPane.classList.remove("d-none");
+
+      // The modal is now correct, but the page around it (e.g. the
+      // About page CTA) was rendered before this submission happened.
+      // Swap any open-modal triggers to the same "already submitted"
+      // markup the server renders on a fresh page load, so it doesn't
+      // take a reload to catch up.
+      document
+        .querySelectorAll("[data-open-feedback-modal]")
+        .forEach((trigger) => {
+          trigger.outerHTML =
+            '<p class="text-success mb-0"><i class="bi bi-check-circle-fill me-1"></i> Thanks, you\'ve already shared your feedback with us.</p>';
+        });
     } catch (error) {
       showError("Something went wrong. Please try again.");
       submitBtn.disabled = false;
