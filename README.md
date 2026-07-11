@@ -58,12 +58,12 @@ SafePoint runs against either of two databases, selected by Spring profile:
  
 | Profile | Database | Config file | Use case |
 |---|---|---|---|
-| `dev` (default) | H2, in-memory | [`application-dev.properties`](src/main/resources/application-dev.properties) | Local development — no setup, no persistence between restarts |
+| `dev` (default) | H2, file-based (`data/safepoint.mv.db`) | [`application-dev.properties`](src/main/resources/application-dev.properties) | Local development — no setup, data persists across restarts in the `data/` folder |
 | `prod` | PostgreSQL | [`application-prod.properties`](src/main/resources/application-prod.properties) | Deployment — persistent, external database |
  
 `spring.jpa.hibernate.ddl-auto=update` in the base [`application.properties`](src/main/resources/application.properties) applies to both: Hibernate generates the correct dialect-specific schema for whichever database is active, so the JPA entities themselves never need to change between the two.
  
-Running locally (`mvn spring-boot:run` or from your IDE) uses the `dev` profile automatically.
+Running locally (`mvn spring-boot:run` or from your IDE) uses the `dev` profile automatically — no database setup needed. The H2 database file lives under `data/` in the project root and is created automatically on first run; it's gitignored, so each contributor gets their own local copy, and deleting the folder resets your local data.
  
 To run against PostgreSQL instead, provide a running Postgres instance and set:
  
@@ -75,7 +75,7 @@ export DB_PASSWORD=your-password
 mvn spring-boot:run
 ```
  
-In production, these same four variables are set as `Environment=` entries in the systemd unit rather than exported manually. `application-prod.properties` never contains real credentials itself, only the `${DB_URL}` / `${DB_USERNAME}` / `${DB_PASSWORD}` placeholders.
+In production, these same four variables are set as `Environment=` entries in the systemd unit rather than exported manually — `application-prod.properties` never contains real credentials itself, only the `${DB_URL}` / `${DB_USERNAME}` / `${DB_PASSWORD}` placeholders.
 
 ## License
 
