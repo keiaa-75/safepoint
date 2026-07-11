@@ -38,4 +38,3 @@ build/
 *LYFJSHS*
 data/
 src/main/resources/app-secrets.properties
-src/main/resources/datasource.properties
