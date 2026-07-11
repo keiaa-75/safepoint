@@ -13,7 +13,7 @@
 	</parent>
 	<groupId>com.keiaa</groupId>
 	<artifactId>safepoint</artifactId>
-	<version>0.2.4-beta</version>
+	<version>2026.07.0</version>
 	<name>SafePoint</name>
 	<description
     >A safe reporting platform for students to report bullying and get support confidentially.</description>
