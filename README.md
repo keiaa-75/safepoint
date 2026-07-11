@@ -10,7 +10,7 @@
 
 ![SafePoint app screenshot](screenshot.png)
 
-SafePoint is a simple, full-stack web application to provide a platform for students to report bullying incidents and schedule one-on-one counseling sessions.
+SafePoint is a simple, full-stack web application to provide a platform for students to report bullying incidents and get support confidentially.
 
 ## Getting Started
 
@@ -44,14 +44,38 @@ mvn spring-boot:run
 
 The application will start on port `9090`.
 
-
 ## Development Properties
-
-This project requires `app-secrets.properties` and `datasource.properties` for local development. These files contain sensitive configuration (such as email credentials and database settings) and are therefore excluded from version control. You may refer to the included template files.
-
+ 
+This project requires `app-secrets.properties` for local development. This file contains sensitive configuration (email credentials) and is therefore excluded from version control. You may refer to the included template file.
+ 
 The [EmailService](src/main/java/com/keiaa/safepoint/service/EmailService.java) uses mail-related properties to automatically communicate actions and updates to the user.
-
-**You must create these files before running the app.**
+ 
+**You must create this file before running the app.**
+ 
+## Database Configuration
+ 
+SafePoint runs against either of two databases, selected by Spring profile:
+ 
+| Profile | Database | Config file | Use case |
+|---|---|---|---|
+| `dev` (default) | H2, in-memory | [`application-dev.properties`](src/main/resources/application-dev.properties) | Local development — no setup, no persistence between restarts |
+| `prod` | PostgreSQL | [`application-prod.properties`](src/main/resources/application-prod.properties) | Deployment — persistent, external database |
+ 
+`spring.jpa.hibernate.ddl-auto=update` in the base [`application.properties`](src/main/resources/application.properties) applies to both: Hibernate generates the correct dialect-specific schema for whichever database is active, so the JPA entities themselves never need to change between the two.
+ 
+Running locally (`mvn spring-boot:run` or from your IDE) uses the `dev` profile automatically.
+ 
+To run against PostgreSQL instead, provide a running Postgres instance and set:
+ 
+```sh
+export SPRING_PROFILES_ACTIVE=prod
+export DB_URL=jdbc:postgresql://localhost:5432/safepoint
+export DB_USERNAME=safepoint
+export DB_PASSWORD=your-password
+mvn spring-boot:run
+```
+ 
+In production, these same four variables are set as `Environment=` entries in the systemd unit rather than exported manually. `application-prod.properties` never contains real credentials itself, only the `${DB_URL}` / `${DB_USERNAME}` / `${DB_PASSWORD}` placeholders.
 
 ## License
 
