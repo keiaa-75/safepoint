@@ -49,33 +49,29 @@ public class SecurityConfig {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain adminFilterChain(HttpSecurity http)
-        throws Exception {
-        http.securityMatcher("/admin/**", "/admin-login")
-            .authorizeHttpRequests(authz ->
-                authz
-                    .requestMatchers("/admin-login")
-                    .permitAll()
-                    .anyRequest()
-                    .hasRole("ADMIN")
+    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
+        http
+            .securityMatcher("/admin/**", "/admin-login")
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/admin-login").permitAll()
+                .anyRequest().hasRole("ADMIN")
             )
-            .formLogin(formLogin ->
-                formLogin
-                    .loginPage("/admin-login")
-                    .loginProcessingUrl("/admin-login")
-                    .defaultSuccessUrl("/admin/dashboard", true)
-                    .failureUrl("/admin-login?error=true")
-                    .permitAll()
+            .formLogin(formLogin -> formLogin
+                .loginPage("/admin-login")
+                .loginProcessingUrl("/admin-login")
+                .defaultSuccessUrl("/admin/dashboard", true)
+                .failureUrl("/admin-login?error=true")
+                .permitAll()
             )
-            .logout(logout ->
-                logout
-                    .logoutUrl("/admin/logout")
-                    .logoutSuccessUrl("/")
-                    .permitAll()
+            .logout(logout -> logout
+                .logoutUrl("/admin/logout")
+                .logoutSuccessUrl("/")
+                .permitAll()
             )
             .userDetailsService(adminDetailsService)
-            .sessionManagement(session ->
-                session.maximumSessions(1).maxSessionsPreventsLogin(false)
+            .sessionManagement(session -> session
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
             );
 
         return http.build();
@@ -83,71 +79,45 @@ public class SecurityConfig {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain studentFilterChain(HttpSecurity http)
-        throws Exception {
-        http.authorizeHttpRequests(authz ->
-            authz
-                .requestMatchers(
-                    "/",
-                    "/files/**",
-                    "/css/**",
-                    "/js/**",
-                    "/img/**",
-                    "/images/**",
-                    "/webjars/**",
-                    "/favicon.ico",
-                    "/manifest.json",
-                    "/service-worker.js",
-                    "/about",
-                    "/student-signup",
-                    "/student-login",
-                    "/admin-login",
-                    "/verify-email",
-                    "/resend-verification",
-                    "/forgot-password",
-                    "/reset-password"
-                )
-                .permitAll()
-                .requestMatchers("/h2-console/**")
-                .permitAll()
-                .requestMatchers(
-                    "/dashboard",
-                    "/report",
-                    "/submit-report",
-                    "/schedule",
-                    "/submit-feedback"
-                )
-                .hasRole("STUDENT")
-                .anyRequest()
-                .denyAll()
-        )
-            .formLogin(formLogin ->
-                formLogin
-                    .loginPage("/student-login")
-                    .loginProcessingUrl("/student-login")
-                    .defaultSuccessUrl("/", true)
-                    .failureHandler((request, response, exception) -> {
-                        if (exception instanceof LockedException) {
-                            response.sendRedirect("/student-login?locked=true");
-                        } else {
-                            response.sendRedirect("/student-login?error=true");
-                        }
-                    })
-                    .permitAll()
+    public SecurityFilterChain studentFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/", "/files/**", "/css/**", "/js/**", "/img/**", "/images/**", "/icons/**", "/webjars/**",
+                    "/favicon.ico", "/favicon.svg", "/manifest.json", "/service-worker.js", "/about", "/student-signup",
+                    "/student-login", "/admin-login", "/verify-email", "/resend-verification", "/forgot-password",
+                    "/reset-password").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/dashboard", "/report", "/submit-report", "/schedule", "/submit-feedback").hasRole("STUDENT")
+                .anyRequest().denyAll()
             )
-            .logout(logout ->
-                logout
-                    .logoutUrl("/student/logout")
-                    .logoutSuccessUrl("/")
-                    .permitAll()
+            .formLogin(formLogin -> formLogin
+                .loginPage("/student-login")
+                .loginProcessingUrl("/student-login")
+                .defaultSuccessUrl("/", true)
+                .failureHandler((request, response, exception) -> {
+                    if (exception instanceof LockedException) {
+                        response.sendRedirect("/student-login?locked=true");
+                    } else {
+                        response.sendRedirect("/student-login?error=true");
+                    }
+                })
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/student/logout")
+                .logoutSuccessUrl("/")
+                .permitAll()
             )
             .userDetailsService(studentDetailsService)
-            .sessionManagement(session ->
-                session.maximumSessions(1).maxSessionsPreventsLogin(false)
+            .sessionManagement(session -> session
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
             )
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
-            .headers(headers ->
-                headers.frameOptions(frameOptions -> frameOptions.sameOrigin())
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/h2-console/**")
+            )
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.sameOrigin())
             );
 
         return http.build();
