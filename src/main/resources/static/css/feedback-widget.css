@@ -4,45 +4,59 @@
  * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
  */
 
-.feedback-rating-options {
+.feedback-star-rating {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row-reverse;
+    justify-content: center;
     gap: var(--sp-spacing-sm);
+    padding: 0;
+    margin: 0;
+    border: none;
 }
 
-.feedback-rating-option {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--sp-spacing-xs);
-    padding: var(--sp-spacing-sm) var(--sp-spacing-xs);
-    background-color: var(--sp-bg-white);
-    border: 1px solid var(--sp-border-light);
-    border-radius: var(--sp-radius-md);
-    color: var(--sp-text-secondary);
-    font-size: 0.8rem;
-    line-height: 1.1;
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.feedback-star-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.feedback-star-label {
     cursor: pointer;
-    transition:
-        border-color 0.15s ease,
-        color 0.15s ease,
-        background-color 0.15s ease;
+    font-size: 2.25rem;
+    line-height: 1;
+    color: var(--sp-border-medium);
+    transition: color 0.15s ease, transform 0.1s ease;
 }
 
-.feedback-rating-option i {
-    font-size: 1.5rem;
+.feedback-star-label:hover {
+    transform: scale(1.12);
 }
 
-.feedback-rating-option:hover {
-    border-color: var(--sp-primary);
-    color: var(--sp-primary-dark);
+/* The fill effect: a checked/hovered star, and every star before it in
+   DOM order (i.e. every star to its left on screen, thanks to
+   row-reverse), turns the app's accent color. Pure CSS - no JS involved. */
+.feedback-star-input:checked ~ .feedback-star-label,
+.feedback-star-label:hover,
+.feedback-star-label:hover ~ .feedback-star-label {
+    color: var(--sp-primary);
 }
 
-.feedback-rating-option.is-selected {
-    background-color: var(--sp-primary);
-    border-color: var(--sp-primary);
-    color: var(--sp-bg-white);
+.feedback-star-input:focus-visible ~ .feedback-star-label {
+    outline: 2px solid var(--sp-primary);
+    outline-offset: 2px;
+    border-radius: var(--sp-radius-sm);
 }
 
 .feedback-pane textarea {

@@ -7,34 +7,28 @@
 package com.keiaa.safepoint.model.enums;
 
 /**
- * The five options a student can pick when rating their SafePoint experience.
- * Display label, icon, and numeric score all live here so the Thymeleaf
- * fragment can render the options straight from this enum instead of
- * duplicating the copy in HTML.
+ * The five options a student can pick when rating their SafePoint experience,
+ * shown as a 1-5 heart widget (score == number of filled hearts). Display
+ * label and score live here so the Thymeleaf fragment can render the
+ * options straight from this enum instead of duplicating the copy in HTML.
  */
 public enum FeedbackRating {
-    POOR("Poor", "bi-emoji-angry", 1),
-    BAD("Bad", "bi-emoji-frown", 2),
-    AVERAGE("Average", "bi-emoji-neutral", 3),
-    GOOD("Good", "bi-emoji-smile", 4),
-    EXCELLENT("Excellent", "bi-emoji-laughing", 5);
+    POOR("Poor", 1),
+    BAD("Bad", 2),
+    AVERAGE("Average", 3),
+    GOOD("Good", 4),
+    EXCELLENT("Excellent", 5);
 
     private final String displayName;
-    private final String iconClass;
     private final int score;
 
-    FeedbackRating(String displayName, String iconClass, int score) {
+    FeedbackRating(String displayName, int score) {
         this.displayName = displayName;
-        this.iconClass = iconClass;
         this.score = score;
     }
 
     public String getDisplayName() {
         return displayName;
-    }
-
-    public String getIconClass() {
-        return iconClass;
     }
 
     public int getScore() {

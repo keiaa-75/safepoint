@@ -11,97 +11,70 @@ feedback-widget.js finds no #feedbackModal and quietly does nothing -
 that's what keeps the CTA and the auto-popup from ever appearing again
 once a student has submitted, and keeps them off admin/guest pages entirely.
 -->
-<div
-    th:fragment="feedback-widget"
-    th:if="${feedbackPromptEligible}"
-    id="feedbackModal"
-    class="modal fade"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="feedbackModalLabel"
-    aria-hidden="true"
-    th:attr="data-csrf-token=${_csrf.token},data-csrf-header=${_csrf.headerName}"
->
+<div th:fragment="feedback-widget"
+     th:if="${feedbackPromptEligible}"
+     id="feedbackModal"
+     class="modal fade"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="feedbackModalLabel"
+     aria-hidden="true"
+     th:attr="data-csrf-token=${_csrf.token},data-csrf-header=${_csrf.headerName}">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 shadow">
+
             <!-- Pane 1: rating form. No close button and no backdrop/Esc dismiss by design. -->
             <div class="modal-body p-4 feedback-pane" id="feedbackRatingPane">
                 <div class="text-center mb-4">
-                    <h5 class="mb-1" id="feedbackModalLabel">
-                        How was your experience?
-                    </h5>
-                    <p class="text-muted mb-0">
-                        We'd love to hear your thoughts.
-                    </p>
+                    <h5 class="mb-1" id="feedbackModalLabel">How was your experience?</h5>
+                    <p class="text-muted mb-0">We'd love to hear your thoughts.</p>
                 </div>
 
-                <div
-                    class="feedback-rating-options"
-                    role="radiogroup"
-                    aria-label="Rate your experience"
-                >
-                    <button
-                        type="button"
-                        class="feedback-rating-option"
-                        th:each="option : ${T(com.keiaa.safepoint.model.enums.FeedbackRating).values()}"
-                        th:attr="data-rating=${option.name()}"
-                        aria-pressed="false"
-                    >
-                        <i th:class="'bi ' + ${option.iconClass}"></i>
-                        <span th:text="${option.displayName}"></span>
-                    </button>
-                </div>
+                <fieldset class="feedback-star-rating" aria-label="Rate your experience">
+                    <legend class="visually-hidden">Rate your experience</legend>
+                    <!-- Iterated in reverse (5 down to 1) so that, combined with
+                         flex-direction: row-reverse in the CSS, stars render
+                         left-to-right as 1 through 5 while still letting a
+                         pure-CSS sibling selector fill "this star and every
+                         one before it" on hover/selection - no JS needed for
+                         the fill effect itself. -->
+                    <th:block th:each="i : ${#numbers.sequence(4, 0, -1)}"
+                              th:with="option=${T(com.keiaa.safepoint.model.enums.FeedbackRating).values()[i]}">
+                        <input type="radio"
+                               name="feedbackRating"
+                               class="feedback-star-input"
+                               th:id="'feedbackRating-' + ${option.name()}"
+                               th:value="${option.name()}">
+                        <label class="feedback-star-label"
+                               th:for="'feedbackRating-' + ${option.name()}"
+                               th:aria-label="|${option.score} stars - ${option.displayName}|">
+                            <i class="bi bi-star-fill"></i>
+                        </label>
+                    </th:block>
+                </fieldset>
 
                 <div class="mt-4">
-                    <label for="feedbackComment" class="form-label text-muted"
-                        >Please tell us more about your experience.</label
-                    >
-                    <textarea
-                        id="feedbackComment"
-                        class="form-control"
-                        rows="3"
-                        maxlength="1000"
-                        placeholder="Optional"
-                    ></textarea>
+                    <label for="feedbackComment" class="form-label text-muted">Please tell us more about your experience.</label>
+                    <textarea id="feedbackComment" class="form-control" rows="3" maxlength="1000" placeholder="Optional"></textarea>
                 </div>
 
-                <div
-                    id="feedbackError"
-                    class="text-danger small mt-3 d-none"
-                ></div>
+                <div id="feedbackError" class="text-danger small mt-3 d-none"></div>
 
                 <div class="d-grid mt-4">
-                    <button
-                        type="button"
-                        id="feedbackSubmitBtn"
-                        class="btn btn-primary btn-lg"
-                        disabled
-                    >
-                        Submit
-                    </button>
+                    <button type="button" id="feedbackSubmitBtn" class="btn btn-primary btn-lg" disabled>Submit</button>
                 </div>
             </div>
 
             <!-- Pane 2: confirmation. Has the only close button in this modal. -->
-            <div
-                class="modal-body p-4 text-center feedback-pane d-none"
-                id="feedbackThanksPane"
-            >
-                <h5 class="mb-1">
-                    Thanks, <span id="feedbackThanksName"></span>
-                </h5>
+            <div class="modal-body p-4 text-center feedback-pane d-none" id="feedbackThanksPane">
+                <h5 class="mb-1">Thanks, <span id="feedbackThanksName"></span></h5>
                 <p class="text-muted mb-4">Your feedback has been saved!</p>
                 <div class="d-grid">
-                    <button
-                        type="button"
-                        class="btn btn-success btn-lg"
-                        data-bs-dismiss="modal"
-                    >
-                        Close
-                    </button>
+                    <button type="button" class="btn btn-success btn-lg" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
