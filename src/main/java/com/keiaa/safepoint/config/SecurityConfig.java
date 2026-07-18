@@ -84,6 +84,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/", "/files/**", "/css/**", "/js/**", "/img/**", "/images/**", "/icons/**", "/webjars/**",
                     "/favicon.ico", "/favicon.svg", "/manifest.json", "/service-worker.js", "/about", "/student-signup",
+                    "/student-signup/check-email", "/student-signup/check-lrn",
                     "/student-login", "/admin-login", "/verify-email", "/resend-verification", "/forgot-password",
                     "/reset-password").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()

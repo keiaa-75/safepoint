@@ -48,7 +48,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <label for="name">Full Name</label>
                         <input type="text" class="form-control" id="name" th:field="*{name}"
                                th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
-                               placeholder="Enter your full name" required>
+                               placeholder="Enter your full name" required oninput="updateSubmitState()">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                     </div>
 
@@ -56,16 +56,20 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         <label for="email">Email</label>
                         <input type="email" class="form-control" id="email" th:field="*{email}"
                                th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
-                               placeholder="Enter your email" required>
+                               placeholder="Enter your email" required
+                               oninput="handleEmailInput()">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                        <div class="invalid-feedback" id="emailAvailabilityFeedback"></div>
                     </div>
 
                     <div class="auth-form-floating">
                         <label for="lrn">LRN</label>
                         <input type="text" class="form-control" id="lrn" th:field="*{lrn}"
                                th:classappend="${#fields.hasErrors('lrn')} ? 'is-invalid'"
-                               placeholder="Enter your 12-digit LRN" maxlength="12" required>
+                               placeholder="Enter your 12-digit LRN" maxlength="12" pattern="[0-9]{12}" required
+                               oninput="handleLrnInput()">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('lrn')}" th:errors="*{lrn}"></div>
+                        <div class="invalid-feedback" id="lrnAvailabilityFeedback"></div>
                     </div>
 
                     <div class="auth-form-floating">
@@ -83,7 +87,7 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                         </div>
                     </div>
 
-                    <button type="button" class="auth-btn" onclick="validateAndShowModal(event)">Sign Up</button>
+                    <button type="button" class="auth-btn" id="signupSubmitBtn" disabled onclick="validateAndShowModal(event)">Sign Up</button>
                 </form>
 
                 <!-- Additional Links -->
@@ -100,8 +104,117 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     <div th:replace="~{fragments/common :: scripts}"></div>
 
     <script>
+    const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+    // null = not checked yet, true = available/valid, false = taken/invalid
+    let emailAvailable = null;
+    let lrnAvailable = null;
+    let passwordValid = false;
+
+    function debounce(fn, delay) {
+        let timer;
+        return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+    }
+
+    function updateSubmitState() {
+        const nameField = document.getElementById('name');
+        const emailField = document.getElementById('email');
+        const lrnField = document.getElementById('lrn');
+        const submitBtn = document.getElementById('signupSubmitBtn');
+
+        const nameValid = nameField.checkValidity();
+        const emailFormatValid = emailField.checkValidity();
+        const lrnFormatValid = lrnField.checkValidity();
+
+        const allGood =
+            nameValid &&
+            emailFormatValid && emailAvailable !== false &&
+            lrnFormatValid && lrnAvailable !== false &&
+            passwordValid;
+
+        submitBtn.disabled = !allGood;
+    }
+
+    const requestEmailCheck = debounce(async function () {
+        const emailField = document.getElementById('email');
+        const feedback = document.getElementById('emailAvailabilityFeedback');
+        const email = emailField.value.trim();
+
+        if (!emailField.checkValidity() || email.length === 0) {
+            emailAvailable = null;
+            emailField.classList.remove('is-invalid', 'is-valid');
+            feedback.textContent = '';
+            updateSubmitState();
+            return;
+        }
+
+        try {
+            const response = await fetch('/student-signup/check-email?email=' + encodeURIComponent(email));
+            if (!response.ok) {
+                emailAvailable = null; // fail open - the server still enforces this on submit
+                updateSubmitState();
+                return;
+            }
+            const data = await response.json();
+            emailAvailable = data.available;
+            emailField.classList.toggle('is-invalid', !emailAvailable);
+            emailField.classList.toggle('is-valid', emailAvailable);
+            feedback.textContent = emailAvailable ? '' : 'An account with this email already exists.';
+        } catch (e) {
+            emailAvailable = null;
+        }
+        updateSubmitState();
+    }, 500);
+
+    const requestLrnCheck = debounce(async function () {
+        const lrnField = document.getElementById('lrn');
+        const feedback = document.getElementById('lrnAvailabilityFeedback');
+        const lrn = lrnField.value.trim();
+
+        if (!lrnField.checkValidity() || lrn.length === 0) {
+            lrnAvailable = null;
+            lrnField.classList.remove('is-invalid', 'is-valid');
+            feedback.textContent = '';
+            updateSubmitState();
+            return;
+        }
+
+        try {
+            const response = await fetch('/student-signup/check-lrn?lrn=' + encodeURIComponent(lrn));
+            if (!response.ok) {
+                lrnAvailable = null;
+                updateSubmitState();
+                return;
+            }
+            const data = await response.json();
+            lrnAvailable = data.available;
+            lrnField.classList.toggle('is-invalid', !lrnAvailable);
+            lrnField.classList.toggle('is-valid', lrnAvailable);
+            feedback.textContent = lrnAvailable ? '' : 'An account with this LRN already exists.';
+        } catch (e) {
+            lrnAvailable = null;
+        }
+        updateSubmitState();
+    }, 500);
+
+    function handleEmailInput() {
+        emailAvailable = null; // stale until the debounced check resolves
+        requestEmailCheck();
+        updateSubmitState();
+    }
+
+    function handleLrnInput() {
+        lrnAvailable = null;
+        requestLrnCheck();
+        updateSubmitState();
+    }
+
     function checkPasswordStrength() {
         const password = document.getElementById('password').value;
+        const passwordField = document.getElementById('password');
         const strengthMeter = document.getElementById('strengthMeter');
         const strengthFeedback = document.getElementById('strengthFeedback');
 
@@ -129,6 +242,10 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
             strengthMeter.classList.add('password-strength-strong');
             strengthFeedback.textContent = 'Strong password';
         }
+
+        passwordValid = PASSWORD_REGEX.test(password);
+        passwordField.classList.toggle('is-invalid', password.length > 0 && !passwordValid);
+        updateSubmitState();
     }
 
     function validateAndShowModal(event) {
@@ -145,15 +262,15 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
     const proceedBtn = document.getElementById('proceedSignup');
     const modal = document.getElementById('termsPrivacyModal');
 
-    agreeCheckbox.addEventListener('change', function() {
+    agreeCheckbox.addEventListener('change', function () {
         proceedBtn.disabled = !this.checked;
     });
 
-    proceedBtn.addEventListener('click', function() {
+    proceedBtn.addEventListener('click', function () {
         document.getElementById('signupForm').submit();
     });
 
-    modal.addEventListener('hidden.bs.modal', function() {
+    modal.addEventListener('hidden.bs.modal', function () {
         agreeCheckbox.checked = false;
         proceedBtn.disabled = true;
     });

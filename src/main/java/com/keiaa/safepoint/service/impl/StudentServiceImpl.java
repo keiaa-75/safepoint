@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
+ */
+
 package com.keiaa.safepoint.service.impl;
 
 import java.util.Optional;
@@ -45,5 +51,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Optional<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<Student> findByLrn(String lrn) {
+        return studentRepository.findByLrn(lrn);
     }
 }

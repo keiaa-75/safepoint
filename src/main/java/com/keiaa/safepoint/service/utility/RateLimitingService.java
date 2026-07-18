@@ -42,15 +42,48 @@ public class RateLimitingService {
         return false; // Blocked for 10 minutes after 5 requests
     }
 
+    /**
+     * Rate limit for the live email/LRN availability checks on the signup
+     * form. Windowed per minute rather than per 10 minutes like
+     * {@link #isAllowedForReports}, since a real user typing and correcting
+     * their email address can easily trigger several checks in a few
+     * seconds - this only needs to stop bulk enumeration, not normal typing.
+     *
+     * @param key caller-supplied key, e.g. a prefixed client IP - callers
+     *            should namespace their own keys (see StudentController) so
+     *            this doesn't collide with other rate limiters sharing this
+     *            service's internal maps.
+     */
+    public boolean isAllowedForAvailabilityCheck(String key) {
+        LocalDateTime now = LocalDateTime.now();
+        Integer count = requestCounts.get(key);
+        LocalDateTime lastRequest = lastRequestTimes.get(key);
+
+        // Reset count if more than a minute passed
+        if (lastRequest == null || lastRequest.plusMinutes(1).isBefore(now)) {
+            requestCounts.put(key, 1);
+            lastRequestTimes.put(key, now);
+            return true;
+        }
+
+        if (count == null || count < 20) {
+            requestCounts.put(key, count == null ? 1 : count + 1);
+            lastRequestTimes.put(key, now);
+            return true;
+        }
+
+        return false; // Blocked for a minute after 20 checks
+    }
+
     private boolean isAllowedWithInterval(String key, int intervalMinutes) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime lastRequest = lastRequestTimes.get(key);
-        
+
         if (lastRequest == null || lastRequest.plusMinutes(intervalMinutes).isBefore(now)) {
             lastRequestTimes.put(key, now);
             return true;
         }
-        
+
         return false;
     }
 }

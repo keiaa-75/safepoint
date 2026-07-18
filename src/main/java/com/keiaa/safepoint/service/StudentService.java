@@ -13,4 +13,5 @@ import com.keiaa.safepoint.model.Student;
 public interface StudentService {
     Student registerStudent(Student student);
     Optional<Student> findByEmail(String email);
+    Optional<Student> findByLrn(String lrn);
 }
