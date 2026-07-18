@@ -36,11 +36,14 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                 </div>
 
                 <!-- Alert Messages -->
+                <div th:if="${param.success}" class="alert alert-success" role="alert">
+                    Account created! Please check your email to verify your account before logging in.
+                </div>
                 <div th:if="${param.error}" class="alert alert-danger" role="alert">
                     Invalid email or password.
                 </div>
                 <div th:if="${param.locked}" class="alert alert-warning" role="alert">
-                    Your email is not verified. Please check your email for verification instructions or 
+                    Your email is not verified. Please check your email for verification instructions or
                     <a href="/resend-verification" class="alert-link">request a new one</a>.
                 </div>
                 <div th:if="${param.logout}" class="alert alert-success" role="alert">

@@ -35,33 +35,54 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
                     <span class="auth-tab-btn active">Sign Up</span>
                 </div>
 
-                <!-- Alert Messages -->
-                <div th:if="${param.error}" class="alert alert-danger" role="alert">
-                    Registration failed. Please check your information and try again.
-                </div>
-                <div th:if="${param.success}" class="alert alert-success" role="alert">
-                    Registration successful! Please check your email for verification.
+                <!-- Account-level errors only (things that aren't a specific field's fault) -->
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <span th:text="${error}"></span>
                 </div>
 
                 <!-- Signup Form -->
-                <form id="signupForm" th:action="@{/student-signup}" th:object="${student}" method="post">
+                <form id="signupForm" th:action="@{/student-signup}" th:object="${student}" method="post" novalidate>
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                     <div class="auth-form-floating">
                         <label for="name">Full Name</label>
-                        <input type="text" class="form-control" id="name" name="name" th:field="*{name}" placeholder="Enter your full name" required>
+                        <input type="text" class="form-control" id="name" th:field="*{name}"
+                               th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                               placeholder="Enter your full name" required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                     </div>
+
                     <div class="auth-form-floating">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" th:field="*{email}" placeholder="Enter your email" required>
+                        <input type="email" class="form-control" id="email" th:field="*{email}"
+                               th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                               placeholder="Enter your email" required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                     </div>
+
                     <div class="auth-form-floating">
                         <label for="lrn">LRN</label>
-                        <input type="text" class="form-control" id="lrn" name="lrn" th:field="*{lrn}" placeholder="Enter your LRN" required>
+                        <input type="text" class="form-control" id="lrn" th:field="*{lrn}"
+                               th:classappend="${#fields.hasErrors('lrn')} ? 'is-invalid'"
+                               placeholder="Enter your 12-digit LRN" maxlength="12" required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('lrn')}" th:errors="*{lrn}"></div>
                     </div>
+
                     <div class="auth-form-floating">
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" th:field="*{password}" placeholder="Create a password" required>
+                        <input type="password" class="form-control" id="password" th:field="*{password}"
+                               th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
+                               placeholder="Create a password" required oninput="checkPasswordStrength()">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                     </div>
+
+                    <div class="password-strength-container">
+                        <div class="password-strength-meter" id="strengthMeter"></div>
+                        <div class="auth-form-feedback show" id="strengthFeedback">
+                            At least 8 characters, with upper &amp; lower case, a number, and a symbol.
+                        </div>
+                    </div>
+
                     <button type="button" class="auth-btn" onclick="validateAndShowModal(event)">Sign Up</button>
                 </form>
 
@@ -72,34 +93,66 @@ file, You can obtain one at https://www.mozilla.org/MPL/2.0/.
             </div>
         </div>
     </div>
-    
+
     <!-- Terms & Privacy Modal -->
     <div th:replace="~{fragments/terms-privacy-modal :: terms-privacy-modal}"></div>
-    
+
     <div th:replace="~{fragments/common :: scripts}"></div>
-    
+
     <script>
+    function checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        const strengthMeter = document.getElementById('strengthMeter');
+        const strengthFeedback = document.getElementById('strengthFeedback');
+
+        let strength = 0;
+        if (password.length >= 8) strength += 25;
+        if (password.length >= 12) strength += 15;
+        if (/[a-z]/.test(password)) strength += 15;
+        if (/[A-Z]/.test(password)) strength += 15;
+        if (/[0-9]/.test(password)) strength += 15;
+        if (/[^a-zA-Z0-9]/.test(password)) strength += 15;
+
+        strengthMeter.className = 'password-strength-meter';
+        if (strength === 0) {
+            strengthFeedback.textContent = 'At least 8 characters, with upper & lower case, a number, and a symbol.';
+        } else if (strength <= 40) {
+            strengthMeter.classList.add('password-strength-weak');
+            strengthFeedback.textContent = 'Weak - keep going';
+        } else if (strength <= 70) {
+            strengthMeter.classList.add('password-strength-fair');
+            strengthFeedback.textContent = 'Fair - almost there';
+        } else if (strength < 100) {
+            strengthMeter.classList.add('password-strength-good');
+            strengthFeedback.textContent = 'Good';
+        } else {
+            strengthMeter.classList.add('password-strength-strong');
+            strengthFeedback.textContent = 'Strong password';
+        }
+    }
+
     function validateAndShowModal(event) {
         const form = document.getElementById('signupForm');
         if (form.checkValidity()) {
-            event.preventDefault();
             const modal = new bootstrap.Modal(document.getElementById('termsPrivacyModal'));
             modal.show();
+        } else {
+            form.reportValidity();
         }
     }
-    
+
     const agreeCheckbox = document.getElementById('agreeTerms');
     const proceedBtn = document.getElementById('proceedSignup');
     const modal = document.getElementById('termsPrivacyModal');
-    
+
     agreeCheckbox.addEventListener('change', function() {
         proceedBtn.disabled = !this.checked;
     });
-    
+
     proceedBtn.addEventListener('click', function() {
         document.getElementById('signupForm').submit();
     });
-    
+
     modal.addEventListener('hidden.bs.modal', function() {
         agreeCheckbox.checked = false;
         proceedBtn.disabled = true;
