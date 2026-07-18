@@ -26,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.keiaa.safepoint.exception.DuplicateAdminUsernameException;
 import com.keiaa.safepoint.model.Admin;
 import com.keiaa.safepoint.model.Appointment;
 import com.keiaa.safepoint.model.Report;
@@ -62,25 +63,25 @@ public class AdminService {
 
     /**
      * Gets dashboard statistics for the admin panel
-     * 
+     *
      * @return Map containing various counts and metrics
      */
     public Map<String, Object> getDashboardStatistics() {
         Map<String, Object> stats = new HashMap<>();
-        
+
         stats.put("pendingReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.PENDING_REVIEW, ReportStatus.UNDER_REVIEW)));
         stats.put("resolvedReportsCount", reportRepository.countByStatusIn(List.of(ReportStatus.RESOLVED)));
         stats.put("totalAppointmentsCount", appointmentRepository.count());
         stats.put("resolvedAppointmentsCount", appointmentRepository.countByPreferredDateTimeBefore(LocalDateTime.now()));
         stats.put("categoryCounts", reportRepository.countByCategory());
         stats.put("recentReports", reportRepository.findTop3ByOrderByTimestampDesc());
-        
+
         return stats;
     }
 
     /**
      * Finds an appointment by its ID
-     * 
+     *
      * @param id The ID of the appointment to find
      * @return Optional containing the appointment if found, empty otherwise
      */
@@ -90,47 +91,47 @@ public class AdminService {
 
     /**
      * Gets all reports with their associated history
-     * 
+     *
      * @return List of reports with history
      */
     public List<Report> getAllReportsWithHistory() {
         List<Report> reports = reportRepository.findAll();
-        
+
         // Fetch history for each report
         for (Report report : reports) {
             List<ReportHistory> history = reportHistoryRepository.findByReportIdOrderByTimestampDesc(report.getId());
             report.setHistory(history);
         }
-        
+
         return reports;
     }
 
     /**
      * Gets paginated reports with their associated history
-     * 
+     *
      * @param pageable pagination information
      * @return Page of reports with history
      */
     public Page<Report> getAllReportsWithHistory(Pageable pageable) {
         Page<Report> reportsPage = reportRepository.findAllByOrderByTimestampDesc(pageable);
-        
+
         // Fetch history for each report
         reportsPage.getContent().forEach(report -> {
             List<ReportHistory> history = reportHistoryRepository.findByReportIdOrderByTimestampDesc(report.getId());
             report.setHistory(history);
         });
-        
+
         return reportsPage;
     }
 
     /**
      * Groups appointments by week for display
-     * 
+     *
      * @return Map of weeks to appointments in that week
      */
     public Map<String, List<Appointment>> getAppointmentsGroupedByWeek() {
         List<Appointment> appointments = appointmentRepository.findAllByOrderByPreferredDateTimeAsc();
-        
+
         return appointments.stream()
                 .collect(Collectors.groupingBy(appointment -> {
                     TemporalField fieldISO = WeekFields.of(Locale.getDefault()).dayOfWeek();
@@ -142,7 +143,7 @@ public class AdminService {
 
     /**
      * Gets paginated appointments
-     * 
+     *
      * @param pageable pagination information
      * @return Page of appointments
      */
@@ -152,7 +153,7 @@ public class AdminService {
 
     /**
      * Finds a report by its report ID with history
-     * 
+     *
      * @param reportId The report ID to search for
      * @return Optional containing the report if found, empty otherwise
      */
@@ -168,7 +169,7 @@ public class AdminService {
 
     /**
      * Updates the status of a report
-     * 
+     *
      * @param reportId The ID of the report to update
      * @param status The new status
      * @return true if the update was successful, false otherwise
@@ -185,7 +186,7 @@ public class AdminService {
 
     /**
      * Updates the status of a report with a description for the history
-     * 
+     *
      * @param reportId The ID of the report to update
      * @param status The new status
      * @param description Description of the status change
@@ -201,13 +202,13 @@ public class AdminService {
                 history.setNewStatus(status);
                 history.setDescription(description);
                 history.setUpdatedBy(username);
-                
+
                 reportHistoryRepository.save(history);
-                
+
                 // Update report status
                 report.setStatus(status);
                 reportRepository.save(report);
-                
+
                 return true;
             })
             .orElse(false);
@@ -215,7 +216,7 @@ public class AdminService {
 
     /**
      * Confirms an appointment and sends confirmation email
-     * 
+     *
      * @param id The ID of the appointment to confirm
      * @return true if the confirmation was successful, false otherwise
      */
@@ -232,7 +233,7 @@ public class AdminService {
 
     /**
      * Reschedules an appointment and sends notification email
-     * 
+     *
      * @param id The ID of the appointment to reschedule
      * @param newDate The new date for the appointment
      * @param newTime The new time for the appointment
@@ -255,7 +256,7 @@ public class AdminService {
 
     /**
      * Marks an appointment as completed and sends completion email
-     * 
+     *
      * @param id The ID of the appointment to complete
      * @return true if the completion was successful, false otherwise
      */
@@ -273,12 +274,17 @@ public class AdminService {
 
     /**
      * Creates a new admin user with hashed password
-     * 
+     *
      * @param username The admin username
      * @param password The admin password
      * @return The created admin user
+     * @throws DuplicateAdminUsernameException if the username is already taken
      */
     public Admin createAdmin(String username, String password) {
+        if (adminRepository.findByUsername(username).isPresent()) {
+            throw new DuplicateAdminUsernameException("An admin with that username already exists.");
+        }
+
         Admin admin = new Admin();
         admin.setUsername(username);
         admin.setPassword(password);  // This will hash the password
@@ -287,7 +293,7 @@ public class AdminService {
 
     /**
      * Gets the count of all admin users
-     * 
+     *
      * @return The number of admin users in the database
      */
     public long getAllAdminsCount() {
@@ -296,7 +302,7 @@ public class AdminService {
 
     /**
      * Checks if any admin exists in the database
-     * 
+     *
      * @return true if any admin exists, false otherwise
      */
     public boolean anyAdminExists() {
@@ -305,19 +311,19 @@ public class AdminService {
 
     /**
      * Gets available years with data for report generation
-     * 
+     *
      * @return List of available years
      */
     public List<AvailableYear> getAvailableYears() {
         List<String> reportYears = reportRepository.findAvailableYears();
         List<String> appointmentYears = appointmentRepository.findAvailableYears();
-        
+
         reportYears.addAll(appointmentYears);
         List<String> allYears = reportYears.stream()
                 .distinct()
                 .sorted((a, b) -> b.compareTo(a))
                 .toList();
-        
+
         return allYears.stream()
                 .map(this::convertToAvailableYear)
                 .toList();
@@ -325,31 +331,31 @@ public class AdminService {
 
     /**
      * Gets yearly report data for a specific year
-     * 
+     *
      * @param year The year in "YYYY" format
      * @return Yearly report data
      */
     public YearlyReportData getYearlyReportData(String year) {
         int yearInt = Integer.parseInt(year);
-        
+
         LocalDateTime startOfYear = LocalDateTime.of(yearInt, 1, 1, 0, 0);
         LocalDateTime endOfYear = LocalDateTime.of(yearInt, 12, 31, 23, 59, 59);
-        
+
         List<Report> reports = reportRepository.findByTimestampBetweenOrderByTimestamp(startOfYear, endOfYear);
         List<ReportSummary> reportSummaries = reports.stream()
                 .map(report -> new ReportSummary(report.getReportId(), report.getCategory(), report.getStatus()))
                 .toList();
-        
+
         List<Appointment> appointments = appointmentRepository.findByPreferredDateTimeBetweenOrderByPreferredDateTime(startOfYear, endOfYear);
         List<AppointmentSummary> appointmentSummaries = appointments.stream()
                 .map(apt -> new AppointmentSummary(apt.getId(), apt.getStatus()))
                 .toList();
-        
+
         Map<String, Long> reportCategoryCounts = new HashMap<>();
         reportSummaries.stream()
                 .collect(Collectors.groupingBy(ReportSummary::getCategory, Collectors.counting()))
                 .forEach(reportCategoryCounts::put);
-        
+
         Map<ReportStatus, Long> reportStatusCounts = new EnumMap<>(ReportStatus.class);
         for (ReportStatus status : ReportStatus.values()) {
             reportStatusCounts.put(status, 0L);
@@ -357,7 +363,7 @@ public class AdminService {
         reportSummaries.stream()
                 .collect(Collectors.groupingBy(ReportSummary::getStatus, Collectors.counting()))
                 .forEach(reportStatusCounts::put);
-        
+
         Map<AppointmentStatus, Long> appointmentStatusCounts = new EnumMap<>(AppointmentStatus.class);
         for (AppointmentStatus status : AppointmentStatus.values()) {
             appointmentStatusCounts.put(status, 0L);
@@ -365,9 +371,9 @@ public class AdminService {
         appointmentSummaries.stream()
                 .collect(Collectors.groupingBy(AppointmentSummary::getStatus, Collectors.counting()))
                 .forEach(appointmentStatusCounts::put);
-        
+
         String yearDisplay = convertToAvailableYear(year).getDisplay();
-        
+
         return new YearlyReportData(
                 year,
                 yearDisplay,

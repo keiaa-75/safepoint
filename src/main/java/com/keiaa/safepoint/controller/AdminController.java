@@ -22,11 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.keiaa.safepoint.exception.DuplicateAdminUsernameException;
 import com.keiaa.safepoint.model.dto.AvailableYear;
 import com.keiaa.safepoint.model.dto.YearlyReportData;
 import com.keiaa.safepoint.model.enums.ReportStatus;
 import com.keiaa.safepoint.service.AdminService;
 import com.keiaa.safepoint.service.utility.InputSanitizer;
+import com.keiaa.safepoint.service.utility.PasswordPolicyValidator;
 
 @Controller
 public class AdminController {
@@ -36,6 +38,9 @@ public class AdminController {
 
     @Autowired
     private InputSanitizer inputSanitizer;
+
+    @Autowired
+    private PasswordPolicyValidator passwordPolicyValidator;
 
     @GetMapping("/admin-login")
     public String showAdminLogin() {
@@ -253,14 +258,25 @@ public class AdminController {
     public String createAdmin(@RequestParam("username") String username,
                               @RequestParam("password") String password,
                               RedirectAttributes redirectAttributes) {
+        String sanitizedUsername = inputSanitizer.sanitize(username);
+        // The password is intentionally NOT run through inputSanitizer. It's
+        // never rendered as HTML - only hashed - and an HTML sanitizer could
+        // silently strip or alter characters like < or & before hashing,
+        // leaving the admin unable to log back in with what they typed.
+
+        String policyError = passwordPolicyValidator.validate(password);
+        if (policyError != null) {
+            redirectAttributes.addFlashAttribute("error", policyError);
+            return "redirect:/admin/about";
+        }
+
         try {
-            String sanitizedUsername = inputSanitizer.sanitize(username);
-            String sanitizedPassword = inputSanitizer.sanitize(password);
-            
-            adminService.createAdmin(sanitizedUsername, sanitizedPassword);
+            adminService.createAdmin(sanitizedUsername, password);
             redirectAttributes.addFlashAttribute("success", "Admin created successfully");
+        } catch (DuplicateAdminUsernameException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Failed to create admin");
+            redirectAttributes.addFlashAttribute("error", "Failed to create admin. Please try again.");
         }
 
         return "redirect:/admin/about";

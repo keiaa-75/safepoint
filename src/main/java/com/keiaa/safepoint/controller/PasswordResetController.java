@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.keiaa.safepoint.service.PasswordResetService;
+import com.keiaa.safepoint.service.utility.PasswordPolicyValidator;
 import com.keiaa.safepoint.service.utility.RateLimitingService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,9 +24,12 @@ public class PasswordResetController {
 
     @Autowired
     private PasswordResetService passwordResetService;
-    
+
     @Autowired
     private RateLimitingService rateLimitingService;
+
+    @Autowired
+    private PasswordPolicyValidator passwordPolicyValidator;
 
     @GetMapping("/forgot-password")
     public String showForgotPasswordForm() {
@@ -33,11 +37,11 @@ public class PasswordResetController {
     }
 
     @PostMapping("/forgot-password")
-    public String processForgotPassword(@RequestParam String email, 
-                                      HttpServletRequest request, 
+    public String processForgotPassword(@RequestParam String email,
+                                      HttpServletRequest request,
                                       Model model) {
         String clientIP = getClientIP(request);
-        
+
         if (!rateLimitingService.isAllowedForPasswordReset(clientIP)) {
             model.addAttribute("error", "Too many requests. Please wait 5 minutes before trying again.");
             return "forgot-password";
@@ -49,7 +53,7 @@ public class PasswordResetController {
         } else {
             model.addAttribute("message", "If an account with that email exists, a password reset link has been sent.");
         }
-        
+
         return "forgot-password";
     }
 
@@ -63,7 +67,7 @@ public class PasswordResetController {
             model.addAttribute("error", "Invalid or expired reset token.");
             return "reset-password-error";
         }
-        
+
         model.addAttribute("token", token);
         return "reset-password";
     }
@@ -79,8 +83,9 @@ public class PasswordResetController {
             return "reset-password";
         }
 
-        if (password.length() < 6) {
-            model.addAttribute("error", "Password must be at least 6 characters long.");
+        String policyError = passwordPolicyValidator.validate(password);
+        if (policyError != null) {
+            model.addAttribute("error", policyError);
             model.addAttribute("token", token);
             return "reset-password";
         }
