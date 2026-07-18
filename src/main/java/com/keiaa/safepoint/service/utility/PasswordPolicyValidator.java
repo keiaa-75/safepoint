@@ -7,6 +7,7 @@
 package com.keiaa.safepoint.service.utility;
 
 import java.util.regex.Pattern;
+
 import org.springframework.stereotype.Component;
 
 /**

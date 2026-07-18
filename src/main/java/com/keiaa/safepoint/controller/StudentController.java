@@ -6,30 +6,30 @@
 
  package com.keiaa.safepoint.controller;
 
- import org.slf4j.Logger;
- import org.slf4j.LoggerFactory;
- import org.springframework.beans.factory.annotation.Autowired;
- import org.springframework.stereotype.Controller;
- import org.springframework.ui.Model;
- import org.springframework.validation.BindingResult;
- import org.springframework.web.bind.annotation.GetMapping;
- import org.springframework.web.bind.annotation.ModelAttribute;
- import org.springframework.web.bind.annotation.PostMapping;
- import org.springframework.web.bind.annotation.RequestParam;
- import org.springframework.web.context.request.RequestContextHolder;
- import org.springframework.web.context.request.ServletRequestAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
- import com.keiaa.safepoint.exception.DuplicateEmailException;
- import com.keiaa.safepoint.exception.DuplicateLrnException;
- import com.keiaa.safepoint.exception.VerificationTokenException;
- import com.keiaa.safepoint.model.Student;
- import com.keiaa.safepoint.model.dto.EmailRequestDto;
- import com.keiaa.safepoint.service.EmailVerificationService;
- import com.keiaa.safepoint.service.StudentService;
- import com.keiaa.safepoint.service.utility.RateLimitingService;
+import com.keiaa.safepoint.exception.DuplicateEmailException;
+import com.keiaa.safepoint.exception.DuplicateLrnException;
+import com.keiaa.safepoint.exception.VerificationTokenException;
+import com.keiaa.safepoint.model.Student;
+import com.keiaa.safepoint.model.dto.EmailRequestDto;
+import com.keiaa.safepoint.service.EmailVerificationService;
+import com.keiaa.safepoint.service.StudentService;
+import com.keiaa.safepoint.service.utility.RateLimitingService;
 
- import jakarta.servlet.http.HttpServletRequest;
- import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
  @Controller
  public class StudentController {
