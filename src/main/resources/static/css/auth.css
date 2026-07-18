@@ -228,8 +228,13 @@ body {
     text-align: center;
 }
 
-.auth-btn:hover {
+.auth-btn:hover:not(:disabled) {
     background-color: var(--sp-text-secondary);
+}
+
+.auth-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Additional Links */
@@ -359,6 +364,7 @@ body {
 }
 
 /* Status Icon */
+.status-icon {
     width: 80px;
     height: 80px;
     margin: 0 auto var(--sp-spacing-lg);
